@@ -1,19 +1,26 @@
 "use client";
 
+import { useState } from "react";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 import Btn from "../ui/Btn";
 
 interface ProviderProps {
   text: string;
-  provider: string;
-  setProvider: React.Dispatch<React.SetStateAction<string>>;
+  signIn: (provider: string) => Promise<void>;
 }
 
-function Provider({ text, provider, setProvider }: ProviderProps) {
+function Provider({ text, signIn }: ProviderProps) {
+  const [loading, setLoading] = useState<boolean>(false);
+
+  function handleSignIn() {
+    setLoading(true);
+    signIn(text);
+  }
+
   return (
     <Btn
-      text={provider === text ? "Loading..." : "Log in with " + text}
-      onclick={() => setProvider(text)}
+      text={loading ? "Loading..." : "Log in with " + text}
+      onclick={handleSignIn}
       styles="py-2 justify-start"
     >
       {text === "Google" && <FaGoogle size={20} />}

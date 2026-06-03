@@ -25,6 +25,7 @@ function Btn({
 
   return href ? (
     <Link href={href as string} className={`${btnStyles} ${styles}`}>
+      {children}
       {text}
     </Link>
   ) : (

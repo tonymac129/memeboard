@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 import LogIn from "./LogIn";
 
 export const metadata: Metadata = {
@@ -7,7 +10,10 @@ export const metadata: Metadata = {
     "Log in to MemeBoard here with credentials, Google, or GitHub, or create an account if you don't already have one!",
 };
 
-function Page() {
+async function Page() {
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (session) redirect("/profile");
+
   return <LogIn />;
 }
 

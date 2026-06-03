@@ -2,9 +2,11 @@
 
 import type { User } from "@/types/User";
 import { useState } from "react";
+import { authClient } from "@/lib/auth-client";
 import Input from "../ui/Input";
 import Btn from "../ui/Btn";
 import Provider from "./Provider";
+import { addUsername } from "./actions";
 
 const providers = ["Google", "GitHub"];
 const tabBtnStyles =
@@ -17,16 +19,69 @@ interface LogInFormProps {
 }
 
 function LogInForm({ isLogIn, setIsLogIn }: LogInFormProps) {
-  const [provider, setProvider] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
   const [userData, setUserData] = useState<User>({
     id: crypto.randomUUID(),
     username: "",
+    email: "",
     display: "",
+    password: "",
   });
 
-  function handleSubmit(e: React.SubmitEvent) {
+  async function handleSubmit(e: React.SubmitEvent) {
     e.preventDefault();
-    alert("submitted");
+    if (isLogIn) {
+      setLoading(true);
+      await authClient.signIn.email(
+        {
+          email: userData.email,
+          password: userData.password as string,
+        },
+        {
+          onSuccess: () => window.location.reload(),
+          onError: (ctx) => {
+            const msg = ctx.error.message;
+            setError(msg);
+            setLoading(false);
+          },
+        },
+      );
+    } else {
+      if (
+        userData.display.trim().length > 0 &&
+        userData.username.trim().length > 0
+      ) {
+        setLoading(true);
+        await authClient.signUp.email(
+          {
+            email: userData.email,
+            password: userData.password as string,
+            name: userData.display,
+          },
+          {
+            onSuccess: async () => {
+              await addUsername(userData);
+              window.location.reload();
+            },
+            onError: (ctx) => {
+              const msg = ctx.error.message;
+              setError(msg.includes("too short") ? msg : "Invalid inputs");
+              setLoading(false);
+            },
+          },
+        );
+      } else {
+        setError("Invalid inputs");
+      }
+    }
+  }
+
+  async function signIn(provider: string) {
+    await authClient.signIn.social({
+      provider: provider.toLowerCase(),
+      callbackURL: "/profile",
+    });
   }
 
   return (
@@ -52,19 +107,29 @@ function LogInForm({ isLogIn, setIsLogIn }: LogInFormProps) {
         </div>
       </div>
       <form onSubmit={handleSubmit} className="p-4 flex flex-col gap-y-3">
+        {!isLogIn && (
+          <label className={labelStyles}>
+            Username
+            <Input
+              placeholder="triplet67"
+              value={userData.username}
+              setValue={(username) => setUserData({ ...userData, username })}
+            />
+          </label>
+        )}
         <label className={labelStyles}>
-          Username
+          Email
           <Input
-            placeholder="tonymac129"
-            value={userData.username}
-            setValue={(username) => setUserData({ ...userData, username })}
+            placeholder="tungtung@gmail.com"
+            value={userData.email}
+            setValue={(email) => setUserData({ ...userData, email })}
           />
         </label>
         {!isLogIn && (
           <label className={labelStyles}>
             Display Name
             <Input
-              placeholder="Tony Hsu"
+              placeholder="Tung Tung Tung Sahur"
               value={userData.display}
               setValue={(display) => setUserData({ ...userData, display })}
             />
@@ -74,23 +139,24 @@ function LogInForm({ isLogIn, setIsLogIn }: LogInFormProps) {
           Password
           <Input
             placeholder="password123"
+            type="password"
             value={userData.password || ""}
             setValue={(password) => setUserData({ ...userData, password })}
           />
         </label>
-        <Btn text="Log in" type="submit" primary />
+        {error && <div className="text-sm text-red-500">{error}</div>}
+        <Btn
+          text={loading ? "Loading..." : isLogIn ? "Log in" : "Sign up"}
+          type="submit"
+          primary
+        />
         <div className="bg-zinc-700 relative h-0.5 my-2 flex items-center">
           <div className="absolute left-[50%] translate-x-[-50%] px-5 py-1 bg-zinc-950 text-zinc-300">
             or
           </div>
         </div>
         {providers.map((p, i) => (
-          <Provider
-            key={i}
-            text={p}
-            provider={provider}
-            setProvider={setProvider}
-          />
+          <Provider key={i} text={p} signIn={signIn} />
         ))}
       </form>
     </div>

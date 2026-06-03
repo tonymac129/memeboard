@@ -1,4 +1,4 @@
-# MemeBoard
+# [MemeBoard]
 
 Explore the trendiest memes, upload your own creations, and interact with the community!
 

@@ -8,7 +8,7 @@ function LogIn() {
   const [isLogIn, setIsLogIn] = useState<boolean>(true);
 
   return (
-    <div className="px-50">
+    <div className="px-50 pb-30">
       <Hero
         text={isLogIn ? "Log In" : "Sign Up"}
         description="Log in to MemeBoard here with credentials, Google, or GitHub, or create an account if you don't already have one!"
