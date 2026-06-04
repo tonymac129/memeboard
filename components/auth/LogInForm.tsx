@@ -1,6 +1,6 @@
 "use client";
 
-import type { User } from "@/types/User";
+import type { UserType } from "@/types/User";
 import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import Input from "../ui/Input";
@@ -21,7 +21,7 @@ interface LogInFormProps {
 function LogInForm({ isLogIn, setIsLogIn }: LogInFormProps) {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [userData, setUserData] = useState<User>({
+  const [userData, setUserData] = useState<UserType>({
     id: crypto.randomUUID(),
     username: "",
     email: "",

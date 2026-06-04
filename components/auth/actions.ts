@@ -1,11 +1,11 @@
 "use server";
 
-import type { User } from "@/types/User";
+import type { UserType } from "@/types/User";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 
-export async function addUsername(userData: User) {
+export async function addUsername(userData: UserType) {
   try {
     const session = await auth.api.getSession({ headers: await headers() });
     if (userData.email === session?.user.email) {
