@@ -20,7 +20,7 @@ async function Page() {
         text="Profile"
         description="Customize your profile and change your account settings here!"
       />
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center pb-30">
         <SignOut />
       </div>
     </div>

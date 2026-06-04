@@ -11,37 +11,41 @@ async function Nav() {
   const session = await auth.api.getSession({ headers: await headers() });
 
   return (
-    <nav className="border-b-2 border-b-zinc-800 flex items-center justify-between px-50 py-3">
-      <div className="flex items-center gap-x-3">
-        <Link
-          href="/"
-          className={navLinkStyles + " text-xl text-green-500! font-bold pl-0"}
-        >
-          MemeBoard
-        </Link>
-        <Link href="/top" className={navLinkStyles}>
-          Top
-        </Link>
-        <Link href="/new" className={navLinkStyles}>
-          New
-        </Link>
-        <Link href="/friends" className={navLinkStyles}>
-          Friends
-        </Link>
-      </div>
-      <div className="flex items-center gap-x-5">
-        {session ? (
-          <>
-            <Btn text="Post" href="/post" styles="gap-x-1.5!" primary>
-              <MdOutlineAdd size={22} />
-            </Btn>
-            <User img={session.user.image || "/icons/default-avatar.svg"} />
-          </>
-        ) : (
-          <Btn text="Log in" href="/login" primary />
-        )}
-      </div>
-    </nav>
+    <div className="sticky top-0 bg-zinc-950 z-5">
+      <nav className="border-b-2 border-b-zinc-800 flex items-center justify-between px-50 py-3">
+        <div className="flex items-center gap-x-3">
+          <Link
+            href="/"
+            className={
+              navLinkStyles + " text-xl text-green-500! font-bold pl-0"
+            }
+          >
+            MemeBoard
+          </Link>
+          <Link href="/top" className={navLinkStyles}>
+            Top
+          </Link>
+          <Link href="/new" className={navLinkStyles}>
+            New
+          </Link>
+          <Link href="/friends" className={navLinkStyles}>
+            Friends
+          </Link>
+        </div>
+        <div className="flex items-center gap-x-5">
+          {session ? (
+            <>
+              <Btn text="Post" href="/post" styles="gap-x-1.5!" primary>
+                <MdOutlineAdd size={22} />
+              </Btn>
+              <User img={session.user.image || "/icons/default-avatar.svg"} />
+            </>
+          ) : (
+            <Btn text="Log in" href="/login" primary />
+          )}
+        </div>
+      </nav>
+    </div>
   );
 }
 
