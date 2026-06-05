@@ -3,6 +3,7 @@
 import type { MemeType } from "@/types/Meme";
 import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
+import { redirect } from "next/navigation";
 import TagModal from "./TagModal";
 import Upload from "./Upload";
 import Input from "../ui/Input";
@@ -10,12 +11,17 @@ import Btn from "../ui/Btn";
 
 const labelStyles = "flex flex-col gap-y-1 text-zinc-300 text-sm";
 
-function MemeForm() {
+function MemeForm({
+  postMeme,
+}: {
+  postMeme: (meme: MemeType) => Promise<string | undefined>;
+}) {
   const [loading, setLoading] = useState<boolean>(false);
   const [selecting, setSelecting] = useState<boolean>(false);
   const [newMeme, setNewMeme] = useState<MemeType>({
     id: crypto.randomUUID(),
     title: "",
+    image: "",
     description: "",
     created: new Date(),
   });
@@ -23,7 +29,8 @@ function MemeForm() {
   async function handleSubmit(e: React.SubmitEvent) {
     e.preventDefault();
     setLoading(true);
-    //TODO: add backend posting
+    const id = (await postMeme(newMeme)) as string;
+    redirect("/memes/" + id);
   }
 
   return (
@@ -61,9 +68,9 @@ function MemeForm() {
           )}
         </div>
       </label>
-      <label className={labelStyles}>
+      <label className={labelStyles + " w-fit"}>
         Upload
-        <Upload />
+        <Upload setNewMeme={setNewMeme} />
       </label>
       <label className={labelStyles}>
         Description

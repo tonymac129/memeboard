@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { postMeme } from "./actions";
 import MemeForm from "@/components/meme/MemeForm";
 
 export const metadata: Metadata = {
@@ -11,7 +12,7 @@ function Page() {
   return (
     <div className="px-50 flex flex-col pb-30 gap-y-10">
       <h2 className="text-white text-2xl font-bold pt-10">Post meme</h2>
-      <MemeForm />
+      <MemeForm postMeme={postMeme} />
     </div>
   );
 }
