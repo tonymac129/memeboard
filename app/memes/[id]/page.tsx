@@ -12,7 +12,7 @@ import Btn from "@/components/ui/Btn";
 async function fetchMeme(id: number) {
   const memeData = await prisma.meme.findUnique({
     where: { id: Number(id) },
-    include: { user: true, comments: { include: { user: true } } },
+    include: { user: true, tags: true, comments: { include: { user: true } } },
   });
   if (!memeData) redirect("/memes");
   return memeData;
@@ -51,13 +51,13 @@ async function Page({ params }: { params: Promise<{ id: number }> }) {
         </p>
         <h1 className="text-white font-bold text-3xl">{memeData.title}</h1>
         {memeData.tags.length > 0 && (
-          <div className="flex gap-x-3">
-            {memeData.tags.map((tag, i) => (
+          <div className="flex gap-3 flex-wrap">
+            {memeData.tags.map((tag) => (
               <span
-                key={i}
+                key={tag.id}
                 className="text-sm text-zinc-300 rounded-full px-4 py-2 bg-zinc-900 font-bold cursor-pointer"
               >
-                {tag}
+                {tag.name}
               </span>
             ))}
           </div>

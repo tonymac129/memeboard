@@ -25,6 +25,7 @@ model User {
   accounts      Account[]
   memes         Meme[]
   comments      Comment[]
+  memeTags      MemeTag[]
 
   @@unique([email])
   @@map("user")
@@ -81,7 +82,7 @@ model Verification {
 model Meme {
   id          Int       @id @default(autoincrement())
   title       String
-  tags        String[]  @default([])
+  tags        MemeTag[]
   image       String
   description String
   createdAt   DateTime  @default(now())
@@ -102,6 +103,17 @@ model Comment {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   memeId    Int
   meme      Meme     @relation(fields: [memeId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model MemeTag {
+  id      Int     @id @default(autoincrement())
+  name    String
+  default Boolean @default(false)
+  userId  String
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  memes   Meme[]
 
   @@index([userId])
 }

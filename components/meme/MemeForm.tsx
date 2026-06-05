@@ -1,5 +1,6 @@
 "use client";
 
+import type { MemeTag } from "@/app/generated/prisma/client";
 import type { MemeType } from "@/types/Meme";
 import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
@@ -11,11 +12,12 @@ import Btn from "../ui/Btn";
 
 const labelStyles = "flex flex-col gap-y-1 text-zinc-300 text-sm";
 
-function MemeForm({
-  postMeme,
-}: {
+interface MemeFormProps {
   postMeme: (meme: MemeType) => Promise<number | undefined>;
-}) {
+  memeTags: MemeTag[];
+}
+
+function MemeForm({ postMeme, memeTags }: MemeFormProps) {
   const [loading, setLoading] = useState<boolean>(false);
   const [selecting, setSelecting] = useState<boolean>(false);
   const [newMeme, setNewMeme] = useState<MemeType>({
@@ -52,12 +54,12 @@ function MemeForm({
             onclick={() => setSelecting(true)}
             styles="w-fit"
           />
-          {newMeme.tags?.slice(0, 3).map((tag, i) => (
+          {newMeme.tags?.slice(0, 3).map((tag) => (
             <span
-              key={i}
+              key={tag.id}
               className="rounded-full px-4 py-2 bg-zinc-900 font-bold cursor-pointer"
             >
-              {tag}
+              {tag.name}
             </span>
           ))}
           {newMeme.tags?.length && newMeme.tags.length > 3 ? (
@@ -96,6 +98,7 @@ function MemeForm({
             selected={newMeme.tags || []}
             setNewMeme={setNewMeme}
             setSelecting={setSelecting}
+            tags={memeTags}
           />
         )}
       </AnimatePresence>

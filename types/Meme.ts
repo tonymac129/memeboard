@@ -1,7 +1,7 @@
 export interface MemeType {
   id: number;
   title: string;
-  tags?: string[];
+  tags?: TagType[];
   image: string;
   description: string;
   comments: CommentType[];
@@ -19,4 +19,10 @@ export interface CommentType {
   createdAt: Date;
   userId: string;
   memeId: number;
+}
+
+export interface TagType {
+  id: number;
+  name: string;
+  default?: boolean;
 }

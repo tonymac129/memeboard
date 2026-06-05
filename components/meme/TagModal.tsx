@@ -1,40 +1,59 @@
 "use client";
 
-import type { MemeType } from "@/types/Meme";
+import type { MemeTag } from "@/app/generated/prisma/client";
+import type { MemeType, TagType } from "@/types/Meme";
 import { motion } from "framer-motion";
 import { useState, useEffect, useRef, useMemo } from "react";
+import { FaCheck } from "react-icons/fa";
+import { addTag } from "@/app/post/actions";
 import Input from "../ui/Input";
 import Btn from "../ui/Btn";
-import { FaCheck } from "react-icons/fa";
 
 interface TagModalProps {
-  selected: string[];
+  selected: TagType[];
   setNewMeme: React.Dispatch<React.SetStateAction<MemeType>>;
   setSelecting: React.Dispatch<React.SetStateAction<boolean>>;
+  tags: MemeTag[];
 }
 
-const tags = ["Tag 1", "Tag 2", "Tag 3", "Tag 4"];
-
-function TagModal({ selected, setNewMeme, setSelecting }: TagModalProps) {
+function TagModal({ selected, setNewMeme, setSelecting, tags }: TagModalProps) {
   const [search, setSearch] = useState<string>("");
-  const [selectedTags, setSelectedTags] = useState<string[]>(selected);
+  const [newTag, setNewTag] = useState<TagType | null>(null);
+  const [selectedTags, setSelectedTags] = useState<TagType[]>(selected);
   const displayedTags = useMemo(() => {
     return tags.filter((tag) =>
-      tag.toLowerCase().includes(search.trim().toLowerCase()),
+      tag.name.toLowerCase().includes(search.trim().toLowerCase()),
     );
-  }, [search]);
+  }, [search, tags]);
   const modalRef = useRef<HTMLDivElement>(null);
+
+  async function handleAddTag() {
+    if (
+      newTag &&
+      newTag.name.trim().length > 0 &&
+      !tags.find((t) => t.name === newTag?.name.trim())
+    ) {
+      await addTag(newTag);
+      setNewTag(null);
+    }
+  }
 
   function handleSave() {
     setNewMeme((prev) => {
-      return { ...prev, tags: selectedTags.sort() };
+      return {
+        ...prev,
+        tags: selectedTags.sort((a, b) => a.name.localeCompare(b.name)),
+      };
     });
     setSelecting(false);
   }
 
   useEffect(() => {
     const clickListener = (e: Event) => {
-      if (!modalRef.current?.contains(e.target as Node)) {
+      if (
+        document.contains(e.target as Node) &&
+        !modalRef.current?.contains(e.target as Node)
+      ) {
         setSelecting(false);
       }
     };
@@ -69,9 +88,9 @@ function TagModal({ selected, setNewMeme, setSelecting }: TagModalProps) {
           />
           <div className="max-h-70 flex flex-col gap-y-1 overflow-auto">
             {displayedTags.length > 0 ? (
-              displayedTags.map((tag, i) => (
+              displayedTags.map((tag) => (
                 <label
-                  key={i}
+                  key={tag.id}
                   className="text-zinc-300 w-fit cursor-pointer flex items-center gap-x-3 py-2"
                 >
                   <div className="group">
@@ -94,11 +113,34 @@ function TagModal({ selected, setNewMeme, setSelecting }: TagModalProps) {
                       {selectedTags.includes(tag) && <FaCheck size={13} />}
                     </div>
                   </div>
-                  {tag}
+                  {tag.name}
                 </label>
               ))
             ) : (
               <span className="text-sm text-zinc-300">No tags found</span>
+            )}
+          </div>
+          {newTag && (
+            <Input
+              placeholder="Custom tag"
+              value={newTag.name}
+              setValue={(name) => setNewTag({ ...newTag, name })}
+            />
+          )}
+          <div className="flex gap-x-3">
+            <Btn
+              text={newTag ? "Add" : "New tag"}
+              styles="w-fit"
+              onclick={() =>
+                newTag ? handleAddTag() : setNewTag({ id: 0, name: "" })
+              }
+            />
+            {newTag && (
+              <Btn
+                text="Cancel"
+                styles="w-fit"
+                onclick={() => setNewTag(null)}
+              />
             )}
           </div>
         </div>
