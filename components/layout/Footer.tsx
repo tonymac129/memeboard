@@ -17,6 +17,9 @@ function Footer() {
         </span>
       </div>
       <div className="flex gap-x-5">
+        <Link href="/memes" className="hover:text-green-500">
+          Memes
+        </Link>
         <Link href="/top" className="hover:text-green-500">
           Top
         </Link>

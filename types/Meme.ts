@@ -1,13 +1,22 @@
 export interface MemeType {
-  id: string;
+  id: number;
   title: string;
   tags?: string[];
   image: string;
   description: string;
+  comments: CommentType[];
   created: Date;
 }
 
 export interface ServerDataType {
   uploadedBy: string;
   file: string;
+}
+
+export interface CommentType {
+  id: number;
+  content: string;
+  createdAt: Date;
+  userId: string;
+  memeId: number;
 }

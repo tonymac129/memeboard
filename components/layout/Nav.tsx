@@ -22,6 +22,9 @@ async function Nav() {
           >
             MemeBoard
           </Link>
+          <Link href="/memes" className={navLinkStyles}>
+            Memes
+          </Link>
           <Link href="/top" className={navLinkStyles}>
             Top
           </Link>

@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 
-export async function postMeme(meme: MemeType): Promise<string | undefined> {
+export async function postMeme(meme: MemeType): Promise<number | undefined> {
   try {
     const session = await auth.api.getSession({ headers: await headers() });
     const newMeme = await prisma.meme.create({
@@ -14,11 +14,7 @@ export async function postMeme(meme: MemeType): Promise<string | undefined> {
         tags: meme.tags,
         image: meme.image,
         description: meme.description,
-        user: {
-          connect: {
-            id: session?.user.id,
-          },
-        },
+        userId: session?.user.id as string,
       },
     });
     return newMeme.id;

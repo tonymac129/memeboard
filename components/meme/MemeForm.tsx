@@ -14,22 +14,23 @@ const labelStyles = "flex flex-col gap-y-1 text-zinc-300 text-sm";
 function MemeForm({
   postMeme,
 }: {
-  postMeme: (meme: MemeType) => Promise<string | undefined>;
+  postMeme: (meme: MemeType) => Promise<number | undefined>;
 }) {
   const [loading, setLoading] = useState<boolean>(false);
   const [selecting, setSelecting] = useState<boolean>(false);
   const [newMeme, setNewMeme] = useState<MemeType>({
-    id: crypto.randomUUID(),
+    id: 0,
     title: "",
     image: "",
     description: "",
+    comments: [],
     created: new Date(),
   });
 
   async function handleSubmit(e: React.SubmitEvent) {
     e.preventDefault();
     setLoading(true);
-    const id = (await postMeme(newMeme)) as string;
+    const id = await postMeme(newMeme);
     redirect("/memes/" + id);
   }
 
