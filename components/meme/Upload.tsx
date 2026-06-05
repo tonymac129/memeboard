@@ -33,7 +33,7 @@ function Upload({
         ? "Uploading..."
         : status === "uploaded"
           ? uploadedFile?.name
-          : "Upload PNG, JPG, or GIF here (max 25MB)"}
+          : "Upload PNG, JPG, or GIF here (max 4MB)"}
       <UploadButton
         className="hidden w-fit"
         endpoint="imageUploader"
