@@ -4,7 +4,7 @@ import type { MemeTag } from "@/app/generated/prisma/client";
 import type { MemeType, TagType } from "@/types/Meme";
 import { motion } from "framer-motion";
 import { useState, useEffect, useRef, useMemo } from "react";
-import { FaCheck } from "react-icons/fa";
+import { FaCheck, FaStar } from "react-icons/fa";
 import { addTag } from "@/app/post/actions";
 import Input from "../ui/Input";
 import Btn from "../ui/Btn";
@@ -114,6 +114,7 @@ function TagModal({ selected, setNewMeme, setSelecting, tags }: TagModalProps) {
                     </div>
                   </div>
                   {tag.name}
+                  {tag.default && <FaStar size={15} title="Popular tag" />}
                 </label>
               ))
             ) : (

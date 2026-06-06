@@ -13,7 +13,7 @@ export async function postMeme(meme: MemeType): Promise<number | undefined> {
       data: {
         title: meme.title,
         image: meme.image,
-        description: meme.description,
+        description: meme.description || "",
         userId: session?.user.id as string,
         tags: {
           connect: meme.tags!.map((tag) => ({

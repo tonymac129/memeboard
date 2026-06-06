@@ -3,7 +3,7 @@ export interface MemeType {
   title: string;
   tags?: TagType[];
   image: string;
-  description: string;
+  description?: string;
   comments: CommentType[];
   created: Date;
 }

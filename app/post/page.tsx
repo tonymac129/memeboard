@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 async function Page() {
-  const memeTags = await prisma.memeTag.findMany();
+  const memeTags = await prisma.memeTag.findMany({ orderBy: { id: "asc" } });
 
   return (
     <div className="px-50 flex flex-col pb-30 gap-y-10">

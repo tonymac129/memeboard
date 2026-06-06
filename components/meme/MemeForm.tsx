@@ -24,6 +24,7 @@ function MemeForm({ postMeme, memeTags }: MemeFormProps) {
     id: 0,
     title: "",
     image: "",
+    tags: [],
     description: "",
     comments: [],
     created: new Date(),
@@ -39,7 +40,9 @@ function MemeForm({ postMeme, memeTags }: MemeFormProps) {
   return (
     <form className="flex flex-col gap-y-3 w-120" onSubmit={handleSubmit}>
       <label className={labelStyles}>
-        Title
+        <div>
+          Title <span className="text-red-500">*</span>
+        </div>
         <Input
           placeholder="Another niche meme 🥹"
           value={newMeme.title}
@@ -72,7 +75,9 @@ function MemeForm({ postMeme, memeTags }: MemeFormProps) {
         </div>
       </label>
       <label className={labelStyles + " w-fit"}>
-        Upload
+        <div>
+          Upload <span className="text-red-500">*</span>
+        </div>
         <Upload setNewMeme={setNewMeme} />
       </label>
       <label className={labelStyles}>
@@ -86,12 +91,14 @@ function MemeForm({ postMeme, memeTags }: MemeFormProps) {
           }
         ></textarea>
       </label>
-      <Btn
-        text={loading ? "Loading..." : "Post"}
-        type="submit"
-        styles="w-fit"
-        primary
-      />
+      {newMeme.title.trim().length > 0 && newMeme.image && (
+        <Btn
+          text={loading ? "Loading..." : "Post"}
+          type="submit"
+          styles="w-fit"
+          primary
+        />
+      )}
       <AnimatePresence>
         {selecting && (
           <TagModal
