@@ -25,11 +25,8 @@ async function Nav() {
           <Link href="/memes" className={navLinkStyles}>
             Memes
           </Link>
-          <Link href="/top" className={navLinkStyles}>
-            Top
-          </Link>
-          <Link href="/new" className={navLinkStyles}>
-            New
+          <Link href="/tags" className={navLinkStyles}>
+            Tags
           </Link>
           <Link href="/friends" className={navLinkStyles}>
             Friends

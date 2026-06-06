@@ -20,11 +20,8 @@ function Footer() {
         <Link href="/memes" className="hover:text-green-500">
           Memes
         </Link>
-        <Link href="/top" className="hover:text-green-500">
-          Top
-        </Link>
-        <Link href="/new" className="hover:text-green-500">
-          New
+        <Link href="/tags" className="hover:text-green-500">
+          Tags
         </Link>
         <Link href="/friends" className="hover:text-green-500">
           Friends
