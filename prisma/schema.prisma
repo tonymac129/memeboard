@@ -26,6 +26,8 @@ model User {
   memes         Meme[]
   comments      Comment[]
   memeTags      MemeTag[]
+  followers     User[]    @relation("Follows")
+  following     User[]    @relation("Follows")
 
   @@unique([email])
   @@map("user")

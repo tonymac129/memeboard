@@ -18,7 +18,6 @@ function SignOut() {
       text={loading ? "Loading..." : "Sign out"}
       onclick={handleSignOut}
       styles="w-fit"
-      primary
     />
   );
 }

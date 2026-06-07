@@ -2,12 +2,12 @@
 
 import type { MemeTag } from "@/app/generated/prisma/client";
 import type { MemeType, TagType } from "@/types/Meme";
-import { motion } from "framer-motion";
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { FaCheck, FaStar } from "react-icons/fa";
 import { addTag } from "@/app/post/actions";
 import Input from "../ui/Input";
 import Btn from "../ui/Btn";
+import Modal from "../ui/Modal";
 
 interface TagModalProps {
   selected: TagType[];
@@ -25,7 +25,6 @@ function TagModal({ selected, setNewMeme, setSelecting, tags }: TagModalProps) {
       tag.name.toLowerCase().includes(search.trim().toLowerCase()),
     );
   }, [search, tags]);
-  const modalRef = useRef<HTMLDivElement>(null);
 
   async function handleAddTag() {
     if (
@@ -48,113 +47,75 @@ function TagModal({ selected, setNewMeme, setSelecting, tags }: TagModalProps) {
     setSelecting(false);
   }
 
-  useEffect(() => {
-    const clickListener = (e: Event) => {
-      if (
-        document.contains(e.target as Node) &&
-        !modalRef.current?.contains(e.target as Node)
-      ) {
-        setSelecting(false);
-      }
-    };
-
-    document.addEventListener("click", clickListener);
-
-    return () => {
-      document.removeEventListener("click", clickListener);
-    };
-  }, [setSelecting]);
-
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="w-screen h-screen fixed top-0 left-0 z-10 bg-zinc-950/70 backdrop-blur-xs flex items-center justify-center"
-    >
-      <motion.div
-        initial={{ scale: 0, y: 100 }}
-        animate={{ scale: 1, y: 0 }}
-        exit={{ scale: 0, y: 100 }}
-        className="rounded w-100 bg-zinc-950 border-2 border-zinc-700"
-        ref={modalRef}
-      >
-        <div className="px-10 pt-5 flex flex-col gap-y-3">
-          <h2 className="text-white text-2xl font-bold">Add tags</h2>
-          <Input
-            placeholder="Search tags"
-            value={search}
-            setValue={(search) => setSearch(search)}
-          />
-          <div className="max-h-70 flex flex-col gap-y-1 overflow-auto">
-            {displayedTags.length > 0 ? (
-              displayedTags.map((tag) => (
-                <label
-                  key={tag.id}
-                  className="text-zinc-300 w-fit cursor-pointer flex items-center gap-x-3 py-2"
-                >
-                  <div className="group">
-                    <input
-                      type="checkbox"
-                      className="hidden"
-                      checked={selectedTags.includes(tag)}
-                      onChange={() => {
-                        setSelectedTags((prev) =>
-                          selectedTags.includes(tag)
-                            ? selectedTags.filter((t) => t !== tag)
-                            : [...prev, tag],
-                        );
-                      }}
-                    />
-                    <div
-                      className="w-4.5 h-4.5 rounded border-2 border-zinc-700 text-zinc-950 flex items-center justify-center
+    <Modal closeModal={() => setSelecting(false)}>
+      <div className="px-10 pt-5 flex flex-col gap-y-3">
+        <h2 className="text-white text-2xl font-bold">Add tags</h2>
+        <Input
+          placeholder="Search tags"
+          value={search}
+          setValue={(search) => setSearch(search)}
+        />
+        <div className="max-h-70 flex flex-col gap-y-1 overflow-auto">
+          {displayedTags.length > 0 ? (
+            displayedTags.map((tag) => (
+              <label
+                key={tag.id}
+                className="text-zinc-300 w-fit cursor-pointer flex items-center gap-x-3 py-2"
+              >
+                <div className="group">
+                  <input
+                    type="checkbox"
+                    className="hidden"
+                    checked={selectedTags.includes(tag)}
+                    onChange={() => {
+                      setSelectedTags((prev) =>
+                        selectedTags.includes(tag)
+                          ? selectedTags.filter((t) => t !== tag)
+                          : [...prev, tag],
+                      );
+                    }}
+                  />
+                  <div
+                    className="w-4.5 h-4.5 rounded border-2 border-zinc-700 text-zinc-950 flex items-center justify-center
                    group-has-checked:border-green-600 group-has-checked:bg-green-600"
-                    >
-                      {selectedTags.includes(tag) && <FaCheck size={13} />}
-                    </div>
+                  >
+                    {selectedTags.includes(tag) && <FaCheck size={13} />}
                   </div>
-                  {tag.name}
-                  {tag.default && <FaStar size={15} title="Popular tag" />}
-                </label>
-              ))
-            ) : (
-              <span className="text-sm text-zinc-300">No tags found</span>
-            )}
-          </div>
-          {newTag && (
-            <Input
-              placeholder="Custom tag"
-              value={newTag.name}
-              setValue={(name) => setNewTag({ ...newTag, name })}
-            />
+                </div>
+                {tag.name}
+                {tag.default && <FaStar size={15} title="Popular tag" />}
+              </label>
+            ))
+          ) : (
+            <span className="text-sm text-zinc-300">No tags found</span>
           )}
-          <div className="flex gap-x-3">
-            <Btn
-              text={newTag ? "Add" : "New tag"}
-              styles="w-fit"
-              onclick={() =>
-                newTag ? handleAddTag() : setNewTag({ id: 0, name: "" })
-              }
-            />
-            {newTag && (
-              <Btn
-                text="Cancel"
-                styles="w-fit"
-                onclick={() => setNewTag(null)}
-              />
-            )}
-          </div>
         </div>
-        <div className="flex gap-x-3 px-10 py-5">
-          <Btn text="Save" onclick={handleSave} styles="w-fit" primary />
-          <Btn
-            text="Cancel"
-            onclick={() => setSelecting(false)}
-            styles="w-fit"
+        {newTag && (
+          <Input
+            placeholder="Custom tag"
+            value={newTag.name}
+            setValue={(name) => setNewTag({ ...newTag, name })}
           />
+        )}
+        <div className="flex gap-x-3">
+          <Btn
+            text={newTag ? "Add" : "New tag"}
+            styles="w-fit"
+            onclick={() =>
+              newTag ? handleAddTag() : setNewTag({ id: 0, name: "" })
+            }
+          />
+          {newTag && (
+            <Btn text="Cancel" styles="w-fit" onclick={() => setNewTag(null)} />
+          )}
         </div>
-      </motion.div>
-    </motion.div>
+      </div>
+      <div className="flex gap-x-3 px-10 py-5">
+        <Btn text="Save" onclick={handleSave} styles="w-fit" primary />
+        <Btn text="Cancel" onclick={() => setSelecting(false)} styles="w-fit" />
+      </div>
+    </Modal>
   );
 }
 
