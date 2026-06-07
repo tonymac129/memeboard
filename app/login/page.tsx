@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 async function Page() {
   const session = await auth.api.getSession({ headers: await headers() });
-  if (session) redirect("/profile");
+  if (session) redirect(`/users/${session.user.username}`);
 
   return <LogIn />;
 }

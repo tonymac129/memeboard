@@ -1,3 +1,5 @@
+"use client";
+
 import type { Meme, User } from "@/app/generated/prisma/client";
 import Link from "next/link";
 import Image from "next/image";
@@ -13,8 +15,11 @@ function MemeCard({ meme }: { meme: MemeType }) {
       className="flex flex-col gap-y-3 border-zinc-700 border-2 rounded hover:bg-zinc-900 px-5 py-3 w-80"
     >
       <div className="flex items-center gap-x-3 text-zinc-300">
-        <Link
-          href={`/users/${meme.userId}`}
+        <div
+          onClick={(e) => {
+            e.preventDefault();
+            window.open(`/users/${meme.user.username}`, "_top");
+          }}
           className="flex items-center gap-x-3 font-bold hover:text-green-500"
         >
           <Image
@@ -25,7 +30,7 @@ function MemeCard({ meme }: { meme: MemeType }) {
             className="rounded-full"
           />
           {meme.user.name}
-        </Link>{" "}
+        </div>{" "}
         •{" "}
         <span className="text-sm" title={meme.createdAt.toISOString()}>
           {meme.createdAt.toLocaleDateString()}

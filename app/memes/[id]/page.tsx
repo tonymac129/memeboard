@@ -43,7 +43,7 @@ async function Page({ params }: { params: Promise<{ id: number }> }) {
         <p className="text-zinc-300 text-sm">
           Uploaded by:{" "}
           <Link
-            href={`/users/${memeData.user.id}`}
+            href={`/users/${memeData.user.username}`}
             className="hover:text-green-500"
           >
             {memeData.user.name}

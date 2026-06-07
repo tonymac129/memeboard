@@ -13,7 +13,7 @@ function Comment({ comment, user }: CommentProps) {
     <div className="border-2 border-zinc-700 rounded flex flex-col gap-y-3 p-5">
       <div className="flex items-center gap-x-3 text-zinc-300">
         <Link
-          href={`/users/${user.id}`}
+          href={`/users/${user.username}`}
           className="flex items-center gap-x-3 font-bold hover:text-green-500"
         >
           <Image

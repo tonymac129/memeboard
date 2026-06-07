@@ -80,7 +80,7 @@ function LogInForm({ isLogIn, setIsLogIn }: LogInFormProps) {
   async function signIn(provider: string) {
     await authClient.signIn.social({
       provider: provider.toLowerCase(),
-      callbackURL: "/profile",
+      callbackURL: "/login",
     });
   }
 

@@ -42,7 +42,7 @@ async function Page({ params }: { params: Promise<{ id: string }> }) {
         <div className="flex gap-x-1 text-zinc-300">
           Created by:
           <Link
-            href={`/users/${memeTag.userId}`}
+            href={`/users/${memeTag.user.username}`}
             className="hover:text-green-500"
           >
             {memeTag.user.name}

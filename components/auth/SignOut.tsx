@@ -17,6 +17,7 @@ function SignOut() {
     <Btn
       text={loading ? "Loading..." : "Sign out"}
       onclick={handleSignOut}
+      styles="w-fit"
       primary
     />
   );

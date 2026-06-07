@@ -32,7 +32,12 @@ export const auth = betterAuth({
       create: {
         before: async (user) => {
           if (!user.username) {
-            return { data: { ...user, username: user.email } };
+            return {
+              data: {
+                ...user,
+                username: user.email.slice(0, user.email.indexOf("@")),
+              },
+            };
           }
           return { data: user };
         },

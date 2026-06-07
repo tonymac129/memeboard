@@ -38,7 +38,10 @@ async function Nav() {
               <Btn text="Post" href="/post" styles="gap-x-1.5!" primary>
                 <MdOutlineAdd size={22} />
               </Btn>
-              <User img={session.user.image || "/icons/default-avatar.svg"} />
+              <User
+                username={session.user.username as string}
+                image={session.user.image || "/icons/default-avatar.svg"}
+              />
             </>
           ) : (
             <Btn text="Log in" href="/login" primary />
