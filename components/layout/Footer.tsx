@@ -23,8 +23,8 @@ function Footer() {
         <Link href="/tags" className="hover:text-green-500">
           Tags
         </Link>
-        <Link href="/friends" className="hover:text-green-500">
-          Friends
+        <Link href="/chat" className="hover:text-green-500">
+          Chat
         </Link>
         <a
           href="https://github.com/tonymac129/memeboard"

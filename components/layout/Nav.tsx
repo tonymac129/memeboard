@@ -28,8 +28,8 @@ async function Nav() {
           <Link href="/tags" className={navLinkStyles}>
             Tags
           </Link>
-          <Link href="/friends" className={navLinkStyles}>
-            Friends
+          <Link href="/chat" className={navLinkStyles}>
+            Chat
           </Link>
         </div>
         <div className="flex items-center gap-x-5">

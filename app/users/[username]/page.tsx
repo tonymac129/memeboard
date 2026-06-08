@@ -7,11 +7,12 @@ import MemeCard from "@/components/meme/MemeCard";
 import EditProfile from "@/components/user/EditProfile";
 import SignOut from "@/components/auth/SignOut";
 import Delete from "@/components/user/Delete";
-import Image from "next/image";
 import Follow from "@/components/user/Follow";
+import Following from "@/components/user/Following";
+import UserCard from "@/components/user/UserCard";
+import Image from "next/image";
 
-async function Page({ params }: { params: Promise<{ username: string }> }) {
-  const { username } = await params;
+async function fetchUser(username: string) {
   const userData = await prisma.user.findUnique({
     where: { username },
     include: {
@@ -21,6 +22,42 @@ async function Page({ params }: { params: Promise<{ username: string }> }) {
     },
   });
   if (!userData) redirect("/");
+  return userData;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ username: string }>;
+}) {
+  const { username } = await params;
+  const userData = await fetchUser(username);
+
+  return {
+    title: `${userData.name}'s Profile | MemeBoard`,
+    description: `Check out ${userData.name}'s custom profile on MemeBoard! Explore their memes and interests and connect with them!`,
+  };
+}
+
+async function Page({ params }: { params: Promise<{ username: string }> }) {
+  const { username } = await params;
+  const userData = await fetchUser(username);
+  const friends = await prisma.user.findMany({
+    where: {
+      AND: [
+        {
+          followers: {
+            some: { id: userData.id },
+          },
+        },
+        {
+          following: {
+            some: { id: userData.id },
+          },
+        },
+      ],
+    },
+  });
   const session = await auth.api.getSession({ headers: await headers() });
   const isUser = userData.id === session?.user.id;
   const isFollowing = userData.followers.find((u) => u.id === session?.user.id)
@@ -42,8 +79,10 @@ async function Page({ params }: { params: Promise<{ username: string }> }) {
           <p>@{userData.username}</p>
         </div>
         <div className="flex gap-x-3 text-base flex-wrap">
-          <span>{userData.followers.length} followers</span> •{" "}
-          <span>{userData.following.length} following</span>
+          <Following
+            followers={userData.followers}
+            following={userData.following}
+          />
         </div>
         <p>{userData.email}</p>
         <p>Joined {userData.createdAt.toLocaleDateString()}</p>
@@ -58,13 +97,21 @@ async function Page({ params }: { params: Promise<{ username: string }> }) {
           <Follow id={userData.id} isFollowing={isFollowing} />
         )}
       </div>
-      <div>
+      <div className="flex-1 flex flex-col gap-y-5">
         <h2 className="text-2xl text-green-500 font-bold">
           Memes posted ({userData.memes.length})
         </h2>
-        <div className="flex flex-wrap justify-center gap-5 mt-5">
+        <div className="flex flex-wrap gap-5">
           {userData.memes.map((meme) => {
             return <MemeCard key={meme.id} meme={meme} />;
+          })}
+        </div>
+        <h2 className="text-2xl text-green-500 font-bold">
+          Friends ({friends.length})
+        </h2>
+        <div className="flex flex-wrap gap-5">
+          {friends.map((user) => {
+            return <UserCard key={user.id} user={user} />;
           })}
         </div>
       </div>
