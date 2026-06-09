@@ -2,6 +2,7 @@ export interface MemeType {
   id: number;
   title: string;
   tags?: TagType[];
+  source?: string;
   image: string;
   description?: string;
   comments: CommentType[];

@@ -3,16 +3,24 @@ import { postComment } from "./actions";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { FaLink } from "react-icons/fa";
 import CommentField from "@/components/meme/CommentField";
 import Comment from "@/components/meme/Comment";
+import Btn from "@/components/ui/Btn";
+import MemeBar from "@/components/meme/MemeBar";
 import Image from "next/image";
 import Link from "next/link";
-import Btn from "@/components/ui/Btn";
 
 async function fetchMeme(id: number) {
   const memeData = await prisma.meme.findUnique({
     where: { id: Number(id) },
-    include: { user: true, tags: true, comments: { include: { user: true } } },
+    include: {
+      user: true,
+      tags: true,
+      upvotes: true,
+      downvotes: true,
+      comments: { include: { user: true } },
+    },
   });
   if (!memeData) redirect("/memes");
   return memeData;
@@ -49,7 +57,19 @@ async function Page({ params }: { params: Promise<{ id: number }> }) {
             {memeData.user.name}
           </Link>
         </p>
-        <h1 className="text-white font-bold text-3xl">{memeData.title}</h1>
+        <h1 className="text-white font-bold text-3xl flex items-center gap-x-5">
+          {memeData.title}
+          {memeData.source && (
+            <Link
+              href={memeData.source}
+              className="hover:text-green-500"
+              title="Original source"
+              target="_blank"
+            >
+              <FaLink size={20} />
+            </Link>
+          )}
+        </h1>
         {memeData.tags.length > 0 && (
           <div className="flex gap-3 flex-wrap">
             {memeData.tags.map((tag) => (
@@ -74,6 +94,7 @@ async function Page({ params }: { params: Promise<{ id: number }> }) {
         height={300}
         className="rounded"
       />
+      <MemeBar meme={memeData} userId={session?.user.id} />
       <div className="flex flex-col gap-y-5">
         {session?.user ? (
           <CommentField

@@ -9,10 +9,17 @@ import { revalidatePath } from "next/cache";
 export async function postMeme(meme: MemeType): Promise<number | undefined> {
   try {
     const session = await auth.api.getSession({ headers: await headers() });
+    const sourceLink = meme.source
+      ? meme.source.toLowerCase().includes("https://") ||
+        meme.source.toLowerCase().includes("http://")
+        ? meme.source
+        : "https://" + meme.source
+      : "";
     const newMeme = await prisma.meme.create({
       data: {
         title: meme.title,
         image: meme.image,
+        source: sourceLink,
         description: meme.description || "",
         userId: session?.user.id as string,
         tags: {

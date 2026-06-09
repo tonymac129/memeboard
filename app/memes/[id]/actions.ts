@@ -23,3 +23,31 @@ export async function postComment(comment: CommentType) {
     console.error("Error: " + err);
   }
 }
+
+export async function vote(memeId: number, vote: boolean | null) {
+  try {
+    const session = await auth.api.getSession({ headers: await headers() });
+    if (session?.user) {
+      await prisma.meme.update({
+        where: { id: memeId },
+        data: vote
+          ? {
+              upvotes: { connect: { id: session.user.id } },
+              downvotes: { disconnect: { id: session.user.id } },
+            }
+          : vote === false
+            ? {
+                upvotes: { disconnect: { id: session.user.id } },
+                downvotes: { connect: { id: session.user.id } },
+              }
+            : {
+                upvotes: { disconnect: { id: session.user.id } },
+                downvotes: { disconnect: { id: session.user.id } },
+              },
+      });
+      revalidatePath(`/memes/${memeId}`);
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}

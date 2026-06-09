@@ -28,6 +28,8 @@ model User {
   memeTags      MemeTag[]
   followers     User[]    @relation("Follows")
   following     User[]    @relation("Follows")
+  upvotes       Meme[]    @relation("Upvotes")
+  downvotes     Meme[]    @relation("Downvotes")
 
   @@unique([email])
   @@map("user")
@@ -85,6 +87,7 @@ model Meme {
   id          Int       @id @default(autoincrement())
   title       String
   tags        MemeTag[]
+  source      String?
   image       String
   description String
   createdAt   DateTime  @default(now())
@@ -92,6 +95,8 @@ model Meme {
   userId      String
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   comments    Comment[]
+  upvotes     User[]    @relation("Upvotes")
+  downvotes   User[]    @relation("Downvotes")
 
   @@index([userId])
 }

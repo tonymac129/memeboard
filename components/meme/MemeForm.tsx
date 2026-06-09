@@ -41,7 +41,10 @@ function MemeForm({ postMeme, memeTags }: MemeFormProps) {
     <form className="flex flex-col gap-y-3 w-120" onSubmit={handleSubmit}>
       <label className={labelStyles}>
         <div>
-          Title <span className="text-red-500">*</span>
+          Title{" "}
+          <span className="text-red-500" title="Required field">
+            *
+          </span>
         </div>
         <Input
           placeholder="Another niche meme 🥹"
@@ -76,7 +79,10 @@ function MemeForm({ postMeme, memeTags }: MemeFormProps) {
       </label>
       <label className={labelStyles + " w-fit"}>
         <div>
-          Upload <span className="text-red-500">*</span>
+          Upload{" "}
+          <span className="text-red-500" title="Required field">
+            *
+          </span>
         </div>
         <Upload setNewMeme={setNewMeme} />
       </label>
@@ -90,6 +96,14 @@ function MemeForm({ postMeme, memeTags }: MemeFormProps) {
             setNewMeme({ ...newMeme, description: e.target.value })
           }
         ></textarea>
+      </label>
+      <label className={labelStyles}>
+        <div>Original source</div>
+        <Input
+          placeholder="tiktok.com/@memeboard/video/12345"
+          value={newMeme.source || ""}
+          setValue={(source) => setNewMeme({ ...newMeme, source })}
+        />
       </label>
       {newMeme.title.trim().length > 0 && newMeme.image && (
         <Btn
