@@ -3,6 +3,7 @@ export interface MemeType {
   title: string;
   tags?: TagType[];
   source?: string;
+  collections?: CollectionType[];
   image: string;
   description?: string;
   comments: CommentType[];
@@ -26,4 +27,10 @@ export interface TagType {
   id: number;
   name: string;
   default?: boolean;
+}
+
+export interface CollectionType {
+  id: number;
+  name: string;
+  userId: string;
 }

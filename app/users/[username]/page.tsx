@@ -106,6 +106,11 @@ async function Page({ params }: { params: Promise<{ username: string }> }) {
             return <MemeCard key={meme.id} meme={meme} />;
           })}
         </div>
+        <h2 className="text-2xl text-green-500 font-bold">Collections (0)</h2>
+        <div className="flex flex-wrap gap-5">
+          No collections yet
+          {/* TODO: add collection pages and section on profile */}
+        </div>
         <h2 className="text-2xl text-green-500 font-bold">
           Friends ({friends.length})
         </h2>

@@ -44,6 +44,10 @@ async function Page({ params }: { params: Promise<{ id: number }> }) {
   const { id } = await params;
   const memeData = await fetchMeme(id);
   const session = await auth.api.getSession({ headers: await headers() });
+  const userCollections = await prisma.collection.findMany({
+    where: { userId: session?.user.id },
+    include: { memes: true },
+  });
 
   return (
     <div className="px-50 pt-10 pb-30 flex flex-col gap-y-10">
@@ -94,7 +98,11 @@ async function Page({ params }: { params: Promise<{ id: number }> }) {
         height={300}
         className="rounded"
       />
-      <MemeBar meme={memeData} userId={session?.user.id} />
+      <MemeBar
+        meme={memeData}
+        userId={session?.user.id}
+        collections={userCollections}
+      />
       <div className="flex flex-col gap-y-5">
         {session?.user ? (
           <CommentField

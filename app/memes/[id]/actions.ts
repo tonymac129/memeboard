@@ -1,6 +1,6 @@
 "use server";
 
-import type { CommentType } from "@/types/Meme";
+import type { CollectionType, CommentType } from "@/types/Meme";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { auth } from "@/lib/auth";
@@ -44,6 +44,52 @@ export async function vote(memeId: number, vote: boolean | null) {
                 upvotes: { disconnect: { id: session.user.id } },
                 downvotes: { disconnect: { id: session.user.id } },
               },
+      });
+      revalidatePath(`/memes/${memeId}`);
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}
+
+export async function createCollection(
+  userId: string,
+  memeId: number,
+  collection: CollectionType,
+) {
+  try {
+    const session = await auth.api.getSession({ headers: await headers() });
+    if (session?.user.id === userId) {
+      await prisma.collection.create({
+        data: {
+          name: collection.name,
+          userId: userId,
+        },
+      });
+      revalidatePath(`/memes/${memeId}`);
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}
+
+export async function addCollections(
+  userId: string,
+  memeId: number,
+  collections: CollectionType[],
+) {
+  try {
+    const session = await auth.api.getSession({ headers: await headers() });
+    if (session?.user.id === userId) {
+      await prisma.meme.update({
+        where: { id: memeId },
+        data: {
+          collections: {
+            set: collections.map((c) => {
+              return { id: c.id };
+            }),
+          },
+        },
       });
       revalidatePath(`/memes/${memeId}`);
     }

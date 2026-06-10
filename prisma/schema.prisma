@@ -13,23 +13,24 @@ datasource db {
 }
 
 model User {
-  id            String    @id
+  id            String       @id
   name          String
-  username      String    @unique @default("")
+  username      String       @unique @default("")
   email         String
-  emailVerified Boolean   @default(false)
+  emailVerified Boolean      @default(false)
   image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
   sessions      Session[]
   accounts      Account[]
   memes         Meme[]
   comments      Comment[]
   memeTags      MemeTag[]
-  followers     User[]    @relation("Follows")
-  following     User[]    @relation("Follows")
-  upvotes       Meme[]    @relation("Upvotes")
-  downvotes     Meme[]    @relation("Downvotes")
+  followers     User[]       @relation("Follows")
+  following     User[]       @relation("Follows")
+  upvotes       Meme[]       @relation("Upvotes")
+  downvotes     Meme[]       @relation("Downvotes")
+  collections   Collection[]
 
   @@unique([email])
   @@map("user")
@@ -84,19 +85,20 @@ model Verification {
 }
 
 model Meme {
-  id          Int       @id @default(autoincrement())
+  id          Int          @id @default(autoincrement())
   title       String
   tags        MemeTag[]
   source      String?
   image       String
   description String
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
   userId      String
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   comments    Comment[]
-  upvotes     User[]    @relation("Upvotes")
-  downvotes   User[]    @relation("Downvotes")
+  upvotes     User[]       @relation("Upvotes")
+  downvotes   User[]       @relation("Downvotes")
+  collections Collection[] @relation("Collections")
 
   @@index([userId])
 }
@@ -123,4 +125,12 @@ model MemeTag {
   memes   Meme[]
 
   @@index([userId])
+}
+
+model Collection {
+  id     Int    @id @default(autoincrement())
+  name   String
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  memes  Meme[] @relation("Collections")
 }
