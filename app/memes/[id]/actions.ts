@@ -1,6 +1,6 @@
 "use server";
 
-import type { CollectionType, CommentType } from "@/types/Meme";
+import type { CollectionType, CommentType, ReportType } from "@/types/Meme";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { auth } from "@/lib/auth";
@@ -92,6 +92,25 @@ export async function addCollections(
         },
       });
       revalidatePath(`/memes/${memeId}`);
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}
+
+export async function reportMeme(memeId: number, report: ReportType) {
+  try {
+    const session = await auth.api.getSession({ headers: await headers() });
+    if (session?.user) {
+      const newReport = await prisma.report.create({
+        data: {
+          selectedOptions: report.selectedOptions,
+          feedback: report.feedback || "",
+          memeId: memeId,
+          userId: session.user.id,
+        },
+      });
+      console.log(newReport);
     }
   } catch (err) {
     console.error("Error: " + err);

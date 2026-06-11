@@ -5,18 +5,21 @@ import { headers } from "next/headers";
 import { deleteAccount } from "./actions";
 import MemeCard from "@/components/meme/MemeCard";
 import EditProfile from "@/components/user/EditProfile";
+import CollectionCard from "@/components/collection/CollectionCard";
 import SignOut from "@/components/auth/SignOut";
 import Delete from "@/components/user/Delete";
 import Follow from "@/components/user/Follow";
 import Following from "@/components/user/Following";
 import UserCard from "@/components/user/UserCard";
 import Image from "next/image";
+import Link from "next/link";
 
 async function fetchUser(username: string) {
   const userData = await prisma.user.findUnique({
     where: { username },
     include: {
       memes: { include: { user: true } },
+      collections: { include: { memes: true } },
       followers: true,
       following: true,
     },
@@ -98,22 +101,38 @@ async function Page({ params }: { params: Promise<{ username: string }> }) {
         )}
       </div>
       <div className="flex-1 flex flex-col gap-y-5">
-        <h2 className="text-2xl text-green-500 font-bold">
+        <Link href="/memes" className="w-fit text-2xl text-green-500 font-bold">
           Memes posted ({userData.memes.length})
-        </h2>
+        </Link>
         <div className="flex flex-wrap gap-5">
-          {userData.memes.map((meme) => {
-            return <MemeCard key={meme.id} meme={meme} />;
-          })}
+          {userData.memes.length > 0 ? (
+            userData.memes.map((meme) => {
+              return <MemeCard key={meme.id} meme={meme} />;
+            })
+          ) : (
+            <div className="text-zinc-300 text-sm">No memes posted yet</div>
+          )}
         </div>
-        <h2 className="text-2xl text-green-500 font-bold">Collections (0)</h2>
+        <Link
+          href="/collections"
+          className="w-fit text-2xl text-green-500 font-bold"
+        >
+          Collections ({userData.collections.length})
+        </Link>
         <div className="flex flex-wrap gap-5">
-          No collections yet
-          {/* TODO: add collection pages and section on profile */}
+          {userData.collections.length > 0 ? (
+            userData.collections.map((collection) => {
+              return (
+                <CollectionCard key={collection.id} collection={collection} />
+              );
+            })
+          ) : (
+            <div className="text-zinc-300 text-sm">No collections yet</div>
+          )}
         </div>
-        <h2 className="text-2xl text-green-500 font-bold">
+        <Link href="/chat" className="w-fit text-2xl text-green-500 font-bold">
           Friends ({friends.length})
-        </h2>
+        </Link>
         <div className="flex flex-wrap gap-5">
           {friends.map((user) => {
             return <UserCard key={user.id} user={user} />;

@@ -31,6 +31,7 @@ model User {
   upvotes       Meme[]       @relation("Upvotes")
   downvotes     Meme[]       @relation("Downvotes")
   collections   Collection[]
+  reports       Report[]
 
   @@unique([email])
   @@map("user")
@@ -99,6 +100,7 @@ model Meme {
   upvotes     User[]       @relation("Upvotes")
   downvotes   User[]       @relation("Downvotes")
   collections Collection[] @relation("Collections")
+  reports     Report[]
 
   @@index([userId])
 }
@@ -133,4 +135,14 @@ model Collection {
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   memes  Meme[] @relation("Collections")
+}
+
+model Report {
+  id              Int      @id @default(autoincrement())
+  selectedOptions String[]
+  feedback        String
+  memeId          Int
+  meme            Meme     @relation(fields: [memeId], references: [id], onDelete: Cascade)
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

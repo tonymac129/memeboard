@@ -11,8 +11,8 @@ async function Nav() {
   const session = await auth.api.getSession({ headers: await headers() });
 
   return (
-    <div className="sticky top-0 bg-zinc-950 z-5">
-      <nav className="border-b-2 border-b-zinc-800 flex items-center justify-between px-50 py-3">
+    <div className="sticky top-0 bg-zinc-950 z-50 border-b-2 border-b-zinc-800">
+      <nav className="flex items-center justify-between px-50 py-3">
         <div className="flex items-center gap-x-3">
           <Link
             href="/"

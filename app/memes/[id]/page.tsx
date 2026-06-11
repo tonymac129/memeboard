@@ -48,6 +48,22 @@ async function Page({ params }: { params: Promise<{ id: number }> }) {
     where: { userId: session?.user.id },
     include: { memes: true },
   });
+  const userFriends = await prisma.user.findMany({
+    where: {
+      AND: [
+        {
+          followers: {
+            some: { id: session?.user.id },
+          },
+        },
+        {
+          following: {
+            some: { id: session?.user.id },
+          },
+        },
+      ],
+    },
+  });
 
   return (
     <div className="px-50 pt-10 pb-30 flex flex-col gap-y-10">
@@ -102,6 +118,7 @@ async function Page({ params }: { params: Promise<{ id: number }> }) {
         meme={memeData}
         userId={session?.user.id}
         collections={userCollections}
+        friends={userFriends}
       />
       <div className="flex flex-col gap-y-5">
         {session?.user ? (

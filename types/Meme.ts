@@ -34,3 +34,8 @@ export interface CollectionType {
   name: string;
   userId: string;
 }
+
+export interface ReportType {
+  selectedOptions: string[];
+  feedback?: string;
+}
