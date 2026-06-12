@@ -30,6 +30,7 @@ model User {
   following     User[]       @relation("Follows")
   upvotes       Meme[]       @relation("Upvotes")
   downvotes     Meme[]       @relation("Downvotes")
+  likedComments Comment[]    @relation("Comment Likes")
   collections   Collection[]
   reports       Report[]
 
@@ -114,6 +115,8 @@ model Comment {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   memeId    Int
   meme      Meme     @relation(fields: [memeId], references: [id], onDelete: Cascade)
+  likedBy   User[]   @relation("Comment Likes")
+  parentId  Int?
 
   @@index([userId])
 }

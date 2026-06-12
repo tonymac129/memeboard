@@ -5,12 +5,33 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { FaLink } from "react-icons/fa";
 import CommentField from "@/components/meme/CommentField";
-import Comment from "@/components/meme/Comment";
+import Comment, { CommentType } from "@/components/meme/Comment";
 import Btn from "@/components/ui/Btn";
 import MemeBar from "@/components/meme/MemeBar";
 import Image from "next/image";
 import Link from "next/link";
 
+function generateTree(comments: CommentType[]): CommentType[] {
+  const commentMap: Record<string, CommentType & { replies: CommentType[] }> =
+    {};
+  const roots: CommentType[] = [];
+
+  comments.forEach((comment) => {
+    commentMap[comment.id] = { ...comment, replies: [] };
+  });
+
+  comments.forEach((comment) => {
+    const mappedComment = commentMap[comment.id];
+    if (comment.parentId) {
+      const parent = commentMap[comment.parentId];
+      parent.replies.push(mappedComment);
+    } else {
+      roots.push(mappedComment);
+    }
+  });
+
+  return roots;
+}
 async function fetchMeme(id: number) {
   const memeData = await prisma.meme.findUnique({
     where: { id: Number(id) },
@@ -19,7 +40,7 @@ async function fetchMeme(id: number) {
       tags: true,
       upvotes: true,
       downvotes: true,
-      comments: { include: { user: true } },
+      comments: { include: { user: true, likedBy: true } },
     },
   });
   if (!memeData) redirect("/memes");
@@ -43,6 +64,7 @@ export async function generateMetadata({
 async function Page({ params }: { params: Promise<{ id: number }> }) {
   const { id } = await params;
   const memeData = await fetchMeme(id);
+  memeData.comments = generateTree(memeData.comments);
   const session = await auth.api.getSession({ headers: await headers() });
   const userCollections = await prisma.collection.findMany({
     where: { userId: session?.user.id },
@@ -140,7 +162,11 @@ async function Page({ params }: { params: Promise<{ id: number }> }) {
         <div className="w-120 flex flex-col gap-y-5">
           {memeData.comments.length > 0 ? (
             memeData.comments.map((comment) => (
-              <Comment key={comment.id} comment={comment} user={comment.user} />
+              <Comment
+                key={comment.id}
+                comment={comment}
+                memeId={memeData.id}
+              />
             ))
           ) : (
             <span className="text-sm text-zinc-300">

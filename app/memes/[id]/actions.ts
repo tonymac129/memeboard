@@ -6,16 +6,26 @@ import { revalidatePath } from "next/cache";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 
-export async function postComment(comment: CommentType) {
+export async function postComment(
+  comment: CommentType,
+  parentId: number | null = null,
+) {
   try {
     const session = await auth.api.getSession({ headers: await headers() });
     if (session?.user) {
       await prisma.comment.create({
-        data: {
-          content: comment.content,
-          userId: session.user.id,
-          memeId: comment.memeId,
-        },
+        data: parentId
+          ? {
+              content: comment.content,
+              userId: session.user.id,
+              memeId: comment.memeId,
+              parentId,
+            }
+          : {
+              content: comment.content,
+              userId: session.user.id,
+              memeId: comment.memeId,
+            },
       });
       revalidatePath(`/memes/${comment.memeId}`);
     }
@@ -102,7 +112,7 @@ export async function reportMeme(memeId: number, report: ReportType) {
   try {
     const session = await auth.api.getSession({ headers: await headers() });
     if (session?.user) {
-      const newReport = await prisma.report.create({
+      await prisma.report.create({
         data: {
           selectedOptions: report.selectedOptions,
           feedback: report.feedback || "",
@@ -110,7 +120,29 @@ export async function reportMeme(memeId: number, report: ReportType) {
           userId: session.user.id,
         },
       });
-      console.log(newReport);
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}
+
+export async function likeComment(
+  liking: boolean,
+  commentId: number,
+  memeId: number,
+) {
+  try {
+    const session = await auth.api.getSession({ headers: await headers() });
+    if (session?.user) {
+      await prisma.comment.update({
+        where: { id: commentId },
+        data: {
+          likedBy: liking
+            ? { connect: { id: session.user.id } }
+            : { disconnect: { id: session.user.id } },
+        },
+      });
+      revalidatePath(`/memes/${memeId}`);
     }
   } catch (err) {
     console.error("Error: " + err);
