@@ -1,6 +1,7 @@
 "use client";
 
 import type { Meme, User } from "@/app/generated/prisma/client";
+import { displayTime } from "@/lib/calc";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -33,7 +34,8 @@ function MemeCard({ meme }: { meme: MemeType }) {
         </div>{" "}
         •{" "}
         <span className="text-sm" title={meme.createdAt.toISOString()}>
-          {meme.createdAt.toLocaleDateString()}
+          {displayTime(meme.createdAt.getTime()) ||
+            meme.createdAt.toLocaleDateString()}
         </span>
       </div>
       <h2 className="text-white text-xl font-bold">{meme.title}</h2>

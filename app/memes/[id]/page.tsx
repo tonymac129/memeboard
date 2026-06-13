@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { FaLink } from "react-icons/fa";
+import { displayTime } from "@/lib/calc";
 import CommentField from "@/components/meme/CommentField";
 import Comment, { CommentType } from "@/components/meme/Comment";
 import Btn from "@/components/ui/Btn";
@@ -87,18 +88,27 @@ async function Page({ params }: { params: Promise<{ id: number }> }) {
     },
   });
 
+  //TODO: add editing and deleting memes
+
   return (
     <div className="px-50 pt-10 pb-30 flex flex-col gap-y-10">
       <div className="flex flex-col gap-y-3">
-        <p className="text-zinc-300 text-sm">
-          Uploaded by:{" "}
-          <Link
-            href={`/users/${memeData.user.username}`}
-            className="hover:text-green-500"
-          >
-            {memeData.user.name}
-          </Link>
-        </p>
+        <div className="flex gap-x-3 text-zinc-300 text-sm">
+          <p>
+            Uploaded by:{" "}
+            <Link
+              href={`/users/${memeData.user.username}`}
+              className="hover:text-green-500"
+            >
+              {memeData.user.name}
+            </Link>
+          </p>{" "}
+          •
+          <p title={memeData.createdAt.toISOString()}>
+            {displayTime(memeData.createdAt.getTime()) ||
+              memeData.createdAt.toLocaleDateString()}
+          </p>
+        </div>
         <h1 className="text-white font-bold text-3xl flex items-center gap-x-5">
           {memeData.title}
           {memeData.source && (

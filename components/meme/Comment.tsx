@@ -1,6 +1,7 @@
 import type { User, Comment } from "@/app/generated/prisma/client";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { displayTime } from "@/lib/calc";
 import Reply from "../comment/Reply";
 import Image from "next/image";
 import Link from "next/link";
@@ -42,7 +43,8 @@ async function Comment({ comment, memeId }: CommentProps) {
         </Link>{" "}
         •{" "}
         <span className="text-sm" title={comment.createdAt.toISOString()}>
-          {comment.createdAt.toLocaleDateString()}
+          {displayTime(comment.createdAt.getTime()) ||
+            comment.createdAt.toLocaleDateString()}
         </span>
       </div>
       <p className="text-zinc-300">{comment.content}</p>
