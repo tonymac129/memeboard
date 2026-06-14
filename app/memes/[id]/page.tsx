@@ -190,3 +190,5 @@ async function Page({ params }: { params: Promise<{ id: number }> }) {
 }
 
 export default Page;
+
+//TODO: add editing and deleting memes

@@ -18,7 +18,7 @@ async function fetchUser(username: string) {
   const userData = await prisma.user.findUnique({
     where: { username },
     include: {
-      memes: { include: { user: true } },
+      memes: { include: { user: true, upvotes: true, downvotes: true } },
       collections: { include: { memes: true } },
       followers: true,
       following: true,

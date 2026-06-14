@@ -6,7 +6,10 @@ import MemeCard from "@/components/meme/MemeCard";
 async function fetchCollection(id: string) {
   const collectionData = await prisma.collection.findUnique({
     where: { id: Number(id) },
-    include: { memes: { include: { user: true } }, user: true },
+    include: {
+      memes: { include: { user: true, upvotes: true, downvotes: true } },
+      user: true,
+    },
   });
   if (!collectionData) redirect("/collections");
   return collectionData;

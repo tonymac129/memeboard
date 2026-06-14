@@ -7,7 +7,10 @@ import MemeCard from "@/components/meme/MemeCard";
 async function fetchTag(id: string) {
   const memeTag = await prisma.memeTag.findUnique({
     where: { id: Number(id) },
-    include: { memes: { include: { user: true } }, user: true },
+    include: {
+      memes: { include: { user: true, upvotes: true, downvotes: true } },
+      user: true,
+    },
   });
   if (!memeTag) redirect("/tags");
   return memeTag;
