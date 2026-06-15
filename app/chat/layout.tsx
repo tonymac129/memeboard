@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import Provider from "@/components/chat/Provider";
 import Friend from "@/components/chat/Friend";
 
 export default async function ChatLayout({
@@ -36,7 +37,9 @@ export default async function ChatLayout({
           return <Friend key={friend.id} friend={friend} />;
         })}
       </div>
-      <div className="flex-1">{children}</div>
+      <div className="flex-1">
+        <Provider>{children}</Provider>
+      </div>
     </div>
   );
 }

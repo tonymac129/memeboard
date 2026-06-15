@@ -1,18 +1,35 @@
 "use client";
 
 import { useState } from "react";
+import { sendMessage } from "@/app/chat/[username]/actions";
 import Input from "../ui/Input";
 
-function MessageInput({ name }: { name: string }) {
+interface MessageInputProps {
+  name: string;
+  username: string;
+}
+
+function MessageInput({ name, username }: MessageInputProps) {
   const [message, setMessage] = useState<string>("");
 
+  async function handleSubmit(e: React.SubmitEvent) {
+    e.preventDefault();
+    if (message.trim().length > 0) {
+      await sendMessage(message, username);
+      setMessage("");
+    }
+  }
+
   return (
-    <Input
-      placeholder={`Message ${name}`}
-      value={message}
-      setValue={(m) => setMessage(m)}
-      styles="w-full"
-    />
+    <form onSubmit={handleSubmit} className="w-full">
+      <Input
+        placeholder={`Message ${name}`}
+        value={message}
+        setValue={(m) => setMessage(m)}
+        styles="w-full"
+      />
+      <button type="submit" className="hidden" />
+    </form>
   );
 }
 

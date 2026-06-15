@@ -1,8 +1,11 @@
+import type { MessageType } from "@/types/Chat";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import { redis } from "@/lib/redis";
 import MessageInput from "@/components/chat/MessageInput";
 import Image from "next/image";
 import Link from "next/link";
+import Messages from "./Messages";
 
 async function Page({ params }: { params: Promise<{ username: string }> }) {
   const { username } = await params;
@@ -11,6 +14,11 @@ async function Page({ params }: { params: Promise<{ username: string }> }) {
     include: { followers: true, following: true },
   });
   if (!userData) redirect("/chat");
+  const messages: MessageType[] = await redis.lrange(
+    `messages:${username}`,
+    0,
+    -1,
+  );
 
   return (
     <div className="flex-1 h-full">
@@ -34,9 +42,10 @@ async function Page({ params }: { params: Promise<{ username: string }> }) {
             following
           </div>
         </div>
+        <Messages messages={messages} />
       </div>
       <div className="h-20 w-full flex items-center justify-center px-5">
-        <MessageInput name={userData.name} />
+        <MessageInput name={userData.name} username={userData.username} />
       </div>
     </div>
   );
