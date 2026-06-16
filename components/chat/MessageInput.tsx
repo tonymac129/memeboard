@@ -6,16 +6,16 @@ import Input from "../ui/Input";
 
 interface MessageInputProps {
   name: string;
-  username: string;
+  id: string;
 }
 
-function MessageInput({ name, username }: MessageInputProps) {
+function MessageInput({ name, id }: MessageInputProps) {
   const [message, setMessage] = useState<string>("");
 
   async function handleSubmit(e: React.SubmitEvent) {
     e.preventDefault();
     if (message.trim().length > 0) {
-      await sendMessage(message, username);
+      await sendMessage(message, id);
       setMessage("");
     }
   }

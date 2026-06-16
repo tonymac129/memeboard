@@ -33,6 +33,8 @@ model User {
   likedComments Comment[]    @relation("Comment Likes")
   collections   Collection[]
   reports       Report[]
+  chats1        Chat[]       @relation("User 1")
+  chats2        Chat[]       @relation("User 2")
 
   @@unique([email])
   @@map("user")
@@ -148,4 +150,14 @@ model Report {
   meme            Meme     @relation(fields: [memeId], references: [id], onDelete: Cascade)
   userId          String
   user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Chat {
+  id      String @id @default(uuid())
+  userId1 String
+  user1   User   @relation(fields: [userId1], references: [id], onDelete: Cascade, name: "User 1")
+  userId2 String
+  user2   User   @relation(fields: [userId2], references: [id], onDelete: Cascade, name: "User 2")
+
+  @@unique([userId1, userId2])
 }

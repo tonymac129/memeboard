@@ -2,6 +2,8 @@ import type { MessageType } from "@/types/Chat";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { redis } from "@/lib/redis";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 import MessageInput from "@/components/chat/MessageInput";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,13 +11,25 @@ import Messages from "./Messages";
 
 async function Page({ params }: { params: Promise<{ username: string }> }) {
   const { username } = await params;
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session) redirect("/login");
   const userData = await prisma.user.findUnique({
-    where: { username },
+    where: {
+      username,
+      AND: {
+        followers: { some: { id: session.user.id } },
+        following: { some: { id: session.user.id } },
+      },
+    },
     include: { followers: true, following: true },
   });
   if (!userData) redirect("/chat");
+  const [userId1, userId2] = [userData.id, session.user.id].sort();
+  const chat = await prisma.chat.findUnique({
+    where: { userId1_userId2: { userId1, userId2 } },
+  });
   const messages: MessageType[] = await redis.lrange(
-    `messages:${username}`,
+    `messages:${chat?.id || ""}`,
     0,
     -1,
   );
@@ -42,10 +56,15 @@ async function Page({ params }: { params: Promise<{ username: string }> }) {
             following
           </div>
         </div>
-        <Messages messages={messages} />
+        <Messages
+          messages={messages}
+          name={userData.name}
+          userData={userData}
+          id={chat?.id || ""}
+        />
       </div>
       <div className="h-20 w-full flex items-center justify-center px-5">
-        <MessageInput name={userData.name} username={userData.username} />
+        <MessageInput name={userData.name} id={userData.id} />
       </div>
     </div>
   );
