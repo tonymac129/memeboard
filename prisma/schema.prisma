@@ -104,6 +104,7 @@ model Meme {
   downvotes   User[]       @relation("Downvotes")
   collections Collection[] @relation("Collections")
   reports     Report[]
+  shares      Int          @default(0)
 
   @@index([userId])
 }

@@ -7,6 +7,7 @@ import { useState, useEffect, useRef } from "react";
 import { authClient } from "@/lib/auth-client";
 import Link from "next/link";
 import Image from "next/image";
+import EmbeddedMeme from "@/components/chat/EmbeddedMeme";
 
 interface MessagesProps {
   messages: MessageType[];
@@ -68,8 +69,9 @@ function Messages({ messages, name, userData, id }: MessagesProps) {
                 </span>
               </div>
               <div
-                className={`bg-zinc-900 rounded px-4 py-2 max-w-[70%] w-fit ${fromMe && "bg-green-800! self-end"}`}
+                className={`bg-zinc-900 rounded px-4 flex flex-col gap-y-3 py-2 max-w-[70%] w-fit ${fromMe && "bg-green-800! self-end"}`}
               >
+                {message.memeId && <EmbeddedMeme memeId={message.memeId} />}
                 {message.message}
               </div>
             </div>

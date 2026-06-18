@@ -87,6 +87,7 @@ function MemeBar({ meme, userId, collections, friends }: MemeBarProps) {
         )}
         {sharing && (
           <ShareModal
+            memeId={meme.id}
             friends={friends}
             setSharing={setSharing}
             setReporting={setReporting}

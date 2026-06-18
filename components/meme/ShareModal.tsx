@@ -1,22 +1,47 @@
 "use client";
 
 import type { User } from "@/app/generated/prisma/client";
-import { FaClipboard, FaFlag } from "react-icons/fa";
+import { FaCheck, FaClipboard, FaFlag } from "react-icons/fa";
+import { IoSend } from "react-icons/io5";
 import { useState } from "react";
 import Modal from "../ui/Modal";
+import Btn from "../ui/Btn";
 import Image from "next/image";
+import { sendMeme } from "@/app/memes/[id]/actions";
+import Input from "../ui/Input";
 
 const optionStyles =
   "flex flex-col gap-y-1 rounded hover:bg-zinc-900 items-center text-zinc-300 cursor-pointer text-sm font-bold";
 
 interface ShareModalProps {
+  memeId: number;
   friends: User[];
   setSharing: React.Dispatch<React.SetStateAction<boolean>>;
   setReporting: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function ShareModal({ friends, setSharing, setReporting }: ShareModalProps) {
+function ShareModal({
+  memeId,
+  friends,
+  setSharing,
+  setReporting,
+}: ShareModalProps) {
   const [copied, setCopied] = useState<boolean>(false);
+  const [selectedFriends, setSelectedFriends] = useState<string[]>([]);
+  const [sent, setSent] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
+
+  async function handleSend() {
+    if (selectedFriends.length > 0) {
+      setMessage("");
+      await sendMeme(memeId, message, selectedFriends);
+      setSent(true);
+      setSelectedFriends([]);
+      setTimeout(() => {
+        setSent(false);
+      }, 2000);
+    }
+  }
 
   function handleCopy() {
     setCopied(true);
@@ -37,7 +62,17 @@ function ShareModal({ friends, setSharing, setReporting }: ShareModalProps) {
         <h2 className="text-white text-2xl font-bold">Share meme</h2>
         <div className="flex gap-x-3 overflow-auto">
           {friends.map((friend) => (
-            <div key={friend.id} className={optionStyles + " p-2"}>
+            <div
+              key={friend.id}
+              onClick={() =>
+                setSelectedFriends(
+                  selectedFriends.includes(friend.id)
+                    ? selectedFriends.filter((f) => f !== friend.id)
+                    : [...selectedFriends, friend.id],
+                )
+              }
+              className={`${optionStyles} p-2 border-transparent border-2 rounded ${selectedFriends.includes(friend.id) && "border-green-700!"}`}
+            >
               <Image
                 src={friend.image || "/icons/default-avatar.svg"}
                 alt="User avatar"
@@ -49,6 +84,24 @@ function ShareModal({ friends, setSharing, setReporting }: ShareModalProps) {
             </div>
           ))}
         </div>
+        {(selectedFriends.length > 0 || sent) && (
+          <>
+            <Input
+              placeholder="Send a message"
+              value={message}
+              setValue={(message) => setMessage(message)}
+            />
+            <Btn
+              text={sent ? "Meme sent" : "Send meme"}
+              onclick={handleSend}
+              styles="text-base"
+              primary
+            >
+              {sent ? <FaCheck size={18} /> : <IoSend size={18} />}
+            </Btn>
+            {/* TODO: show a popup that has a link to the chat after sending meme */}
+          </>
+        )}
         <div className="h-0.5 my-3 w-full bg-zinc-700 relative">
           <div className="absolute left-[50%] translate-x-[-50%] top-[50%] translate-y-[-50%] px-5 bg-zinc-950 text-zinc-300">
             or

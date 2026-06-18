@@ -5,6 +5,8 @@ import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { redis } from "@/lib/redis";
+import { realtime } from "@/lib/realtime";
 
 export async function postComment(
   comment: CommentType,
@@ -143,6 +145,47 @@ export async function likeComment(
         },
       });
       revalidatePath(`/memes/${memeId}`);
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}
+
+export async function sendMeme(
+  memeId: number,
+  message: string,
+  friends: string[],
+) {
+  try {
+    const session = await auth.api.getSession({ headers: await headers() });
+    if (session?.user) {
+      const pairs = friends.map((friend) => {
+        return [session.user.id, friend].sort().join("-");
+      });
+      const chats = await prisma.chat.findMany({
+        where: {
+          OR: [{ userId1: session.user.id }, { userId2: session.user.id }],
+        },
+      });
+      let counter = 0;
+      for (const chat of chats) {
+        if (pairs.includes([chat.userId1, chat.userId2].join("-"))) {
+          const newMessage = {
+            message,
+            memeId,
+            created: new Date(),
+            from: session.user.id,
+            chatId: chat.id,
+          };
+          await redis.rpush(`messages:${chat.id}`, newMessage);
+          await realtime.emit("chat.message", JSON.stringify(newMessage));
+          counter++;
+        }
+      }
+      await prisma.meme.update({
+        where: { id: memeId },
+        data: { shares: { increment: counter } },
+      });
     }
   } catch (err) {
     console.error("Error: " + err);
