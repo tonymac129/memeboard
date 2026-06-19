@@ -171,6 +171,7 @@ export async function sendMeme(
       for (const chat of chats) {
         if (pairs.includes([chat.userId1, chat.userId2].join("-"))) {
           const newMessage = {
+            id: crypto.randomUUID(),
             message,
             memeId,
             created: new Date(),

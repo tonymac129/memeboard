@@ -1,12 +1,17 @@
 "use server";
 
+import type { ReplyType } from "@/types/Chat";
 import { redis } from "@/lib/redis";
 import { realtime } from "@/lib/realtime";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
 
-export async function sendMessage(message: string, id: string) {
+export async function sendMessage(
+  message: string,
+  id: string,
+  replying: ReplyType | null,
+) {
   try {
     const session = await auth.api.getSession({ headers: await headers() });
     if (session?.user) {
@@ -17,10 +22,12 @@ export async function sendMessage(message: string, id: string) {
         create: { userId1, userId2 },
       });
       const newMessage = {
+        id: crypto.randomUUID(),
         message: message,
         created: new Date(),
         from: session.user.id,
         chatId: chat.id,
+        replying,
       };
       await redis.rpush(`messages:${chat.id}`, newMessage);
       await realtime.emit("chat.message", JSON.stringify(newMessage));
