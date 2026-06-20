@@ -1,6 +1,6 @@
 "use server";
 
-import type { ReplyType } from "@/types/Chat";
+import type { MessageType, ReplyType } from "@/types/Chat";
 import { redis } from "@/lib/redis";
 import { realtime } from "@/lib/realtime";
 import { auth } from "@/lib/auth";
@@ -31,6 +31,56 @@ export async function sendMessage(
       };
       await redis.rpush(`messages:${chat.id}`, newMessage);
       await realtime.emit("chat.message", JSON.stringify(newMessage));
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}
+
+export async function reactMessage(
+  chatId: string,
+  messageId: string,
+  emoji: string,
+  reacted?: boolean,
+) {
+  try {
+    const session = await auth.api.getSession({ headers: await headers() });
+    if (session?.user) {
+      const existingMessages: MessageType[] = await redis.lrange(
+        `messages:${chatId}`,
+        0,
+        -1,
+      );
+      if (existingMessages) {
+        const message = existingMessages.find((m) => m.id === messageId)!;
+        const index = existingMessages.indexOf(message);
+        const existingReaction = message.reactions?.find(
+          (r) => r.emoji === emoji,
+        );
+        let newReaction;
+        if (existingReaction) {
+          if (reacted) {
+            existingReaction.count = existingReaction.count.filter(
+              (r) => r !== session.user.id,
+            );
+          } else {
+            existingReaction.count.push(session.user.id);
+          }
+          newReaction = existingReaction;
+        } else {
+          newReaction = { emoji, count: [session.user.id] };
+        }
+        message.reactions = (
+          message.reactions
+            ? [
+                ...message?.reactions.filter((r) => r.emoji !== emoji),
+                newReaction,
+              ]
+            : [newReaction]
+        ).filter((r) => r.count.length > 0);
+        await redis.lset(`messages:${chatId}`, index, message);
+        await realtime.emit("chat.reaction", JSON.stringify(message));
+      }
     }
   } catch (err) {
     console.error("Error: " + err);

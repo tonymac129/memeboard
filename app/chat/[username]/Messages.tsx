@@ -10,6 +10,9 @@ import { HiOutlineReply } from "react-icons/hi";
 import EmbeddedMeme from "@/components/chat/EmbeddedMeme";
 import Link from "next/link";
 import Image from "next/image";
+import React from "@/components/chat/React";
+import Reaction from "@/components/chat/Reaction";
+import { reactMessage } from "./actions";
 
 interface MessagesProps {
   messages: MessageType[];
@@ -37,7 +40,6 @@ function Messages({
   }, [allMessages]);
 
   useEffect(() => {
-    console.log(highlightedRef.current);
     if (highlightedRef.current) {
       highlightedRef.current.scrollIntoView({
         behavior: "smooth",
@@ -56,11 +58,33 @@ function Messages({
     },
   });
 
+  useRealtime({
+    events: ["chat.reaction"],
+    onData: (data) => {
+      const newMessage = JSON.parse(data.data);
+      if (newMessage.chatId == id) {
+        const messages = [...allMessages];
+        messages[
+          messages.findIndex((message) => message.id === newMessage.id)
+        ] = newMessage;
+        setAllMessages(messages);
+      }
+    },
+  });
+
   function handleReply(replying: string) {
     setHighlighted(replying);
     setTimeout(() => {
       setHighlighted(null);
     }, 1500);
+  }
+
+  async function handleReact(
+    messageId: string,
+    emoji: string,
+    reacted: boolean,
+  ) {
+    await reactMessage(id, messageId, emoji, reacted);
   }
 
   return (
@@ -131,7 +155,7 @@ function Messages({
                   </div>
                 )}
                 <div
-                  className={`flex gap-x-3 items-center ${fromMe && "justify-end"}`}
+                  className={`flex gap-x-3 items-center ${fromMe && "flex-row-reverse"}`}
                 >
                   <div
                     className={`bg-zinc-900 rounded px-4 flex flex-col gap-y-3 py-2 max-w-[70%] w-fit ${fromMe && "bg-green-800! self-end"}`}
@@ -155,7 +179,25 @@ function Messages({
                       Reply
                     </div>
                   )}
+                  <React chatId={id} messageId={message.id} />
                 </div>
+                {message.reactions && message.reactions.length > 0 && (
+                  <div
+                    className={`flex gap-x-3 mt-2 ${fromMe && "flex-row-reverse"}`}
+                  >
+                    {message.reactions.map((reaction, i) => (
+                      <Reaction
+                        key={i}
+                        reaction={reaction}
+                        handleReact={handleReact}
+                        messageId={message.id}
+                        reacted={reaction.count.includes(
+                          session?.user.id || "",
+                        )}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
               {fromMe && firstMessage && (
                 <Link

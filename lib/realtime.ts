@@ -5,6 +5,7 @@ import z from "zod/v4";
 const schema = {
   chat: {
     message: z.string(),
+    reaction: z.string(),
   },
 };
 

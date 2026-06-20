@@ -6,9 +6,15 @@ export interface MessageType {
   from: string;
   chatId: string;
   replying?: ReplyType;
+  reactions?: ReactionType[];
 }
 
 export interface ReplyType {
   id: string;
   message: string;
+}
+
+export interface ReactionType {
+  emoji: string;
+  count: string[];
 }
