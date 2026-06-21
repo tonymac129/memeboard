@@ -4,10 +4,10 @@ import type { User } from "@/app/generated/prisma/client";
 import { FaCheck, FaClipboard, FaFlag } from "react-icons/fa";
 import { IoSend } from "react-icons/io5";
 import { useState } from "react";
+import { sendMeme } from "@/app/memes/[id]/actions";
 import Modal from "../ui/Modal";
 import Btn from "../ui/Btn";
 import Image from "next/image";
-import { sendMeme } from "@/app/memes/[id]/actions";
 import Input from "../ui/Input";
 
 const optionStyles =
@@ -32,14 +32,21 @@ function ShareModal({
   const [message, setMessage] = useState<string>("");
 
   async function handleSend() {
-    if (selectedFriends.length > 0) {
-      setMessage("");
-      await sendMeme(memeId, message, selectedFriends);
-      setSent(true);
-      setSelectedFriends([]);
-      setTimeout(() => {
-        setSent(false);
-      }, 2000);
+    if (sent) {
+      const username = friends.find(
+        (f) => f.id === selectedFriends[0],
+      )!.username;
+      window.open(`/chat/${username}`, "_self");
+    } else {
+      if (selectedFriends.length > 0) {
+        setMessage("");
+        await sendMeme(memeId, message, selectedFriends);
+        setSent(true);
+        setTimeout(() => {
+          setSelectedFriends([]);
+          setSent(false);
+        }, 3000);
+      }
     }
   }
 
@@ -92,7 +99,7 @@ function ShareModal({
               setValue={(message) => setMessage(message)}
             />
             <Btn
-              text={sent ? "Meme sent" : "Send meme"}
+              text={sent ? "Meme sent. View message" : "Send meme"}
               onclick={handleSend}
               styles="text-base"
               primary

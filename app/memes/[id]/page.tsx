@@ -9,6 +9,7 @@ import CommentField from "@/components/meme/CommentField";
 import Comment, { CommentType } from "@/components/meme/Comment";
 import Btn from "@/components/ui/Btn";
 import MemeBar from "@/components/meme/MemeBar";
+import Options from "./Options";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -33,6 +34,7 @@ function generateTree(comments: CommentType[]): CommentType[] {
 
   return roots;
 }
+
 async function fetchMeme(id: number) {
   const memeData = await prisma.meme.findUnique({
     where: { id: Number(id) },
@@ -87,12 +89,14 @@ async function Page({ params }: { params: Promise<{ id: number }> }) {
       ],
     },
   });
+  const hasUpdated =
+    memeData.updatedAt.getTime() !== memeData.createdAt.getTime();
 
   //TODO: add editing and deleting memes
 
   return (
     <div className="px-50 pt-10 pb-30 flex flex-col gap-y-10">
-      <div className="flex flex-col gap-y-3">
+      <div className="flex flex-col gap-y-3 relative w-150">
         <div className="flex gap-x-3 text-zinc-300 text-sm">
           <p>
             Uploaded by:{" "}
@@ -105,9 +109,20 @@ async function Page({ params }: { params: Promise<{ id: number }> }) {
           </p>{" "}
           •
           <p title={memeData.createdAt.toISOString()}>
+            {hasUpdated && "Posted "}
             {displayTime(memeData.createdAt.getTime()) ||
               memeData.createdAt.toLocaleDateString()}
           </p>
+          {hasUpdated && (
+            <>
+              •
+              <p title={memeData.updatedAt.toISOString()}>
+                Updated{" "}
+                {displayTime(memeData.updatedAt.getTime()) ||
+                  memeData.updatedAt.toLocaleDateString()}
+              </p>
+            </>
+          )}
         </div>
         <h1 className="text-white font-bold text-3xl flex items-center gap-x-5">
           {memeData.title}
@@ -134,6 +149,9 @@ async function Page({ params }: { params: Promise<{ id: number }> }) {
               </Link>
             ))}
           </div>
+        )}
+        {session?.user.id === memeData.userId && (
+          <Options memeId={memeData.id} userId={session.user.id} />
         )}
       </div>
       {memeData.description && (

@@ -2,7 +2,7 @@ export interface MemeType {
   id: number;
   title: string;
   tags?: TagType[];
-  source?: string;
+  source?: string | undefined | null;
   collections?: CollectionType[];
   image: string;
   description?: string;

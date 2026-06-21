@@ -67,11 +67,13 @@ function TagModal({ selected, setNewMeme, setSelecting, tags }: TagModalProps) {
                   <input
                     type="checkbox"
                     className="hidden"
-                    checked={selectedTags.includes(tag)}
+                    checked={
+                      selectedTags.find((t) => t.id === tag.id) ? true : false
+                    }
                     onChange={() => {
                       setSelectedTags((prev) =>
-                        selectedTags.includes(tag)
-                          ? selectedTags.filter((t) => t !== tag)
+                        selectedTags.find((t) => t.id === tag.id)
+                          ? selectedTags.filter((t) => t.id !== tag.id)
                           : [...prev, tag],
                       );
                     }}
@@ -80,7 +82,9 @@ function TagModal({ selected, setNewMeme, setSelecting, tags }: TagModalProps) {
                     className="w-4.5 h-4.5 rounded border-2 border-zinc-700 text-zinc-950 flex items-center justify-center
                    group-has-checked:border-green-600 group-has-checked:bg-green-600"
                   >
-                    {selectedTags.includes(tag) && <FaCheck size={13} />}
+                    {selectedTags.find((t) => t.id === tag.id) && (
+                      <FaCheck size={13} />
+                    )}
                   </div>
                 </div>
                 {tag.name}

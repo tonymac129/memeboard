@@ -192,3 +192,16 @@ export async function sendMeme(
     console.error("Error: " + err);
   }
 }
+
+export async function deleteMeme(memeId: number, userId: string) {
+  try {
+    const session = await auth.api.getSession({ headers: await headers() });
+    if (session?.user && session.user.id === userId) {
+      await prisma.meme.delete({
+        where: { id: memeId, userId: session.user.id },
+      });
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}

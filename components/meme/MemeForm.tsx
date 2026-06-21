@@ -15,20 +15,23 @@ const labelStyles = "flex flex-col gap-y-1 text-zinc-300 text-sm";
 interface MemeFormProps {
   postMeme: (meme: MemeType) => Promise<number | undefined>;
   memeTags: MemeTag[];
+  data?: MemeType;
 }
 
-function MemeForm({ postMeme, memeTags }: MemeFormProps) {
+function MemeForm({ postMeme, memeTags, data }: MemeFormProps) {
   const [loading, setLoading] = useState<boolean>(false);
   const [selecting, setSelecting] = useState<boolean>(false);
-  const [newMeme, setNewMeme] = useState<MemeType>({
-    id: 0,
-    title: "",
-    image: "",
-    tags: [],
-    description: "",
-    comments: [],
-    created: new Date(),
-  });
+  const [newMeme, setNewMeme] = useState<MemeType>(
+    data || {
+      id: 0,
+      title: "",
+      image: "",
+      tags: [],
+      description: "",
+      comments: [],
+      created: new Date(),
+    },
+  );
 
   async function handleSubmit(e: React.SubmitEvent) {
     e.preventDefault();
@@ -84,7 +87,7 @@ function MemeForm({ postMeme, memeTags }: MemeFormProps) {
             *
           </span>
         </div>
-        <Upload setNewMeme={setNewMeme} />
+        <Upload provided={newMeme.image} setNewMeme={setNewMeme} />
       </label>
       <label className={labelStyles}>
         Description
@@ -107,7 +110,7 @@ function MemeForm({ postMeme, memeTags }: MemeFormProps) {
       </label>
       {newMeme.title.trim().length > 0 && newMeme.image && (
         <Btn
-          text={loading ? "Loading..." : "Post"}
+          text={loading ? "Loading..." : data ? "Edit" : "Post"}
           type="submit"
           styles="w-fit"
           primary

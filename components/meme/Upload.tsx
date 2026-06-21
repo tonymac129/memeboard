@@ -7,20 +7,21 @@ import { useState } from "react";
 import { UploadButton } from "@/lib/uploadthing";
 import Image from "next/image";
 
-function Upload({
-  setNewMeme,
-}: {
+interface UploadProps {
+  provided?: string;
   setNewMeme: React.Dispatch<React.SetStateAction<MemeType>>;
-}) {
+}
+
+function Upload({ provided, setNewMeme }: UploadProps) {
   const [status, setStatus] = useState<string>("");
   const [uploadedFile, setUploadedFile] =
     useState<ClientUploadedFileData<ServerDataType> | null>(null);
 
   return (
     <div className="w-60 border-zinc-700 border-2 rounded flex flex-col justify-center gap-y-3 cursor-pointer hover:bg-zinc-900 text-center px-10 py-5 items-center">
-      {uploadedFile ? (
+      {uploadedFile || provided ? (
         <Image
-          src={uploadedFile.ufsUrl}
+          src={uploadedFile ? uploadedFile.ufsUrl : provided!}
           alt="Meme"
           width={150}
           height={150}
@@ -33,7 +34,9 @@ function Upload({
         ? "Uploading..."
         : status === "uploaded"
           ? uploadedFile?.name
-          : "Upload PNG, JPG, or GIF here (max 4MB)"}
+          : provided
+            ? ""
+            : "Upload PNG, JPG, or GIF here (max 4MB)"}
       <UploadButton
         className="hidden w-fit"
         endpoint="imageUploader"
