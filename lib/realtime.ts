@@ -6,6 +6,7 @@ const schema = {
   chat: {
     message: z.string(),
     reaction: z.string(),
+    edit: z.string(),
   },
 };
 

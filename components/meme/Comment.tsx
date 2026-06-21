@@ -5,6 +5,7 @@ import { displayTime } from "@/lib/calc";
 import Reply from "../comment/Reply";
 import Image from "next/image";
 import Link from "next/link";
+import Options from "../comment/Options";
 
 export type CommentType = Comment & {
   likedBy: User[];
@@ -24,9 +25,11 @@ async function Comment({ comment, memeId }: CommentProps) {
   const likedComment = comment.likedBy.find((c) => c.id === session?.user.id)
     ? true
     : false;
+  const hasUpdated =
+    comment.createdAt.getTime() !== comment.updatedAt.getTime();
 
   return (
-    <div className="border-2 border-zinc-700 rounded flex flex-col gap-y-3 p-5">
+    <div className="w-full relative border-2 border-zinc-700 rounded flex flex-col gap-y-3 p-5">
       <div className="flex items-center gap-x-3 text-zinc-300">
         <Link
           href={`/users/${comment.user.username}`}
@@ -43,9 +46,20 @@ async function Comment({ comment, memeId }: CommentProps) {
         </Link>{" "}
         •{" "}
         <span className="text-sm" title={comment.createdAt.toISOString()}>
+          {hasUpdated && "Posted "}
           {displayTime(comment.createdAt.getTime()) ||
             comment.createdAt.toLocaleDateString()}
         </span>
+        {hasUpdated && (
+          <>
+            •
+            <span className="text-sm" title={comment.updatedAt.toISOString()}>
+              Updated{" "}
+              {displayTime(comment.updatedAt.getTime()) ||
+                comment.updatedAt.toLocaleDateString()}
+            </span>
+          </>
+        )}
       </div>
       <p className="text-zinc-300">{comment.content}</p>
       <Reply
@@ -60,6 +74,9 @@ async function Comment({ comment, memeId }: CommentProps) {
             <Comment key={reply.id} comment={reply} memeId={memeId} />
           ))}
         </div>
+      )}
+      {session?.user.id === comment.userId && (
+        <Options comment={comment} userId={session.user.id} />
       )}
     </div>
   );

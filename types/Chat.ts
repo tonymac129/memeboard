@@ -7,6 +7,7 @@ export interface MessageType {
   chatId: string;
   replying?: ReplyType;
   reactions?: ReactionType[];
+  edited?: boolean;
 }
 
 export interface ReplyType {

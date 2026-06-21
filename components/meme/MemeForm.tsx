@@ -110,7 +110,7 @@ function MemeForm({ postMeme, memeTags, data }: MemeFormProps) {
       </label>
       {newMeme.title.trim().length > 0 && newMeme.image && (
         <Btn
-          text={loading ? "Loading..." : data ? "Edit" : "Post"}
+          text={loading ? "Loading..." : data ? "Save" : "Post"}
           type="submit"
           styles="w-fit"
           primary

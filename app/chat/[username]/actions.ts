@@ -86,3 +86,32 @@ export async function reactMessage(
     console.error("Error: " + err);
   }
 }
+
+export async function editMessage(
+  chatId: string,
+  messageId: string,
+  newMessage: string,
+) {
+  try {
+    const session = await auth.api.getSession({ headers: await headers() });
+    if (session?.user) {
+      const existingMessages: MessageType[] = await redis.lrange(
+        `messages:${chatId}`,
+        0,
+        -1,
+      );
+      if (existingMessages) {
+        const message = existingMessages.find((m) => m.id === messageId)!;
+        const index = existingMessages.indexOf(message);
+        message.message = newMessage;
+        message.edited = true;
+        await redis.lset(`messages:${chatId}`, index, message);
+        await realtime.emit("chat.edit", JSON.stringify(message));
+      }
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}
+
+//TODO: add deleting messages

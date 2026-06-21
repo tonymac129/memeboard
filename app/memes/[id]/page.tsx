@@ -26,7 +26,7 @@ function generateTree(comments: CommentType[]): CommentType[] {
     const mappedComment = commentMap[comment.id];
     if (comment.parentId) {
       const parent = commentMap[comment.parentId];
-      parent.replies.push(mappedComment);
+      parent?.replies.push(mappedComment);
     } else {
       roots.push(mappedComment);
     }
@@ -187,7 +187,7 @@ async function Page({ params }: { params: Promise<{ id: number }> }) {
           Comment{memeData.comments.length !== 1 && "s"} (
           {memeData.comments.length})
         </h2>
-        <div className="w-120 flex flex-col gap-y-5">
+        <div className="w-150 flex flex-col gap-y-5">
           {memeData.comments.length > 0 ? (
             memeData.comments.map((comment) => (
               <Comment

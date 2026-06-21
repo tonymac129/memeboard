@@ -21,16 +21,18 @@ function CommentField({ userId, memeId, postComment }: CommentFieldProps) {
   });
 
   async function handlePost() {
-    setLoading(true);
-    await postComment(newComment);
-    setNewComment((prev) => {
-      return { ...prev, content: "" };
-    });
-    setLoading(false);
+    if (newComment.content.trim().length > 0) {
+      setLoading(true);
+      await postComment(newComment);
+      setNewComment((prev) => {
+        return { ...prev, content: "" };
+      });
+      setLoading(false);
+    }
   }
 
   return (
-    <div className="w-120 flex flex-col gap-y-3">
+    <div className="w-150 flex flex-col gap-y-3">
       <h2 className="text-lg font-bold text-white">New comment</h2>
       <textarea
         className="text-base border-2 border-zinc-700 rounded px-4 py-2 text-zinc-300 outline-none resize-none h-30"

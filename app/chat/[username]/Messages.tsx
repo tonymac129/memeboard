@@ -5,14 +5,26 @@ import type { User } from "@/app/generated/prisma/client";
 import { useRealtime } from "@/lib/realtime-client";
 import { useState, useEffect, useRef } from "react";
 import { authClient } from "@/lib/auth-client";
-import { FaReply } from "react-icons/fa";
+import { FaEdit, FaReply } from "react-icons/fa";
 import { HiOutlineReply } from "react-icons/hi";
+import { editMessage, reactMessage } from "./actions";
 import EmbeddedMeme from "@/components/chat/EmbeddedMeme";
-import Link from "next/link";
-import Image from "next/image";
 import React from "@/components/chat/React";
 import Reaction from "@/components/chat/Reaction";
-import { reactMessage } from "./actions";
+import Modal from "@/components/ui/Modal";
+import Link from "next/link";
+import Image from "next/image";
+import { AnimatePresence } from "framer-motion";
+import Input from "@/components/ui/Input";
+import Btn from "@/components/ui/Btn";
+
+const optionStyles =
+  "flex rounded text-sm items-center bg-zinc-900 w-fit gap-x-2 cursor-pointer px-1.5 py-0.5";
+
+interface EditingType {
+  id: string;
+  content: string;
+}
 
 interface MessagesProps {
   messages: MessageType[];
@@ -31,6 +43,8 @@ function Messages({
 }: MessagesProps) {
   const [allMessages, setAllMessages] = useState<MessageType[]>(messages);
   const [highlighted, setHighlighted] = useState<string | null>(null);
+  const [editing, setEditing] = useState<EditingType | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
   const messageRef = useRef<HTMLDivElement>(null);
   const highlightedRef = useRef<HTMLDivElement>(null);
   const { data: session } = authClient.useSession();
@@ -60,23 +74,36 @@ function Messages({
 
   useRealtime({
     events: ["chat.reaction"],
-    onData: (data) => {
-      const newMessage = JSON.parse(data.data);
-      if (newMessage.chatId == id) {
-        const messages = [...allMessages];
-        messages[
-          messages.findIndex((message) => message.id === newMessage.id)
-        ] = newMessage;
-        setAllMessages(messages);
-      }
-    },
+    onData: handleData,
   });
+
+  useRealtime({
+    events: ["chat.edit"],
+    onData: handleData,
+  });
+
+  function handleData(data: { event: string; data: string; channel: string }) {
+    const newMessage = JSON.parse(data.data);
+    if (newMessage.chatId == id) {
+      const messages = [...allMessages];
+      messages[messages.findIndex((message) => message.id === newMessage.id)] =
+        newMessage;
+      setAllMessages(messages);
+    }
+  }
 
   function handleReply(replying: string) {
     setHighlighted(replying);
     setTimeout(() => {
       setHighlighted(null);
     }, 1500);
+  }
+
+  async function handleEdit() {
+    setLoading(true);
+    await editMessage(id, editing!.id, editing!.content);
+    setEditing(null);
+    setLoading(false);
   }
 
   async function handleReact(
@@ -161,9 +188,24 @@ function Messages({
                     className={`bg-zinc-900 rounded px-4 flex flex-col gap-y-3 py-2 max-w-[70%] w-fit ${fromMe && "bg-green-800! self-end"}`}
                   >
                     {message.memeId && <EmbeddedMeme memeId={message.memeId} />}
-                    {message.message}
+                    <div className="flex gap-x-2 items-end">
+                      {message.message}
+                      {message.edited && (
+                        <span className="text-xs">(edited)</span>
+                      )}
+                    </div>
                   </div>
-                  {!fromMe && (
+                  {fromMe ? (
+                    <div
+                      onClick={() =>
+                        setEditing({ id: message.id, content: message.message })
+                      }
+                      className={optionStyles}
+                    >
+                      <FaEdit size={15} />
+                      Edit
+                    </div>
+                  ) : (
                     <div
                       onClick={() =>
                         setReplying({
@@ -173,7 +215,7 @@ function Messages({
                             (message.message.length > 80 ? "..." : ""),
                         })
                       }
-                      className="flex rounded text-sm items-center bg-zinc-900 w-fit gap-x-2 cursor-pointer px-1.5 py-0.5"
+                      className={optionStyles}
                     >
                       <FaReply size={15} />
                       Reply
@@ -218,6 +260,28 @@ function Messages({
         );
       })}
       <div ref={messageRef} />
+      <AnimatePresence>
+        {editing !== null && (
+          <Modal closeModal={() => setEditing(null)}>
+            <div className="flex flex-col gap-y-3 p-6">
+              <h2 className="text-white text-xl font-bold">Edit message</h2>
+              <Input
+                placeholder="Edit message"
+                value={editing.content}
+                setValue={(content) => setEditing({ ...editing, content })}
+              />
+              <div className="flex gap-x-3">
+                <Btn
+                  text={loading ? "Loading..." : "Save"}
+                  onclick={handleEdit}
+                  primary
+                />
+                <Btn text="Cancel" onclick={() => setEditing(null)} />
+              </div>
+            </div>
+          </Modal>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

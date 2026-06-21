@@ -36,6 +36,35 @@ export async function postComment(
   }
 }
 
+export async function deleteComment(commentId: number, userId: string) {
+  try {
+    const session = await auth.api.getSession({ headers: await headers() });
+    if (session?.user && session.user.id === userId) {
+      const deletedComment = await prisma.comment.delete({
+        where: { id: commentId, userId: session.user.id },
+      });
+      revalidatePath(`/memes/${deletedComment.memeId}`);
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}
+
+export async function editComment(comment: CommentType, userId: string) {
+  try {
+    const session = await auth.api.getSession({ headers: await headers() });
+    if (session?.user && session.user.id === userId) {
+      const updatedComment = await prisma.comment.update({
+        where: { id: comment.id, userId: session.user.id },
+        data: { content: comment.content },
+      });
+      revalidatePath(`/memes/${updatedComment.memeId}`);
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}
+
 export async function vote(memeId: number, vote: boolean | null) {
   try {
     const session = await auth.api.getSession({ headers: await headers() });
