@@ -95,9 +95,9 @@ async function Page({ params }: { params: Promise<{ id: number }> }) {
   //TODO: add editing and deleting memes
 
   return (
-    <div className="px-50 pt-10 pb-30 flex flex-col gap-y-10">
-      <div className="flex flex-col gap-y-3 relative w-150">
-        <div className="flex gap-x-3 text-zinc-300 text-sm">
+    <div className="max-w-400 mx-auto px-5 sm:px-20 lg:px-50 pt-10 pb-30 flex flex-col gap-y-10">
+      <div className="flex flex-col gap-y-3 relative w-[90%] sm:w-[75%] md:w-150">
+        <div className="flex flex-wrap gap-3 text-zinc-300 text-sm">
           <p>
             Uploaded by:{" "}
             <Link
@@ -187,7 +187,7 @@ async function Page({ params }: { params: Promise<{ id: number }> }) {
           Comment{memeData.comments.length !== 1 && "s"} (
           {memeData.comments.length})
         </h2>
-        <div className="w-150 flex flex-col gap-y-5">
+        <div className="w-[90%] sm:w-[75%] md:w-150 flex flex-col gap-y-5">
           {memeData.comments.length > 0 ? (
             memeData.comments.map((comment) => (
               <Comment

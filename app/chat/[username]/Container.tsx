@@ -23,7 +23,7 @@ function Container({ userData, messages, chat }: ContainerProps) {
   const [replying, setReplying] = useState<ReplyType | null>(null);
 
   return (
-    <div className="flex-1 h-full">
+    <div className="w-full h-full">
       <div className="h-[calc(100%-80px)] flex flex-col items-center gap-y-5 py-5 overflow-auto scrollbar-none">
         <div className="flex flex-col gap-y-3 items-center text-zinc-300">
           <Image

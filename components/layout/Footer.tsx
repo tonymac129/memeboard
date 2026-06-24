@@ -3,13 +3,15 @@ import Link from "next/link";
 function Footer() {
   return (
     <div className="flex flex-col gap-y-5 py-15 border-t-2 border-zinc-700 text-sm text-zinc-300 items-center">
-      <div className="flex gap-x-15">
-        <span>&copy; {new Date().getFullYear()} MemeBoard</span>
+      <div className="flex flex-col sm:flex-row gap-y-5 gap-x-15">
+        <span className="text-center">
+          &copy; {new Date().getFullYear()} MemeBoard
+        </span>
         <span>
           Made with ♥️ by{" "}
           <a
             href="https://github.com/tonymac129"
-            className="hover:text-green-500"
+            className="hover:text-green-500 text-center"
             target="_blank"
           >
             TonyMac129

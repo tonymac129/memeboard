@@ -68,7 +68,7 @@ async function Page({ params }: { params: Promise<{ username: string }> }) {
     : false;
 
   return (
-    <div className="px-50 pb-30 py-10 flex gap-x-20">
+    <div className="max-w-400 mx-auto px-5 sm:px-20 lg:px-50 py-10 flex flex-col sm:flex-row gap-20">
       <div className="flex flex-col gap-y-5 text-zinc-300 text-sm w-60">
         <Image
           src={userData.image || "/icons/default-avatar.svg"}

@@ -108,11 +108,11 @@ function Memes({ memes, friends, userId }: MemesProps) {
           placeholder="Search memes"
           value={search}
           setValue={(search) => setSearch(search)}
-          styles="w-100"
+          styles="w-[90%] sm:w-100"
         />
         <button type="submit" className="none" />
       </form>
-      <div className="flex justify-center items-center gap-x-10 w-full mb-5 relative">
+      <div className="flex flex-wrap justify-center items-center gap-3 lg:gap-10 w-full mb-5 relative">
         <div className={optionStyles}>
           <FaSort size={20} title="Sort by" />
           <Dropdown

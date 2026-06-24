@@ -149,12 +149,12 @@ function Messages({
               </div>
             )}
             <div
-              className={`flex gap-x-3 w-[calc(100%-120px)] relative mx-15 ${fromMe && "justify-end"}`}
+              className={`flex gap-x-3 relative mx-0 sm:mx-15 ${fromMe && "self-end"}`}
             >
               {!fromMe && firstMessage && (
                 <Link
                   href={`/users/${userData.username}`}
-                  className="absolute -left-15 top-0"
+                  className="absolute -left-15 top-0 hidden sm:block"
                 >
                   <Image
                     src={userData.image || "/icons/default-avatar.svg"}
@@ -185,7 +185,7 @@ function Messages({
                   className={`flex gap-x-3 items-center ${fromMe && "flex-row-reverse"}`}
                 >
                   <div
-                    className={`bg-zinc-900 rounded px-4 flex flex-col gap-y-3 py-2 max-w-[70%] w-fit ${fromMe && "bg-green-800! self-end"}`}
+                    className={`bg-zinc-900 rounded px-4 flex flex-col gap-y-3 py-2 overflow-auto max-w-[45%] md:max-w-[60%] ${fromMe && "bg-green-800! self-end"}`}
                   >
                     {message.memeId && <EmbeddedMeme memeId={message.memeId} />}
                     <div className="flex gap-x-2 items-end">
@@ -203,7 +203,7 @@ function Messages({
                       className={optionStyles}
                     >
                       <FaEdit size={15} />
-                      Edit
+                      <span className="hidden md:block">Edit</span>
                     </div>
                   ) : (
                     <div
@@ -218,7 +218,7 @@ function Messages({
                       className={optionStyles}
                     >
                       <FaReply size={15} />
-                      Reply
+                      <span className="hidden md:block">Reply</span>
                     </div>
                   )}
                   <React chatId={id} messageId={message.id} />
@@ -244,7 +244,7 @@ function Messages({
               {fromMe && firstMessage && (
                 <Link
                   href={`/users/${(session.user as typeof session.user & { username: string }).username}`}
-                  className="absolute -right-15 top-0"
+                  className="absolute -right-15 top-0 hidden sm:block"
                 >
                   <Image
                     src={session.user.image || "/icons/default-avatar.svg"}

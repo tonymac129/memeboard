@@ -44,7 +44,7 @@ function React({ chatId, messageId }: ReactProps) {
         className="flex rounded text-sm items-center bg-zinc-900 w-fit gap-x-2 cursor-pointer px-1.5 py-0.5"
       >
         <GrEmoji size={18} />
-        React
+        <span className="hidden md:block">React</span>
       </div>
       {reacting && (
         <div className="absolute bottom-8">

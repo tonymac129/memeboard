@@ -48,7 +48,7 @@ function MemeBar({ meme, userId, collections, friends }: MemeBarProps) {
   //TODO: make unauthenticated users unable to interact with the things
 
   return (
-    <div className="flex gap-x-5 items-center">
+    <div className="flex flex-wrap gap-5 items-center">
       <Voting meme={meme} upvoted={upvoted} />
       <div
         className={optionStyles + " hover:bg-zinc-900"}

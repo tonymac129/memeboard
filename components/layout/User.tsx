@@ -20,7 +20,7 @@ function User({ username, image }: UserProps) {
         height={50}
         className="w-8 rounded-full"
       />
-      Profile
+      <span className="hidden sm:block">Profile</span>
     </Link>
   );
 }

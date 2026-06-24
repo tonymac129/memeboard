@@ -34,7 +34,7 @@ async function Page({ params }: { params: Promise<{ id: string }> }) {
   const collectionData = await fetchCollection(id);
 
   return (
-    <div className="px-50 pb-30">
+    <div className="max-w-400 mx-auto px-5 sm:px-20 lg:px-50 pb-30">
       <Hero
         text={`${collectionData.name} Collection (${collectionData.memes.length})`}
         description={"Created by " + collectionData.user.name}

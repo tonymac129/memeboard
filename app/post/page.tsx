@@ -13,7 +13,7 @@ async function Page() {
   const memeTags = await prisma.memeTag.findMany({ orderBy: { id: "asc" } });
 
   return (
-    <div className="px-50 flex flex-col pb-30 gap-y-10">
+    <div className="max-w-400 mx-auto px-5 sm:px-20 lg:px-50 flex flex-col pb-30 gap-y-10">
       <h2 className="text-white text-2xl font-bold pt-10">Post meme</h2>
       <MemeForm postMeme={postMeme} memeTags={memeTags} />
     </div>

@@ -15,7 +15,7 @@ async function Page() {
   });
 
   return (
-    <div className="px-50 pb-30">
+    <div className="max-w-400 mx-auto px-5 sm:px-20 lg:px-50 pb-30">
       <Hero
         text="Collections"
         description="Browse custom curated meme collections other people created or create and manage your own here!"

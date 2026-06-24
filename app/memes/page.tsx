@@ -45,7 +45,7 @@ async function Page() {
     : [];
 
   return (
-    <div className="px-50 pb-30">
+    <div className="max-w-400 mx-auto px-5 sm:px-20 lg:px-50 pb-30">
       <Hero
         text="Explore Memes"
         description="Browse, search, explore, and discover all kinds of memes curated by the community here with custom tags and filters!"

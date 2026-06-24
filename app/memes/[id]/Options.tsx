@@ -50,7 +50,7 @@ function Options({ memeId, userId }: OptionsProps) {
           size={35}
         />
         {menuOpen && (
-          <div className="absolute top-[calc(100%+5px)] border-2 border-zinc-700 rounded flex flex-col right-0">
+          <div className="absolute top-[calc(100%+5px)] border-2 bg-zinc-950 border-zinc-700 rounded flex flex-col right-0">
             <Link href={`/edit/${memeId}`} className={optionStyles}>
               <FaEdit size={15} /> Edit
             </Link>

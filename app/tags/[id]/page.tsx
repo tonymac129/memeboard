@@ -37,7 +37,7 @@ async function Page({ params }: { params: Promise<{ id: string }> }) {
   const memeTag = await fetchTag(id);
 
   return (
-    <div className="px-50 pb-30">
+    <div className="max-w-400 mx-auto px-5 sm:px-20 lg:px-50 pb-30">
       <Hero
         text={`${memeTag.name} Memes (${memeTag.memes.length})`}
         description={`Browse all the memes labeled with the ${memeTag.name} tag!`}

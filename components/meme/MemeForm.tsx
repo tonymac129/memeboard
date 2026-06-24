@@ -41,7 +41,10 @@ function MemeForm({ postMeme, memeTags, data }: MemeFormProps) {
   }
 
   return (
-    <form className="flex flex-col gap-y-3 w-120" onSubmit={handleSubmit}>
+    <form
+      className="flex flex-col gap-y-3 w-[90%] sm:w-120"
+      onSubmit={handleSubmit}
+    >
       <label className={labelStyles}>
         <div>
           Title{" "}

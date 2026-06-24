@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import Hero from "@/components/layout/Hero";
-import TagCard from "@/components/meme/TagCard";
+import Tags from "./Tags";
 
 export const metadata: Metadata = {
   title: "Tags | MemeBoard",
@@ -16,16 +16,12 @@ async function Page() {
   });
 
   return (
-    <div className="px-50 pb-30">
+    <div className="max-w-400 mx-auto px-5 sm:px-20 lg:px-50 pb-30">
       <Hero
         text="Explore Tags"
         description="Check out all the categorized and custom tags on MemeBoard to discover more memes related to a specific topic!"
       />
-      <div className="flex flex-wrap justify-center gap-5">
-        {tags.map((tag) => {
-          return <TagCard key={tag.id} tag={tag} />;
-        })}
-      </div>
+      <Tags tags={tags} />
     </div>
   );
 }

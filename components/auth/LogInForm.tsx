@@ -85,7 +85,7 @@ function LogInForm({ isLogIn, setIsLogIn }: LogInFormProps) {
   }
 
   return (
-    <div className="rounded border-2 border-zinc-700 flex flex-col w-100">
+    <div className="rounded border-2 border-zinc-700 flex flex-col w-[90%] sm:w-100">
       <div className="flex">
         <div
           onClick={() => setIsLogIn(true)}

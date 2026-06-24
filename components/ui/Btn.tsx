@@ -21,7 +21,7 @@ function Btn({
   styles,
   children,
 }: BtnProps) {
-  const btnStyles = `flex items-center justify-center gap-x-3 px-3.5 py-1.5 cursor-pointer font-bold border-2 rounded ${primary ? "bg-green-600 text-zinc-950 border-green-600" : "bg-transparent text-zinc-300 hover:bg-zinc-900 border-zinc-800"}`;
+  const btnStyles = `flex items-center justify-center gap-x-3 px-3.5 py-1.5 cursor-pointer font-bold border-2 rounded ${primary ? "bg-green-600 text-zinc-950 border-green-600" : "bg-transparent text-zinc-300 hover:bg-zinc-900 border-zinc-700"}`;
 
   return href ? (
     <Link href={href as string} className={`${btnStyles} ${styles}`}>
