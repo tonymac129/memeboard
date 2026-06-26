@@ -1,7 +1,10 @@
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 import Hero from "@/components/layout/Hero";
 import MemeCard from "@/components/meme/MemeCard";
+import Options from "./Options";
 
 async function fetchCollection(id: string) {
   const collectionData = await prisma.collection.findUnique({
@@ -31,10 +34,12 @@ export async function generateMetadata({
 
 async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  const session = await auth.api.getSession({ headers: await headers() });
   const collectionData = await fetchCollection(id);
+  const fromMe = collectionData.userId === session?.user.id;
 
   return (
-    <div className="max-w-400 mx-auto px-5 sm:px-20 lg:px-50 pb-30">
+    <div className="max-w-400 mx-auto px-5 sm:px-20 lg:px-50 pb-30 relative">
       <Hero
         text={`${collectionData.name} Collection (${collectionData.memes.length})`}
         description={"Created by " + collectionData.user.name}
@@ -50,6 +55,7 @@ async function Page({ params }: { params: Promise<{ id: string }> }) {
           </div>
         )}
       </div>
+      {fromMe && <Options collectionData={collectionData} />}
     </div>
   );
 }

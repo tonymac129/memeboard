@@ -31,6 +31,9 @@ async function Nav() {
           <Link href="/tags" className={navLinkStyles}>
             Tags
           </Link>
+          <Link href="/collections" className={navLinkStyles}>
+            Collections
+          </Link>
           <Link href="/chat" className={navLinkStyles}>
             Chat
           </Link>

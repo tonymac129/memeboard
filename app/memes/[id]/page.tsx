@@ -69,10 +69,12 @@ async function Page({ params }: { params: Promise<{ id: number }> }) {
   const memeData = await fetchMeme(id);
   memeData.comments = generateTree(memeData.comments);
   const session = await auth.api.getSession({ headers: await headers() });
-  const userCollections = await prisma.collection.findMany({
-    where: { userId: session?.user.id },
-    include: { memes: true },
-  });
+  const userCollections = session
+    ? await prisma.collection.findMany({
+        where: { userId: session.user.id },
+        include: { memes: true },
+      })
+    : [];
   const userFriends = await prisma.user.findMany({
     where: {
       AND: [
@@ -91,8 +93,6 @@ async function Page({ params }: { params: Promise<{ id: number }> }) {
   });
   const hasUpdated =
     memeData.updatedAt.getTime() !== memeData.createdAt.getTime();
-
-  //TODO: add editing and deleting memes
 
   return (
     <div className="max-w-400 mx-auto px-5 sm:px-20 lg:px-50 pt-10 pb-30 flex flex-col gap-y-10">

@@ -83,5 +83,3 @@ async function Comment({ comment, memeId }: CommentProps) {
 }
 
 export default Comment;
-
-//TODO: add editing and deleting comments

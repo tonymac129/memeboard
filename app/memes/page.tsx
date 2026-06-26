@@ -22,9 +22,11 @@ async function Page() {
       downvotes: true,
     },
   });
-  const userData = await prisma.user.findUnique({
-    where: { id: session?.user.id },
-  });
+  const userData = session
+    ? await prisma.user.findUnique({
+        where: { id: session?.user.id },
+      })
+    : null;
   const friends = userData
     ? await prisma.user.findMany({
         where: {

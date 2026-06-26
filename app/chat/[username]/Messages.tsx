@@ -152,7 +152,7 @@ function Messages({
                 You deleted a message{" "}
                 <span
                   onClick={() => handleUndo(message.id)}
-                  className="ml-5 hover:underline cursor-pointer"
+                  className="ml-5 hover:text-green-500 cursor-pointer"
                 >
                   Undo
                 </span>

@@ -15,6 +15,7 @@ datasource db {
 model User {
   id            String       @id
   name          String
+  bio           String?
   username      String       @unique @default("")
   email         String
   emailVerified Boolean      @default(false)

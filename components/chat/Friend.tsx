@@ -8,6 +8,8 @@ import { User } from "@/app/generated/prisma/client";
 function Friend({ friend }: { friend: User }) {
   const { username } = useParams();
 
+  //TODO: show last sent message text preview on sidebar component
+
   return (
     <Link
       href={`/chat/${friend.username}`}

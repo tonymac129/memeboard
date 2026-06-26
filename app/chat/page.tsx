@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Chat | MemeBoard",
@@ -6,7 +9,10 @@ export const metadata: Metadata = {
     "Chat about random stuff, share memes, and hang out with your friends here!",
 };
 
-function Page() {
+async function Page() {
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session) redirect("/login");
+
   return (
     <div className="h-full flex flex-col gap-y-5 items-center justify-center">
       <h1 className="text-green-500 font-bold text-4xl">Chat</h1>

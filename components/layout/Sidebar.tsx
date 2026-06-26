@@ -6,7 +6,7 @@ import { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 
-const navLinkStyles = "text-zinc-300 hover:text-green-500 font-bold py-2 px-4";
+const navLinkStyles = "text-zinc-300 hover:text-green-500 font-bold py-2 px-10";
 
 function Sidebar() {
   const [open, setOpen] = useState<boolean>(false);
@@ -67,6 +67,9 @@ function Sidebar() {
               </Link>
               <Link href="/tags" className={navLinkStyles}>
                 Tags
+              </Link>
+              <Link href="/collections" className={navLinkStyles}>
+                Collections
               </Link>
               <Link href="/chat" className={navLinkStyles}>
                 Chat

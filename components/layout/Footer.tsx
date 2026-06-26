@@ -25,6 +25,9 @@ function Footer() {
         <Link href="/tags" className="hover:text-green-500">
           Tags
         </Link>
+        <Link href="/collections" className="hover:text-green-500">
+          Collections
+        </Link>
         <Link href="/chat" className="hover:text-green-500">
           Chat
         </Link>

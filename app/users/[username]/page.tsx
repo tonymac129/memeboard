@@ -13,6 +13,8 @@ import Following from "@/components/user/Following";
 import UserCard from "@/components/user/UserCard";
 import Image from "next/image";
 import Link from "next/link";
+import { FaInfoCircle } from "react-icons/fa";
+import { MdEmail, MdVerified } from "react-icons/md";
 
 async function fetchUser(username: string) {
   const userData = await prisma.user.findUnique({
@@ -87,7 +89,28 @@ async function Page({ params }: { params: Promise<{ username: string }> }) {
             following={userData.following}
           />
         </div>
-        <p>{userData.email}</p>
+        {userData.bio && (
+          <div className="flex flex-col gap-y-1">
+            <h2 className="text-zinc-300 flex items-center gap-x-2 font-bold text-base">
+              <FaInfoCircle size={15} /> Bio
+            </h2>
+            <p>{userData.bio}</p>
+          </div>
+        )}
+        <div className="flex flex-col gap-y-1">
+          <h2 className="text-zinc-300 flex items-center gap-x-2 font-bold text-base">
+            <MdEmail size={15} /> Email
+          </h2>
+          <p className="flex gap-x-2 items-center">
+            {userData.email}
+            {userData.emailVerified && (
+              <MdVerified
+                size={15}
+                title="This user's email address is verified"
+              />
+            )}
+          </p>
+        </div>
         <p>Joined {userData.createdAt.toLocaleDateString()}</p>
         {isUser && (
           <div className="flex flex-col gap-y-3 text-base">

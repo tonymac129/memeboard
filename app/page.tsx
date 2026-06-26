@@ -12,5 +12,6 @@ function Page() {
 }
 
 // TODO: add SEO to pages without it
+// TODO: put the most recent and popular memes on the homepage
 
 export default Page;

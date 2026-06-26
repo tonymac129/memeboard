@@ -1,6 +1,6 @@
 # [MemeBoard](https://memeboard-app.vercel.app)
 
-Explore the trendiest memes, upload your own creations, and interact with the community!
+Explore the trendiest memes, upload your own creations, chat with your friends, interact with the community, and more!
 
 ## Features
 
@@ -11,4 +11,4 @@ Explore the trendiest memes, upload your own creations, and interact with the co
 - Customize your own profile
 - Follow your friends
 
-_(more stuff coming soon 👀)_
+_(more stuff to be documented soon 👀)_

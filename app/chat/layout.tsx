@@ -10,22 +10,24 @@ export default async function ChatLayout({
   children: React.ReactNode;
 }) {
   const session = await auth.api.getSession({ headers: await headers() });
-  const friends = await prisma.user.findMany({
-    where: {
-      AND: [
-        {
-          followers: {
-            some: { id: session?.user.id },
-          },
+  const friends = session
+    ? await prisma.user.findMany({
+        where: {
+          AND: [
+            {
+              followers: {
+                some: { id: session?.user.id },
+              },
+            },
+            {
+              following: {
+                some: { id: session?.user.id },
+              },
+            },
+          ],
         },
-        {
-          following: {
-            some: { id: session?.user.id },
-          },
-        },
-      ],
-    },
-  });
+      })
+    : [];
 
   return (
     <div className="max-w-400 mx-auto px-5 sm:px-20 lg:px-50 h-[calc(100vh-68px)] flex">

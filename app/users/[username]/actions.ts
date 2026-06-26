@@ -36,7 +36,12 @@ export async function updateProfile(user: User) {
       }
       const newUser = await prisma.user.update({
         where: { id: user.id },
-        data: { username: user.username, name: user.name, image: user.image },
+        data: {
+          username: user.username,
+          name: user.name,
+          image: user.image,
+          bio: user.bio,
+        },
       });
       if (oldUsername !== newUser.username) {
         shouldRedirect = true;

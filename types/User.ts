@@ -4,4 +4,5 @@ export interface UserType {
   email: string;
   display: string;
   password?: string;
+  bio?: string;
 }

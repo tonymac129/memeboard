@@ -4,10 +4,12 @@ import type { Collection, Meme, User } from "@/app/generated/prisma/client";
 import { FaBookmark, FaFlag, FaRegBookmark, FaShare } from "react-icons/fa";
 import { useState, useMemo } from "react";
 import { AnimatePresence } from "framer-motion";
+import { authClient } from "@/lib/auth-client";
 import CollectionModal from "./CollectionModal";
 import ShareModal from "./ShareModal";
 import ReportModal from "./ReportModal";
 import Voting from "./Voting";
+import Link from "next/link";
 
 const optionStyles =
   "border-2 border-zinc-700 rounded cursor-pointer px-3 py-1.5 flex items-center gap-x-2 text-sm text-zinc-300 font-bold";
@@ -44,24 +46,25 @@ function MemeBar({ meme, userId, collections, friends }: MemeBarProps) {
         ? false
         : null
     : null;
-
-  //TODO: make unauthenticated users unable to interact with the things
+  const { data: session } = authClient.useSession();
 
   return (
     <div className="flex flex-wrap gap-5 items-center">
       <Voting meme={meme} upvoted={upvoted} />
-      <div
-        className={optionStyles + " hover:bg-zinc-900"}
-        onClick={() => setCollection(true)}
-      >
-        {savedCollections.length > 0 ? (
-          <FaBookmark className="text-yellow-500" size={18} />
-        ) : (
-          <FaRegBookmark size={18} />
-        )}
-        Save
-        {savedCollections.length > 0 ? `d (${savedCollections.length})` : ""}
-      </div>
+      {session && (
+        <div
+          className={optionStyles + " hover:bg-zinc-900"}
+          onClick={() => setCollection(true)}
+        >
+          {savedCollections.length > 0 ? (
+            <FaBookmark className="text-yellow-500" size={18} />
+          ) : (
+            <FaRegBookmark size={18} />
+          )}
+          Save
+          {savedCollections.length > 0 ? `d (${savedCollections.length})` : ""}
+        </div>
+      )}
       <div
         className={optionStyles + " hover:bg-zinc-900"}
         onClick={() => setSharing(true)}
@@ -69,13 +72,22 @@ function MemeBar({ meme, userId, collections, friends }: MemeBarProps) {
         <FaShare size={18} />
         Share
       </div>
-      <div
-        className={optionStyles + " hover:bg-zinc-900"}
-        onClick={() => setReporting(true)}
-      >
-        <FaFlag size={18} />
-        Report
-      </div>
+      {session ? (
+        <div
+          className={optionStyles + " hover:bg-zinc-900"}
+          onClick={() => setReporting(true)}
+        >
+          <FaFlag size={18} />
+          Report
+        </div>
+      ) : (
+        <div className="text-zinc-300">
+          <Link href="/login" className="hover:text-green-500">
+            Log in
+          </Link>{" "}
+          to unlock more features!
+        </div>
+      )}
       <AnimatePresence>
         {collection && (
           <CollectionModal

@@ -60,6 +60,17 @@ function EditProfile({ user }: { user: User }) {
                 />
               </label>
               <label className={labelStyles}>
+                Bio
+                <textarea
+                  className="text-base border-2 border-zinc-700 rounded px-4 py-2 text-zinc-300 outline-none resize-none h-30"
+                  placeholder="Tell people about you"
+                  value={userData.bio || ""}
+                  onChange={(e) =>
+                    setUserData({ ...userData, bio: e.target.value })
+                  }
+                ></textarea>
+              </label>
+              <label className={labelStyles}>
                 Profile image
                 <Image
                   src={
