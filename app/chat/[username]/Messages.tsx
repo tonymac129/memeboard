@@ -5,9 +5,14 @@ import type { User } from "@/app/generated/prisma/client";
 import { useRealtime } from "@/lib/realtime-client";
 import { useState, useEffect, useRef } from "react";
 import { authClient } from "@/lib/auth-client";
-import { FaEdit, FaReply } from "react-icons/fa";
+import { FaEdit, FaReply, FaTrash } from "react-icons/fa";
 import { HiOutlineReply } from "react-icons/hi";
-import { editMessage, reactMessage } from "./actions";
+import {
+  deleteMessage,
+  editMessage,
+  reactMessage,
+  undoMessage,
+} from "./actions";
 import EmbeddedMeme from "@/components/chat/EmbeddedMeme";
 import React from "@/components/chat/React";
 import Reaction from "@/components/chat/Reaction";
@@ -44,6 +49,7 @@ function Messages({
   const [allMessages, setAllMessages] = useState<MessageType[]>(messages);
   const [highlighted, setHighlighted] = useState<string | null>(null);
   const [editing, setEditing] = useState<EditingType | null>(null);
+  const [deleting, setDeleting] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const messageRef = useRef<HTMLDivElement>(null);
   const highlightedRef = useRef<HTMLDivElement>(null);
@@ -73,24 +79,18 @@ function Messages({
   });
 
   useRealtime({
-    events: ["chat.reaction"],
-    onData: handleData,
+    events: ["chat.reaction", "chat.edit", "chat.delete", "chat.undo"],
+    onData: (data) => {
+      const newMessage = JSON.parse(data.data);
+      if (newMessage.chatId == id) {
+        const messages = [...allMessages];
+        messages[
+          messages.findIndex((message) => message.id === newMessage.id)
+        ] = newMessage;
+        setAllMessages(messages);
+      }
+    },
   });
-
-  useRealtime({
-    events: ["chat.edit"],
-    onData: handleData,
-  });
-
-  function handleData(data: { event: string; data: string; channel: string }) {
-    const newMessage = JSON.parse(data.data);
-    if (newMessage.chatId == id) {
-      const messages = [...allMessages];
-      messages[messages.findIndex((message) => message.id === newMessage.id)] =
-        newMessage;
-      setAllMessages(messages);
-    }
-  }
 
   function handleReply(replying: string) {
     setHighlighted(replying);
@@ -114,6 +114,19 @@ function Messages({
     await reactMessage(id, messageId, emoji, reacted);
   }
 
+  async function handleDelete() {
+    if (deleting) {
+      setLoading(true);
+      await deleteMessage(id, deleting);
+      setLoading(false);
+      setDeleting(null);
+    }
+  }
+
+  async function handleUndo(messageId: string) {
+    await undoMessage(id, messageId);
+  }
+
   return (
     <div className="flex flex-col gap-y-3 w-full px-5">
       {allMessages.map((message, i) => {
@@ -127,13 +140,31 @@ function Messages({
                     new Date(allMessages[i - 1].created).getTime() >
                   1000 * 60 * 5
                 ? true
-                : allMessages[i - 1].from !== message.from;
+                : allMessages[i - 1].deleted
+                  ? true
+                  : allMessages[i - 1].from !== message.from;
         const created = new Date(message.created);
 
-        return (
+        return message.deleted ? (
+          <div className="text-zinc-300 text-sm my-2 text-center">
+            {fromMe ? (
+              <>
+                You deleted a message{" "}
+                <span
+                  onClick={() => handleUndo(message.id)}
+                  className="ml-5 hover:underline cursor-pointer"
+                >
+                  Undo
+                </span>
+              </>
+            ) : (
+              `Message deleted by ${userData.name}`
+            )}
+          </div>
+        ) : (
           <div
             key={message.id}
-            className={`flex flex-col gap-y-1 ${highlighted === message.id && "bg-zinc-900"}`}
+            className={`flex group flex-col gap-y-1 ${highlighted === message.id && "bg-zinc-900"}`}
             ref={highlighted === message.id ? highlightedRef : null}
           >
             {message.replying && (
@@ -195,33 +226,49 @@ function Messages({
                       )}
                     </div>
                   </div>
-                  {fromMe ? (
-                    <div
-                      onClick={() =>
-                        setEditing({ id: message.id, content: message.message })
-                      }
-                      className={optionStyles}
-                    >
-                      <FaEdit size={15} />
-                      <span className="hidden md:block">Edit</span>
-                    </div>
-                  ) : (
-                    <div
-                      onClick={() =>
-                        setReplying({
-                          id: message.id,
-                          message:
-                            message.message.slice(0, 80) +
-                            (message.message.length > 80 ? "..." : ""),
-                        })
-                      }
-                      className={optionStyles}
-                    >
-                      <FaReply size={15} />
-                      <span className="hidden md:block">Reply</span>
-                    </div>
-                  )}
-                  <React chatId={id} messageId={message.id} />
+                  <div
+                    className={`opacity-0 flex gap-x-3 group-hover:opacity-100 transition-all! duration-300 ${fromMe && "flex-row-reverse"}`}
+                  >
+                    <React chatId={id} messageId={message.id} />
+                    {fromMe ? (
+                      <>
+                        <div
+                          onClick={() =>
+                            setEditing({
+                              id: message.id,
+                              content: message.message,
+                            })
+                          }
+                          className={optionStyles}
+                        >
+                          <FaEdit size={15} />
+                          <span className="hidden md:block">Edit</span>
+                        </div>
+                        <div
+                          onClick={() => setDeleting(message.id)}
+                          className={optionStyles + " text-red-500"}
+                        >
+                          <FaTrash size={15} />
+                          <span className="hidden md:block">Delete</span>
+                        </div>
+                      </>
+                    ) : (
+                      <div
+                        onClick={() =>
+                          setReplying({
+                            id: message.id,
+                            message:
+                              message.message.slice(0, 80) +
+                              (message.message.length > 80 ? "..." : ""),
+                          })
+                        }
+                        className={optionStyles}
+                      >
+                        <FaReply size={15} />
+                        <span className="hidden md:block">Reply</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
                 {message.reactions && message.reactions.length > 0 && (
                   <div
@@ -277,6 +324,25 @@ function Messages({
                   primary
                 />
                 <Btn text="Cancel" onclick={() => setEditing(null)} />
+              </div>
+            </div>
+          </Modal>
+        )}
+        {deleting && (
+          <Modal closeModal={() => setDeleting(null)}>
+            <div className="flex flex-col gap-y-3 p-6">
+              <h2 className="text-white text-xl font-bold">Delete message</h2>
+              <p className="text-zinc-300">
+                Are you sure you want to delete this message from the chat?
+              </p>
+              <div className="flex gap-x-3">
+                <Btn
+                  text={loading ? "Loading..." : "Delete"}
+                  onclick={handleDelete}
+                  styles="bg-red-500 text-white! border-red-500"
+                  primary
+                />
+                <Btn text="Cancel" onclick={() => setDeleting(null)} />
               </div>
             </div>
           </Modal>

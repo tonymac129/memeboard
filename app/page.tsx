@@ -11,4 +11,6 @@ function Page() {
   );
 }
 
+// TODO: add SEO to pages without it
+
 export default Page;

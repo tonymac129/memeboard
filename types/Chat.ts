@@ -8,6 +8,7 @@ export interface MessageType {
   replying?: ReplyType;
   reactions?: ReactionType[];
   edited?: boolean;
+  deleted?: boolean;
 }
 
 export interface ReplyType {

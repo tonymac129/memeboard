@@ -114,4 +114,58 @@ export async function editMessage(
   }
 }
 
-//TODO: add deleting messages
+export async function deleteMessage(chatId: string, messageId: string) {
+  try {
+    const session = await auth.api.getSession({ headers: await headers() });
+    if (session?.user) {
+      const existingMessages: MessageType[] = await redis.lrange(
+        `messages:${chatId}`,
+        0,
+        -1,
+      );
+      if (existingMessages) {
+        const message = existingMessages.find((m) => m.id === messageId);
+        if (message?.from === session.user.id) {
+          const newMessage = { ...message, deleted: true };
+          await redis.lset(
+            `messages:${chatId}`,
+            existingMessages.indexOf(message),
+            newMessage,
+          );
+          await realtime.emit("chat.delete", JSON.stringify(newMessage));
+        }
+      }
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}
+
+export async function undoMessage(chatId: string, messageId: string) {
+  try {
+    const session = await auth.api.getSession({ headers: await headers() });
+    if (session?.user) {
+      const existingMessages: MessageType[] = await redis.lrange(
+        `messages:${chatId}`,
+        0,
+        -1,
+      );
+      if (existingMessages) {
+        const message = existingMessages.find((m) => m.id === messageId);
+        if (message?.deleted && message.from === session.user.id) {
+          const newMessage = { ...message, deleted: false };
+          await redis.lset(
+            `messages:${chatId}`,
+            existingMessages.indexOf(message),
+            newMessage,
+          );
+          await realtime.emit("chat.undo", JSON.stringify(newMessage));
+        }
+      }
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}
+
+//TODO: all these actions are just boilerplate and could be merged into one function but im too lazy to refactor

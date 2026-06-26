@@ -7,6 +7,8 @@ const schema = {
     message: z.string(),
     reaction: z.string(),
     edit: z.string(),
+    delete: z.string(),
+    undo: z.string(),
   },
 };
 
