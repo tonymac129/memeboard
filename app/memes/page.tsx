@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 import Hero from "@/components/layout/Hero";
 import Memes from "./Memes";
-import { headers } from "next/headers";
 
 export const metadata: Metadata = {
   title: "Memes | MemeBoard",
@@ -20,8 +20,10 @@ async function Page() {
       user: true,
       upvotes: true,
       downvotes: true,
+      tags: true,
     },
   });
+  const tags = await prisma.memeTag.findMany();
   const userData = session
     ? await prisma.user.findUnique({
         where: { id: session?.user.id },
@@ -52,7 +54,12 @@ async function Page() {
         text="Explore Memes"
         description="Browse, search, explore, and discover all kinds of memes curated by the community here with custom tags and filters!"
       />
-      <Memes memes={memes} friends={friends} userId={userData?.id || ""} />
+      <Memes
+        memes={memes}
+        friends={friends}
+        userId={userData?.id || ""}
+        tags={tags}
+      />
     </div>
   );
 }

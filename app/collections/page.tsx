@@ -25,4 +25,7 @@ async function Page() {
   );
 }
 
+//TODO: add public and private collections
+//TODO: add create collection button on collection page
+
 export default Page;

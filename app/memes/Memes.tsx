@@ -1,5 +1,6 @@
 "use client";
 
+import type { MemeTag, User } from "../generated/prisma/client";
 import type { MemeType } from "@/components/meme/MemeCard";
 import { useState, useMemo } from "react";
 import { FaFilter, FaSort, FaTag } from "react-icons/fa";
@@ -7,7 +8,6 @@ import { GrGrid } from "react-icons/gr";
 import Input from "@/components/ui/Input";
 import MemeCard from "@/components/meme/MemeCard";
 import Dropdown from "@/components/ui/Dropdown";
-import { User } from "../generated/prisma/client";
 
 const optionStyles = "flex gap-x-3 text-zinc-300 items-center";
 const sortOptions = ["Best", "Top", "New"];
@@ -19,28 +19,35 @@ const filterOptions = [
   "Friends",
   "You",
 ];
-const tags: string[] = []; //TODO: implement filtering by tags
 const numberOptions = ["5", "10", "25", "50"];
 
 type Meme = MemeType & {
   upvotes: User[];
   downvotes: User[];
+  tags: MemeTag[];
 };
 
 interface MemesProps {
   memes: Meme[];
   friends: User[];
   userId: string;
+  tags: MemeTag[];
 }
 
-function Memes({ memes, friends, userId }: MemesProps) {
+function Memes({ memes, friends, userId, tags }: MemesProps) {
   const [search, setSearch] = useState<string>("");
   const [query, setQuery] = useState<string>("");
   const [sortMethod, setSortMethod] = useState<string>("Best");
-  const [filterMethod, setFilterMethod] = useState<string>("Today");
-  const [count, setCount] = useState<string>("5");
+  const [filterMethod, setFilterMethod] = useState<string>("This week");
+  const [count, setCount] = useState<string>("10");
+  const [selectedTag, setSelectedTag] = useState<string>("None");
   const finalMemes = useMemo(() => {
     return memes
+      .filter((meme) => {
+        return selectedTag === "None"
+          ? true
+          : meme.tags.find((t) => t.name === selectedTag);
+      })
       .filter((meme) => {
         let displayed = true;
         switch (filterMethod) {
@@ -94,7 +101,16 @@ function Memes({ memes, friends, userId }: MemesProps) {
         return result;
       })
       .slice(0, Number(count));
-  }, [memes, query, sortMethod, filterMethod, count, friends, userId]);
+  }, [
+    memes,
+    query,
+    sortMethod,
+    filterMethod,
+    count,
+    friends,
+    userId,
+    selectedTag,
+  ]);
 
   function handleSearch(e: React.SubmitEvent) {
     e.preventDefault();
@@ -134,10 +150,11 @@ function Memes({ memes, friends, userId }: MemesProps) {
         <div className={optionStyles}>
           <FaTag size={18} title="Has tag" />
           <Dropdown
-            options={tags}
+            options={["None", ...tags.map((t) => t.name)]}
             label="Custom tag"
-            value="None"
-            setValue={setFilterMethod}
+            value={selectedTag}
+            setValue={setSelectedTag}
+            hasSearch
           />
         </div>
         <div className={optionStyles}>

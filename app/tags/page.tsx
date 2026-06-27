@@ -26,4 +26,6 @@ async function Page() {
   );
 }
 
+//TODO: add tag button on tags page
+
 export default Page;
