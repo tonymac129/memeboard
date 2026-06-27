@@ -146,7 +146,7 @@ function Messages({
         const created = new Date(message.created);
 
         return message.deleted ? (
-          <div className="text-zinc-300 text-sm my-2 text-center">
+          <div key={i} className="text-zinc-300 text-sm my-2 text-center">
             {fromMe ? (
               <>
                 You deleted a message{" "}

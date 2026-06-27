@@ -6,6 +6,32 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import Container from "./Container";
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ username: string }>;
+}) {
+  const { username } = await params;
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session) redirect("/login");
+  const userData = await prisma.user.findUnique({
+    where: {
+      username,
+      AND: {
+        followers: { some: { id: session.user.id } },
+        following: { some: { id: session.user.id } },
+      },
+    },
+    include: { followers: true, following: true },
+  });
+  if (!userData) redirect("/chat");
+
+  return {
+    title: `Your Chat with ${userData.name} | MemeBoard`,
+    description: `Chat, hang out, share memes, and have fun with ${userData.name} with MemeBoard Chat!`,
+  };
+}
+
 async function Page({ params }: { params: Promise<{ username: string }> }) {
   const { username } = await params;
   const session = await auth.api.getSession({ headers: await headers() });

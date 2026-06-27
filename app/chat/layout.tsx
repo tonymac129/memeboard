@@ -1,8 +1,12 @@
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { redis } from "@/lib/redis";
 import Provider from "@/components/chat/Provider";
 import Friend from "@/components/chat/Friend";
+import { redirect } from "next/navigation";
+
+//TODO: add chatbot or smth for unauthenticated/unfriended users to experience chat
 
 export default async function ChatLayout({
   children,
@@ -10,24 +14,29 @@ export default async function ChatLayout({
   children: React.ReactNode;
 }) {
   const session = await auth.api.getSession({ headers: await headers() });
-  const friends = session
-    ? await prisma.user.findMany({
-        where: {
-          AND: [
-            {
-              followers: {
-                some: { id: session?.user.id },
-              },
-            },
-            {
-              following: {
-                some: { id: session?.user.id },
-              },
-            },
-          ],
+  if (!session?.user) redirect("/login");
+  const friends = await prisma.user.findMany({
+    where: {
+      AND: [
+        {
+          followers: {
+            some: { id: session?.user.id },
+          },
         },
-      })
-    : [];
+        {
+          following: {
+            some: { id: session?.user.id },
+          },
+        },
+      ],
+    },
+  });
+  const chats = await prisma.chat.findMany({
+    where: { OR: [{ userId1: session.user.id }, { userId2: session.user.id }] },
+  });
+  const previews = chats.map(async (chat)=>{
+    const messages = 
+  })
 
   return (
     <div className="max-w-400 mx-auto px-5 sm:px-20 lg:px-50 h-[calc(100vh-68px)] flex">

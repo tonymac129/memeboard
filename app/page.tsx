@@ -5,13 +5,12 @@ function Page() {
     <div className="max-w-400 mx-auto px-5 sm:px-20 lg:px-50 pb-30">
       <Hero
         text="Welcome to MemeBoard!"
-        description="Explore the trendiest memes right now, upload your own creations and share with friends, and interact with the community!"
+        description="Explore the trendiest memes, upload your own creations, chat with your friends, interact with the community, and more!"
       />
     </div>
   );
 }
 
-// TODO: add SEO to pages without it
 // TODO: put the most recent and popular memes on the homepage
 
 export default Page;

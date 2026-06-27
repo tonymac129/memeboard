@@ -28,7 +28,7 @@ export async function generateMetadata({
 
   return {
     title: `${collectionData.name} Collection | MemeBoard`,
-    description: `Created by ${collectionData.user.name}`,
+    description: `Check out the memes in the ${collectionData.name} collection created by ${collectionData.user.name}!`,
   };
 }
 

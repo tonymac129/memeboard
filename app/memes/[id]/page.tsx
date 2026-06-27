@@ -60,7 +60,9 @@ export async function generateMetadata({
 
   return {
     title: `${memeData.title} | MemeBoard`,
-    description: memeData.description.slice(0, 100),
+    description:
+      memeData.description.slice(0, 100) +
+      (memeData.description.length > 100 ? "..." : ""),
   };
 }
 

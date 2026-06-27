@@ -1,9 +1,16 @@
+import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { editMeme } from "./actions";
 import MemeForm from "@/components/meme/MemeForm";
+
+export const metadata: Metadata = {
+  title: "Edit Meme | MemeBoard",
+  description:
+    "Edit your meme's title, tags, image, description, and source link here using this form!",
+};
 
 async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

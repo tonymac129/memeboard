@@ -11,7 +11,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Home | MemeBoard",
   description:
-    "Explore the trendiest memes, upload your own creations, and interact with the community!",
+    "Explore the trendiest memes, upload your own creations, chat with your friends, interact with the community, and more!",
 };
 
 export default function RootLayout({

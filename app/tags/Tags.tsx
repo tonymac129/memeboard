@@ -1,12 +1,19 @@
 "use client";
 
 import type { MemeTag, Meme } from "../generated/prisma/client";
+import type { Metadata } from "next";
 import { useState } from "react";
 import TagCard from "@/components/meme/TagCard";
 import Input from "@/components/ui/Input";
 
 type TagType = MemeTag & {
   memes: Meme[];
+};
+
+export const metadata: Metadata = {
+  title: "Tags | MemeBoard",
+  description:
+    "Check out all the categorized and custom tags on MemeBoard to discover more memes related to a specific topic!",
 };
 
 function Tags({ tags }: { tags: TagType[] }) {
