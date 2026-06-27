@@ -39,6 +39,8 @@ interface MessagesProps {
   setReplying: React.Dispatch<React.SetStateAction<ReplyType | null>>;
 }
 
+//TODO: fix issue where first message sent isnt realtime
+
 function Messages({
   messages,
   name,

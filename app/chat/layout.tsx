@@ -1,12 +1,20 @@
+import type { MessageType } from "@/types/Chat";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redis } from "@/lib/redis";
+import { redirect } from "next/navigation";
 import Provider from "@/components/chat/Provider";
 import Friend from "@/components/chat/Friend";
-import { redirect } from "next/navigation";
 
 //TODO: add chatbot or smth for unauthenticated/unfriended users to experience chat
+
+export interface PreviewType {
+  userId: string;
+  from: string;
+  channel: string;
+  message: string;
+}
 
 export default async function ChatLayout({
   children,
@@ -34,9 +42,27 @@ export default async function ChatLayout({
   const chats = await prisma.chat.findMany({
     where: { OR: [{ userId1: session.user.id }, { userId2: session.user.id }] },
   });
-  const previews = chats.map(async (chat)=>{
-    const messages = 
-  })
+  const previews: (PreviewType | null)[] = await Promise.all(
+    chats.map(async (chat) => {
+      const message: MessageType = await redis.lindex(
+        `messages:${chat.id}`,
+        -1,
+      );
+      if (message) {
+        return {
+          userId:
+            chat.userId1 === session.user.id ? chat.userId2 : chat.userId1,
+          from:
+            message.from === session.user.id
+              ? "You"
+              : friends.find((f) => f.id === message.from)!.name,
+          channel: chat.id,
+          message: message.deleted ? "Deleted message" : message.message,
+        };
+      }
+      return null;
+    }),
+  );
 
   return (
     <div className="max-w-400 mx-auto px-5 sm:px-20 lg:px-50 h-[calc(100vh-68px)] flex">
@@ -44,9 +70,19 @@ export default async function ChatLayout({
         <h2 className="text-center text-white font-bold text-xl pt-3">
           Friends
         </h2>
-        {friends.map((friend) => {
-          return <Friend key={friend.id} friend={friend} />;
-        })}
+        <Provider>
+          {friends.map((friend) => {
+            return (
+              <Friend
+                key={friend.id}
+                friend={friend}
+                prev={
+                  previews.find((chat) => chat?.userId === friend.id) || null
+                }
+              />
+            );
+          })}
+        </Provider>
       </div>
       <div className="w-[65%] md:flex-1">
         <Provider>{children}</Provider>
