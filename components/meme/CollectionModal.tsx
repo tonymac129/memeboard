@@ -4,10 +4,17 @@ import type { CollectionType } from "@/types/Meme";
 import type { CollectionType as Collection } from "./MemeBar";
 import { createCollection, addCollections } from "@/app/memes/[id]/actions";
 import { useState, useMemo } from "react";
-import { FaCheck } from "react-icons/fa";
+import { FaCheck, FaGlobe, FaLock } from "react-icons/fa";
 import Modal from "../ui/Modal";
 import Input from "../ui/Input";
 import Btn from "../ui/Btn";
+import Checkbox from "../collection/Checkbox";
+
+const emptyCollection: CollectionType = {
+  id: -1,
+  name: "",
+  userId: "",
+};
 
 interface CollectionModalProps {
   userId: string;
@@ -24,9 +31,8 @@ function CollectionModal({
 }: CollectionModalProps) {
   const [loading, setLoading] = useState<boolean>(false);
   const [search, setSearch] = useState<string>("");
-  const [newCollection, setNewCollection] = useState<CollectionType | null>(
-    null,
-  );
+  const [newCollection, setNewCollection] =
+    useState<CollectionType>(emptyCollection);
   const [selectedCollections, setSelectedCollections] = useState<
     CollectionType[]
   >(collections.filter((c) => c.memes.find((m) => m.id === memeId)));
@@ -45,7 +51,7 @@ function CollectionModal({
   async function handleAddCollection() {
     if (newCollection && newCollection.name.trim().length > 0) {
       await createCollection(userId, memeId, newCollection);
-      setNewCollection(null);
+      setNewCollection(emptyCollection);
     }
   }
 
@@ -91,35 +97,46 @@ function CollectionModal({
                     ) && <FaCheck size={13} />}
                   </div>
                 </div>
-                {collection.name} ({collection.memes.length})
+                {collection.name} ({collection.memes.length}){" "}
+                {collection.public ? (
+                  <FaGlobe size={15} title="Public collection" />
+                ) : (
+                  <FaLock size={15} title="Private collection" />
+                )}
               </label>
             ))
           ) : (
             <span className="text-sm text-zinc-300">No collections found</span>
           )}
         </div>
-        {newCollection && (
-          <Input
-            placeholder="Custom collection"
-            value={newCollection.name}
-            setValue={(name) => setNewCollection({ ...newCollection, name })}
-          />
+        {newCollection.id !== -1 && (
+          <>
+            <Input
+              placeholder="Custom collection"
+              value={newCollection.name}
+              setValue={(name) => setNewCollection({ ...newCollection, name })}
+            />
+            <Checkbox
+              collection={newCollection}
+              setCollection={setNewCollection}
+            />
+          </>
         )}
         <div className="flex gap-x-3">
           <Btn
-            text={newCollection ? "Add" : "New collection"}
+            text={newCollection.id !== -1 ? "Add" : "New collection"}
             styles="w-fit"
             onclick={() =>
-              newCollection
+              newCollection.id !== -1
                 ? handleAddCollection()
                 : setNewCollection({ id: 0, name: "", userId: "" })
             }
           />
-          {newCollection && (
+          {newCollection.id !== -1 && (
             <Btn
               text="Cancel"
               styles="w-fit"
-              onclick={() => setNewCollection(null)}
+              onclick={() => setNewCollection(emptyCollection)}
             />
           )}
         </div>

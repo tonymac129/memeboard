@@ -35,16 +35,20 @@ export async function postMeme(meme: MemeType): Promise<number | undefined> {
   }
 }
 
-export async function addTag(tag: TagType) {
+export async function addTag(tag: TagType, creating?: boolean) {
   try {
     const session = await auth.api.getSession({ headers: await headers() });
-    await prisma.memeTag.create({
+    const newTag = await prisma.memeTag.create({
       data: {
         name: tag.name,
         userId: session?.user.id as string,
       },
     });
-    revalidatePath("/post");
+    if (creating) {
+      return newTag.id;
+    } else {
+      revalidatePath("/post");
+    }
   } catch (err) {
     console.error("Error: " + err);
   }

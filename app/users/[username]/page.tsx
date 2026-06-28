@@ -68,6 +68,8 @@ async function Page({ params }: { params: Promise<{ username: string }> }) {
   const isFollowing = userData.followers.find((u) => u.id === session?.user.id)
     ? true
     : false;
+  const publicCollections = userData.collections.filter((c) => c.public);
+  const privateCollections = userData.collections.filter((c) => !c.public);
 
   return (
     <div className="max-w-400 mx-auto px-5 sm:px-20 lg:px-50 py-10 flex flex-col sm:flex-row gap-20">
@@ -140,19 +142,47 @@ async function Page({ params }: { params: Promise<{ username: string }> }) {
           href="/collections"
           className="w-fit text-2xl text-green-500 font-bold"
         >
-          Collections ({userData.collections.length})
+          Public collections ({publicCollections.length})
         </Link>
         <div className="flex flex-wrap gap-5">
-          {userData.collections.length > 0 ? (
-            userData.collections.map((collection) => {
+          {publicCollections.length > 0 ? (
+            publicCollections.map((collection) => {
               return (
                 <CollectionCard key={collection.id} collection={collection} />
               );
             })
           ) : (
-            <div className="text-zinc-300 text-sm">No collections yet</div>
+            <div className="text-zinc-300 text-sm">
+              No public collections yet
+            </div>
           )}
         </div>
+        {isUser && (
+          <>
+            <Link
+              href="/collections"
+              className="w-fit text-2xl text-green-500 font-bold"
+            >
+              Private collections ({privateCollections.length})
+            </Link>
+            <div className="flex flex-wrap gap-5">
+              {privateCollections.length > 0 ? (
+                privateCollections.map((collection) => {
+                  return (
+                    <CollectionCard
+                      key={collection.id}
+                      collection={collection}
+                    />
+                  );
+                })
+              ) : (
+                <div className="text-zinc-300 text-sm">
+                  No private collections yet
+                </div>
+              )}
+            </div>
+          </>
+        )}
         <Link href="/chat" className="w-fit text-2xl text-green-500 font-bold">
           Friends ({friends.length})
         </Link>

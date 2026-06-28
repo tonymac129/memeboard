@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import Hero from "@/components/layout/Hero";
 import Tags from "./Tags";
+import CreateTag from "./CreateTag";
 
 export const metadata: Metadata = {
   title: "Tags | MemeBoard",
@@ -16,16 +17,15 @@ async function Page() {
   });
 
   return (
-    <div className="max-w-400 mx-auto px-5 sm:px-20 lg:px-50 pb-30">
+    <div className="max-w-400 mx-auto px-5 sm:px-20 lg:px-50 pb-30 relative">
       <Hero
         text="Explore Tags"
         description="Check out all the categorized and custom tags on MemeBoard to discover more memes related to a specific topic!"
       />
       <Tags tags={tags} />
+      <CreateTag />
     </div>
   );
 }
-
-//TODO: add tag button on tags page
 
 export default Page;

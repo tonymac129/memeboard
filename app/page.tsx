@@ -11,6 +11,8 @@ function Page() {
   );
 }
 
+//TODO: add lazy loading/loading indicator for certain pages
+
 // TODO: put the most recent and popular memes on the homepage
 
 export default Page;

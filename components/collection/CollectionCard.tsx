@@ -6,7 +6,12 @@ type CollectionType = Collection & {
   memes: Meme[];
 };
 
-function CollectionCard({ collection }: { collection: CollectionType }) {
+interface CollectionCardProps {
+  collection: CollectionType;
+  user?: string;
+}
+
+function CollectionCard({ collection, user }: CollectionCardProps) {
   return (
     <Link
       key={collection.id}
@@ -16,6 +21,7 @@ function CollectionCard({ collection }: { collection: CollectionType }) {
       {collection.name.slice(0, 14) +
         (collection.name.length > 14 ? "..." : "")}{" "}
       ({collection.memes.length})
+      {user && <div className="font-normal text-sm">Created by {user}</div>}
       {collection.memes.length > 0 ? (
         <div className="flex flex-col items-center w-full relative">
           <div className="absolute -bottom-3 w-[84%] rounded bg-zinc-800 h-10" />

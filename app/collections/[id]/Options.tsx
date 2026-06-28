@@ -9,6 +9,7 @@ import { editCollection, deleteCollection } from "./actions";
 import Modal from "@/components/ui/Modal";
 import Input from "@/components/ui/Input";
 import Btn from "@/components/ui/Btn";
+import Checkbox from "@/components/collection/Checkbox";
 
 const labelStyles = "flex flex-col gap-y-1 text-zinc-300 text-sm";
 const optionStyles =
@@ -96,6 +97,21 @@ function Options({ collectionData }: { collectionData: CollectionType }) {
                   setValue={(name) => setCollection({ ...collection, name })}
                 />
               </label>
+              <label className={labelStyles}>
+                Description
+                <textarea
+                  className="text-base border-2 border-zinc-700 rounded px-4 py-2 text-zinc-300 outline-none resize-none h-30"
+                  placeholder="Describe what kinds of memes go in this collection (optional)"
+                  value={collection.description || ""}
+                  onChange={(e) =>
+                    setCollection({
+                      ...collection,
+                      description: e.target.value,
+                    })
+                  }
+                ></textarea>
+              </label>
+              <Checkbox collection={collection} setCollection={setCollection} />
               <div className="max-h-70 flex flex-col gap-y-1 overflow-auto">
                 <p className={labelStyles}>Memes</p>
                 {collection.memes.length > 0 ? (

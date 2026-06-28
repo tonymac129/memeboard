@@ -101,13 +101,18 @@ export async function createCollection(
   try {
     const session = await auth.api.getSession({ headers: await headers() });
     if (session?.user.id === userId) {
-      await prisma.collection.create({
+      const newCollection = await prisma.collection.create({
         data: {
           name: collection.name,
           userId: userId,
+          public: collection.public,
         },
       });
-      revalidatePath(`/memes/${memeId}`);
+      if (memeId === -1) {
+        return newCollection.id;
+      } else {
+        revalidatePath(`/memes/${memeId}`);
+      }
     }
   } catch (err) {
     console.error("Error: " + err);

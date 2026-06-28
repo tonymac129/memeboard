@@ -137,11 +137,13 @@ model MemeTag {
 }
 
 model Collection {
-  id     Int    @id @default(autoincrement())
-  name   String
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  memes  Meme[] @relation("Collections")
+  id          Int      @id @default(autoincrement())
+  name        String
+  userId      String
+  public      Boolean?
+  description String?
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  memes       Meme[]   @relation("Collections")
 }
 
 model Report {

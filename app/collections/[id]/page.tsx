@@ -2,9 +2,11 @@ import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { FaGlobe, FaLock } from "react-icons/fa";
 import Hero from "@/components/layout/Hero";
 import MemeCard from "@/components/meme/MemeCard";
 import Options from "./Options";
+import Link from "next/link";
 
 async function fetchCollection(id: string) {
   const collectionData = await prisma.collection.findUnique({
@@ -37,13 +39,44 @@ async function Page({ params }: { params: Promise<{ id: string }> }) {
   const session = await auth.api.getSession({ headers: await headers() });
   const collectionData = await fetchCollection(id);
   const fromMe = collectionData.userId === session?.user.id;
+  if (!collectionData.public && !fromMe) redirect("/collections");
 
   return (
     <div className="max-w-400 mx-auto px-5 sm:px-20 lg:px-50 pb-30 relative">
       <Hero
         text={`${collectionData.name} Collection (${collectionData.memes.length})`}
-        description={"Created by " + collectionData.user.name}
-      />
+        description={collectionData.description || ""}
+      >
+        <div className="flex gap-x-3 text-zinc-300">
+          <div>
+            Created by{" "}
+            <Link
+              href={`/users/${collectionData.user.username}`}
+              className="hover:text-green-500"
+            >
+              {collectionData.user.name}
+            </Link>
+          </div>
+          •
+          {collectionData.public ? (
+            <div
+              className="flex items-center gap-x-3 text-zinc-300"
+              title="Everyone on MemeBoard can see this collection and its content"
+            >
+              <FaGlobe size={20} />
+              Public
+            </div>
+          ) : (
+            <div
+              className="flex items-center gap-x-3 text-zinc-300"
+              title="Only you can see this collection and its content"
+            >
+              <FaLock size={20} />
+              Private
+            </div>
+          )}
+        </div>
+      </Hero>
       <div className="flex flex-wrap justify-center gap-5">
         {collectionData.memes.length > 0 ? (
           collectionData.memes.map((meme) => (

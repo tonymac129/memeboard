@@ -33,6 +33,8 @@ export interface CollectionType {
   id: number;
   name: string;
   userId: string;
+  public?: boolean | null;
+  description?: string | null;
 }
 
 export interface ReportType {

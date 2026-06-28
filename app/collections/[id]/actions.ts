@@ -17,6 +17,8 @@ export async function editCollection(
         where: { id: collectionData.id, userId: session.user.id },
         data: {
           name: collectionData.name,
+          description: collectionData.description,
+          public: collectionData.public,
           memes: {
             set: selectedMemes.map((m) => {
               return { id: m };
