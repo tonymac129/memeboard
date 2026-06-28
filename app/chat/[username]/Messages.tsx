@@ -72,7 +72,11 @@ function Messages({
     events: ["chat.message"],
     onData: (data) => {
       const newMessage = JSON.parse(data.data);
-      if (newMessage.chatId === id || newMessage.memebot === session?.user.id) {
+      if (
+        newMessage.chatId === id ||
+        ((newMessage.both as string[]).includes(session?.user.id as string) &&
+          (newMessage.both as string[]).includes(userData?.id || "memebot"))
+      ) {
         setAllMessages((prev) => [...prev, newMessage]);
       }
     },

@@ -48,16 +48,17 @@ export async function sendMessage(
         from: session.user.id,
         chatId: chat.id,
         replying,
-        memebot: "",
+        both: [""],
       };
       const existing = await redis.lrange(`messages:${chat.id}`, 0, -1);
       if (existing.length === 0) {
-        revalidatePath(
-          `/chat/${chat.user1.username === session.user.username ? chat.user2.username : chat.user1.username}`,
-        );
-        const firstMessage = { ...botMessage, chatId: chat.id };
-        await redis.rpush(`messages:${chat.id}`, firstMessage);
-        newMessage.memebot = session.user.id;
+        revalidatePath(`/chat/${chat.user1.username}`);
+        revalidatePath(`/chat/${chat.user2.username}`);
+        if (id === "memebot") {
+          const firstMessage = { ...botMessage, chatId: chat.id };
+          await redis.rpush(`messages:${chat.id}`, firstMessage);
+        }
+        newMessage.both = [userId1, userId2];
       }
       await redis.rpush(`messages:${chat.id}`, newMessage);
       await realtime.emit("chat.message", JSON.stringify(newMessage));
