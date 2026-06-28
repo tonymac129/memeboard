@@ -25,7 +25,6 @@ async function Page() {
     0,
     -1,
   );
-  console.log(messages);
 
   return (
     <Container

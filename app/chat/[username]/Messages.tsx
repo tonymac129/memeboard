@@ -39,8 +39,6 @@ interface MessagesProps {
   setReplying: React.Dispatch<React.SetStateAction<ReplyType | null>>;
 }
 
-//TODO: fix issue where first message sent isnt realtime
-
 function Messages({
   messages,
   name,
@@ -74,7 +72,7 @@ function Messages({
     events: ["chat.message"],
     onData: (data) => {
       const newMessage = JSON.parse(data.data);
-      if (newMessage.chatId === id) {
+      if (newMessage.chatId === id || newMessage.memebot === session?.user.id) {
         setAllMessages((prev) => [...prev, newMessage]);
       }
     },
@@ -84,7 +82,6 @@ function Messages({
     events: ["chat.reaction", "chat.edit", "chat.delete", "chat.undo"],
     onData: (data) => {
       const newMessage = JSON.parse(data.data);
-      console.log(newMessage, id);
       if (newMessage.chatId == id) {
         const messages = [...allMessages];
         messages[

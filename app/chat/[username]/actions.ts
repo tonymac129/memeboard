@@ -7,6 +7,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
 import { botMessage } from "../memebot/page";
+import { revalidatePath } from "next/cache";
 
 const botMessages = [
   "Ooooops, I can not fulfill that request 🤖🤖🤖",
@@ -38,6 +39,7 @@ export async function sendMessage(
         where: { userId1_userId2: { userId1, userId2 } },
         update: {},
         create: { userId1, userId2 },
+        include: { user1: true, user2: true },
       });
       const newMessage = {
         id: crypto.randomUUID(),
@@ -46,11 +48,16 @@ export async function sendMessage(
         from: session.user.id,
         chatId: chat.id,
         replying,
+        memebot: "",
       };
       const existing = await redis.lrange(`messages:${chat.id}`, 0, -1);
       if (existing.length === 0) {
+        revalidatePath(
+          `/chat/${chat.user1.username === session.user.username ? chat.user2.username : chat.user1.username}`,
+        );
         const firstMessage = { ...botMessage, chatId: chat.id };
         await redis.rpush(`messages:${chat.id}`, firstMessage);
+        newMessage.memebot = session.user.id;
       }
       await redis.rpush(`messages:${chat.id}`, newMessage);
       await realtime.emit("chat.message", JSON.stringify(newMessage));
@@ -88,7 +95,6 @@ export async function reactMessage(
         -1,
       );
       if (existingMessages) {
-        console.log(emoji);
         const message = existingMessages.find((m) => m.id === messageId)!;
         const index = existingMessages.indexOf(message);
         const existingReaction = message.reactions?.find(
@@ -107,7 +113,6 @@ export async function reactMessage(
         } else {
           newReaction = { emoji, count: [session.user.id] };
         }
-        console.log(newReaction);
         message.reactions = (
           message.reactions
             ? [

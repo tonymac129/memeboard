@@ -54,8 +54,10 @@ function MessageInput({ name, id, replying, setReplying }: MessageInputProps) {
     </form>
   ) : (
     <div className="bg-zinc-900 rounded text-center py-3 text-zinc-300 w-full relative">
-      <Link href="/login">Log in</Link> to unlock chatting, posting, commenting,
-      and other features!
+      <Link href="/login" className="hover:text-green-500">
+        Log in
+      </Link>{" "}
+      to unlock chatting, posting, commenting, and other features!
     </div>
   );
 }
