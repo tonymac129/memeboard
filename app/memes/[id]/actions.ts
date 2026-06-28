@@ -106,6 +106,7 @@ export async function createCollection(
           name: collection.name,
           userId: userId,
           public: collection.public,
+          description: collection.description,
         },
       });
       if (memeId === -1) {

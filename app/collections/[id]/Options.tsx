@@ -2,14 +2,19 @@
 
 import type { Collection, Meme } from "@/app/generated/prisma/client";
 import { useRef, useState, useEffect } from "react";
-import { FaEdit, FaTrash, FaEllipsisH, FaCheck } from "react-icons/fa";
+import {
+  FaEdit,
+  FaTrash,
+  FaEllipsisH,
+  FaCheck,
+  FaInfoCircle,
+} from "react-icons/fa";
 import { AnimatePresence } from "framer-motion";
 import { redirect } from "next/navigation";
 import { editCollection, deleteCollection } from "./actions";
 import Modal from "@/components/ui/Modal";
 import Input from "@/components/ui/Input";
 import Btn from "@/components/ui/Btn";
-import Checkbox from "@/components/collection/Checkbox";
 
 const labelStyles = "flex flex-col gap-y-1 text-zinc-300 text-sm";
 const optionStyles =
@@ -111,7 +116,34 @@ function Options({ collectionData }: { collectionData: CollectionType }) {
                   }
                 ></textarea>
               </label>
-              <Checkbox collection={collection} setCollection={setCollection} />
+              <label className="text-zinc-300 text-sm w-fit cursor-pointer flex items-center gap-x-3 py-2">
+                <div className="group">
+                  <input
+                    type="checkbox"
+                    className="hidden"
+                    checked={collection?.public ? true : false}
+                    onChange={(e) => {
+                      setCollection((prev) => {
+                        return prev && { ...prev, public: e.target.checked };
+                      });
+                    }}
+                  />
+                  <div
+                    className="w-4.5 h-4.5 rounded border-2 border-zinc-700 text-zinc-950 flex items-center justify-center
+                                                 group-has-checked:border-green-600 group-has-checked:bg-green-600"
+                  >
+                    {collection?.public && <FaCheck size={13} />}
+                  </div>
+                </div>
+                Public
+                <div className="group relative">
+                  <FaInfoCircle size={15} />
+                  <div className="pointer-events-none opacity-0 group-hover:opacity-100 absolute left-7 top-[50%] translate-y-[-50%] transition-opacity! duration-300 w-60 bg-zinc-900 rounded p-2 text-xs">
+                    Public collections are viewable by everyone, but only you
+                    can edit and add/remove memes from it.
+                  </div>
+                </div>
+              </label>
               <div className="max-h-70 flex flex-col gap-y-1 overflow-auto">
                 <p className={labelStyles}>Memes</p>
                 {collection.memes.length > 0 ? (
