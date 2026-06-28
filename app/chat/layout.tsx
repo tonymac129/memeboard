@@ -53,13 +53,14 @@ export default async function ChatLayout({
             -1,
           );
           if (message) {
+            const friend = friends.find((f) => f.id === message.from);
             return {
               userId:
                 chat.userId1 === session.user.id ? chat.userId2 : chat.userId1,
               from:
                 message.from === session.user.id
                   ? "You"
-                  : friends.find((f) => f.id === message.from)!.name,
+                  : friend?.name || "MemeBot",
               channel: chat.id,
               message: message.deleted ? "Deleted message" : message.message,
             };
