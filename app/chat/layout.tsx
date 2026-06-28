@@ -3,11 +3,9 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redis } from "@/lib/redis";
-import { redirect } from "next/navigation";
 import Provider from "@/components/chat/Provider";
 import Friend from "@/components/chat/Friend";
-
-//TODO: add chatbot or smth for unauthenticated/unfriended users to experience chat
+import MemeBot from "@/components/chat/MemeBot";
 
 export interface PreviewType {
   userId: string;
@@ -22,47 +20,54 @@ export default async function ChatLayout({
   children: React.ReactNode;
 }) {
   const session = await auth.api.getSession({ headers: await headers() });
-  if (!session?.user) redirect("/login");
-  const friends = await prisma.user.findMany({
-    where: {
-      AND: [
-        {
-          followers: {
-            some: { id: session?.user.id },
-          },
+  const friends = session
+    ? await prisma.user.findMany({
+        where: {
+          AND: [
+            {
+              followers: {
+                some: { id: session?.user.id },
+              },
+            },
+            {
+              following: {
+                some: { id: session?.user.id },
+              },
+            },
+          ],
         },
-        {
-          following: {
-            some: { id: session?.user.id },
-          },
+      })
+    : [];
+  const chats = session
+    ? await prisma.chat.findMany({
+        where: {
+          OR: [{ userId1: session.user.id }, { userId2: session.user.id }],
         },
-      ],
-    },
-  });
-  const chats = await prisma.chat.findMany({
-    where: { OR: [{ userId1: session.user.id }, { userId2: session.user.id }] },
-  });
-  const previews: (PreviewType | null)[] = await Promise.all(
-    chats.map(async (chat) => {
-      const message: MessageType = await redis.lindex(
-        `messages:${chat.id}`,
-        -1,
-      );
-      if (message) {
-        return {
-          userId:
-            chat.userId1 === session.user.id ? chat.userId2 : chat.userId1,
-          from:
-            message.from === session.user.id
-              ? "You"
-              : friends.find((f) => f.id === message.from)!.name,
-          channel: chat.id,
-          message: message.deleted ? "Deleted message" : message.message,
-        };
-      }
-      return null;
-    }),
-  );
+      })
+    : [];
+  const previews: (PreviewType | null)[] = session
+    ? await Promise.all(
+        chats.map(async (chat) => {
+          const message: MessageType = await redis.lindex(
+            `messages:${chat.id}`,
+            -1,
+          );
+          if (message) {
+            return {
+              userId:
+                chat.userId1 === session.user.id ? chat.userId2 : chat.userId1,
+              from:
+                message.from === session.user.id
+                  ? "You"
+                  : friends.find((f) => f.id === message.from)!.name,
+              channel: chat.id,
+              message: message.deleted ? "Deleted message" : message.message,
+            };
+          }
+          return null;
+        }),
+      )
+    : [];
 
   return (
     <div className="max-w-400 mx-auto px-5 sm:px-20 lg:px-50 h-[calc(100vh-68px)] flex">
@@ -71,6 +76,7 @@ export default async function ChatLayout({
           Friends
         </h2>
         <Provider>
+          <MemeBot />
           {friends.map((friend) => {
             return (
               <Friend

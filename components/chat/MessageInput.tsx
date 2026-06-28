@@ -4,7 +4,9 @@ import type { ReplyType } from "@/types/Chat";
 import { useState } from "react";
 import { sendMessage } from "@/app/chat/[username]/actions";
 import { FaXmark } from "react-icons/fa6";
+import { authClient } from "@/lib/auth-client";
 import Input from "../ui/Input";
+import Link from "next/link";
 
 interface MessageInputProps {
   name: string;
@@ -15,6 +17,7 @@ interface MessageInputProps {
 
 function MessageInput({ name, id, replying, setReplying }: MessageInputProps) {
   const [message, setMessage] = useState<string>("");
+  const { data: session } = authClient.useSession();
 
   async function handleSubmit(e: React.SubmitEvent) {
     e.preventDefault();
@@ -25,7 +28,7 @@ function MessageInput({ name, id, replying, setReplying }: MessageInputProps) {
     }
   }
 
-  return (
+  return session ? (
     <form onSubmit={handleSubmit} className="w-full relative">
       {replying && (
         <div
@@ -49,6 +52,11 @@ function MessageInput({ name, id, replying, setReplying }: MessageInputProps) {
       />
       <button type="submit" className="hidden" />
     </form>
+  ) : (
+    <div className="bg-zinc-900 rounded text-center py-3 text-zinc-300 w-full relative">
+      <Link href="/login">Log in</Link> to unlock chatting, posting, commenting,
+      and other features!
+    </div>
   );
 }
 

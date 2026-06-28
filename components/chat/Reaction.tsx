@@ -6,11 +6,7 @@ interface ReactionProps {
   reaction: ReactionType;
   reacted: boolean;
   messageId: string;
-  handleReact: (
-    messageId: string,
-    emoji: string,
-    reacted: boolean,
-  ) => Promise<void>;
+  handleReact: (messageId: string, emoji: string) => Promise<void>;
 }
 
 function Reaction({
@@ -22,7 +18,7 @@ function Reaction({
   return (
     <div
       className={`border border-zinc-700 rounded px-2 py-0.5 flex gap-x-2 cursor-pointer hover:bg-zinc-900 ${reacted && "border-green-500! bg-zinc-900"}`}
-      onClick={() => handleReact(messageId, reaction.emoji, reacted)}
+      onClick={() => handleReact(messageId, reaction.emoji)}
     >
       <span>{reaction.emoji}</span>
       {reaction.count.length}

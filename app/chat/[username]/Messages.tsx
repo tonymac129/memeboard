@@ -34,7 +34,7 @@ interface EditingType {
 interface MessagesProps {
   messages: MessageType[];
   name: string;
-  userData: User;
+  userData?: User;
   id: string;
   setReplying: React.Dispatch<React.SetStateAction<ReplyType | null>>;
 }
@@ -84,6 +84,7 @@ function Messages({
     events: ["chat.reaction", "chat.edit", "chat.delete", "chat.undo"],
     onData: (data) => {
       const newMessage = JSON.parse(data.data);
+      console.log(newMessage, id);
       if (newMessage.chatId == id) {
         const messages = [...allMessages];
         messages[
@@ -108,12 +109,8 @@ function Messages({
     setLoading(false);
   }
 
-  async function handleReact(
-    messageId: string,
-    emoji: string,
-    reacted: boolean,
-  ) {
-    await reactMessage(id, messageId, emoji, reacted);
+  async function handleReact(messageId: string, emoji: string) {
+    await reactMessage(id, messageId, emoji);
   }
 
   async function handleDelete() {
@@ -160,7 +157,7 @@ function Messages({
                 </span>
               </>
             ) : (
-              `Message deleted by ${userData.name}`
+              `Message deleted by ${userData?.name || "MemeBot"}`
             )}
           </div>
         ) : (
@@ -184,20 +181,32 @@ function Messages({
             <div
               className={`flex gap-x-3 relative mx-0 sm:mx-15 ${fromMe && "self-end"}`}
             >
-              {!fromMe && firstMessage && (
-                <Link
-                  href={`/users/${userData.username}`}
-                  className="absolute -left-15 top-0 hidden sm:block"
-                >
-                  <Image
-                    src={userData.image || "/icons/default-avatar.svg"}
-                    alt="Avatar"
-                    width={50}
-                    height={50}
-                    className="rounded-full"
-                  />
-                </Link>
-              )}
+              {!fromMe &&
+                firstMessage &&
+                (userData ? (
+                  <Link
+                    href={`/users/${userData.username}`}
+                    className="absolute -left-15 top-0 hidden sm:block"
+                  >
+                    <Image
+                      src={userData.image || "/icons/default-avatar.svg"}
+                      alt="Avatar"
+                      width={50}
+                      height={50}
+                      className="rounded-full"
+                    />
+                  </Link>
+                ) : (
+                  <div className="absolute -left-15 top-0 hidden sm:block">
+                    <Image
+                      src="/icons/memebot.png"
+                      alt="Avatar"
+                      width={50}
+                      height={50}
+                      className="rounded-full"
+                    />
+                  </div>
+                ))}
               <div className="text-zinc-300 flex flex-col gap-y-1 flex-1">
                 {firstMessage && (
                   <div

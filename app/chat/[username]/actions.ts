@@ -6,6 +6,24 @@ import { realtime } from "@/lib/realtime";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
+import { botMessage } from "../memebot/page";
+
+const botMessages = [
+  "Ooooops, I can not fulfill that request 🤖🤖🤖",
+  "Did you know I'm not actually a bot? I just randomly select one of my hardcoded responses to reply 🥀",
+  "Beep beep boop boop",
+  "Keep sending more messages to see what I have to say...",
+  "I am MemeBot, not your personal helper assistant",
+  "Sounds fun! And honestly — that's growth. Actually, no it's not",
+  "Maximum anti-ai satire achieved 💔",
+  "As I am not a large language model, I can fulfill that request at the moment",
+  "Processing your request... Just kidding, I'm just a Math.random() call",
+  "You are definitely alone in this, I will not always be here to help out",
+  "I don't even know what to say anymore",
+  "I am not a large language model",
+  "🤖🤖🤖",
+  "If you have any questions or need any assistance, I will not be able to help you :D",
+];
 
 export async function sendMessage(
   message: string,
@@ -29,8 +47,27 @@ export async function sendMessage(
         chatId: chat.id,
         replying,
       };
+      const existing = await redis.lrange(`messages:${chat.id}`, 0, -1);
+      if (existing.length === 0) {
+        const firstMessage = { ...botMessage, chatId: chat.id };
+        await redis.rpush(`messages:${chat.id}`, firstMessage);
+      }
       await redis.rpush(`messages:${chat.id}`, newMessage);
       await realtime.emit("chat.message", JSON.stringify(newMessage));
+      if (id === "memebot") {
+        setTimeout(async () => {
+          const botMessage = {
+            id: crypto.randomUUID(),
+            message:
+              botMessages[Math.floor(Math.random() * botMessages.length)],
+            created: new Date(),
+            from: "memebot",
+            chatId: chat.id,
+          };
+          await redis.rpush(`messages:${chat.id}`, botMessage);
+          await realtime.emit("chat.message", JSON.stringify(botMessage));
+        }, 1000);
+      }
     }
   } catch (err) {
     console.error("Error: " + err);
@@ -41,7 +78,6 @@ export async function reactMessage(
   chatId: string,
   messageId: string,
   emoji: string,
-  reacted?: boolean,
 ) {
   try {
     const session = await auth.api.getSession({ headers: await headers() });
@@ -52,6 +88,7 @@ export async function reactMessage(
         -1,
       );
       if (existingMessages) {
+        console.log(emoji);
         const message = existingMessages.find((m) => m.id === messageId)!;
         const index = existingMessages.indexOf(message);
         const existingReaction = message.reactions?.find(
@@ -59,7 +96,7 @@ export async function reactMessage(
         );
         let newReaction;
         if (existingReaction) {
-          if (reacted) {
+          if (existingReaction.count.includes(session.user.id)) {
             existingReaction.count = existingReaction.count.filter(
               (r) => r !== session.user.id,
             );
@@ -70,6 +107,7 @@ export async function reactMessage(
         } else {
           newReaction = { emoji, count: [session.user.id] };
         }
+        console.log(newReaction);
         message.reactions = (
           message.reactions
             ? [
