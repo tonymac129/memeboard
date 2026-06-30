@@ -6,6 +6,7 @@ import { redis } from "@/lib/redis";
 import Provider from "@/components/chat/Provider";
 import Friend from "@/components/chat/Friend";
 import MemeBot from "@/components/chat/MemeBot";
+import AddFriend from "@/components/chat/AddFriend";
 
 export interface PreviewType {
   userId: string;
@@ -69,6 +70,23 @@ export default async function ChatLayout({
         }),
       )
     : [];
+  const unfriended = await prisma.user.findMany({
+    where: {
+      NOT: [
+        {
+          id: session?.user.id,
+        },
+        {
+          username: "memebot",
+        },
+      ],
+      OR: [
+        { followers: { none: { id: session?.user.id } } },
+        { following: { none: { id: session?.user.id } } },
+      ],
+    },
+    include: { followers: true },
+  });
 
   return (
     <div className="max-w-400 mx-auto px-5 sm:px-20 lg:px-50 h-[calc(100vh-68px)] flex">
@@ -90,6 +108,7 @@ export default async function ChatLayout({
             );
           })}
         </Provider>
+        {session && <AddFriend users={unfriended} userId={session.user.id} />}
       </div>
       <div className="w-[65%] md:flex-1">
         <Provider>{children}</Provider>
