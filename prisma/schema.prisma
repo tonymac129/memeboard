@@ -96,8 +96,6 @@ model Meme {
   source      String?
   image       String
   description String
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
   userId      String
   user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   comments    Comment[]
@@ -107,20 +105,24 @@ model Meme {
   reports     Report[]
   shares      Int          @default(0)
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@index([userId])
 }
 
 model Comment {
-  id        Int      @id @default(autoincrement())
-  content   String
+  id       Int    @id @default(autoincrement())
+  content  String
+  userId   String
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  memeId   Int
+  meme     Meme   @relation(fields: [memeId], references: [id], onDelete: Cascade)
+  likedBy  User[] @relation("Comment Likes")
+  parentId Int?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  memeId    Int
-  meme      Meme     @relation(fields: [memeId], references: [id], onDelete: Cascade)
-  likedBy   User[]   @relation("Comment Likes")
-  parentId  Int?
 
   @@index([userId])
 }
@@ -133,6 +135,9 @@ model MemeTag {
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   memes   Meme[]
 
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
   @@index([userId])
 }
 
@@ -144,6 +149,9 @@ model Collection {
   description String?
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   memes       Meme[]   @relation("Collections")
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 model Report {
@@ -154,6 +162,9 @@ model Report {
   meme            Meme     @relation(fields: [memeId], references: [id], onDelete: Cascade)
   userId          String
   user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 model Chat {
@@ -162,6 +173,9 @@ model Chat {
   user1   User   @relation(fields: [userId1], references: [id], onDelete: Cascade, name: "User 1")
   userId2 String
   user2   User   @relation(fields: [userId2], references: [id], onDelete: Cascade, name: "User 2")
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 
   @@unique([userId1, userId2])
 }

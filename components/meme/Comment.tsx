@@ -19,6 +19,7 @@ interface CommentProps {
 }
 
 //TODO: move comment.tsx and commentfield.tsx to the comment folder
+//TODO: add share comment to chat feature
 
 async function Comment({ comment, memeId }: CommentProps) {
   const session = await auth.api.getSession({ headers: await headers() });

@@ -10,9 +10,10 @@ interface UserCardProps {
   user: User;
   follow?: boolean;
   following?: boolean;
+  link?: string;
 }
 
-function UserCard({ user, follow, following }: UserCardProps) {
+function UserCard({ user, follow, following, link }: UserCardProps) {
   return follow ? (
     <div className={userStyles + " justify-between"}>
       <Link
@@ -34,7 +35,7 @@ function UserCard({ user, follow, following }: UserCardProps) {
       <Follow id={user.id} isFollowing={following || false} />
     </div>
   ) : (
-    <Link href={`/users/${user.username}`} className={userStyles}>
+    <Link href={link || `/users/${user.username}`} className={userStyles}>
       <Image
         src={user.image || "/icons/default-avatar.svg"}
         alt="Profile avatar"
