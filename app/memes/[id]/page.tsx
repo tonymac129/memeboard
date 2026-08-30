@@ -196,6 +196,7 @@ async function Page({ params }: { params: Promise<{ id: number }> }) {
                 key={comment.id}
                 comment={comment}
                 memeId={memeData.id}
+                friends={userFriends}
               />
             ))
           ) : (

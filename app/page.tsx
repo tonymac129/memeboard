@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import Hero from "@/components/layout/Hero";
 import MemeCard from "@/components/meme/MemeCard";
 import UserCard from "@/components/user/UserCard";
+import Btn from "@/components/ui/Btn";
 
 const headerStyles = "w-fit text-2xl text-green-500 font-bold";
 
@@ -82,6 +83,16 @@ async function Page() {
         text="Welcome to MemeBoard!"
         description="Explore the trendiest memes, upload your own creations, chat with your friends, interact with the community, and more!"
       />
+      {!session && (
+        <div className="flex gap-x-5 justify-center mb-5">
+          <Btn href="/memes" text="Browse memes" primary />
+          <Btn href="/login" text="Log in" primary />
+          <Btn
+            href="https://github.com/tonymac129/memeboard"
+            text="Learn more"
+          />
+        </div>
+      )}
       <div className="flex flex-col gap-y-5">
         <h2 className={headerStyles}>Most recent posts ({recent.length})</h2>
         <div className="flex gap-5 flex-wrap">
@@ -114,15 +125,15 @@ async function Page() {
         <>
           <div className="flex flex-col gap-y-5">
             <h2 className={headerStyles}>
-              Your friends' posts ({friends.length})
+              Your friends&apos; posts ({friends.length})
             </h2>
             <div className="flex gap-5 flex-wrap">
               {friends.length > 0 ? (
                 friends.map((meme) => <MemeCard key={meme.id} meme={meme} />)
               ) : (
                 <div className="py-5 text-zinc-300">
-                  You either don&apos;t have any friends, or they haven't posted
-                  anything yet :(
+                  You either don&apos;t have any friends, or they haven&apos;t
+                  posted anything yet :(
                 </div>
               )}
             </div>

@@ -1,23 +1,32 @@
 "use client";
 
+import type { User } from "@/app/generated/prisma/client";
 import type { CommentType as NewCommentType } from "@/types/Meme";
 import type { CommentType } from "../meme/Comment";
 import { useState } from "react";
 import { likeComment, postComment } from "@/app/memes/[id]/actions";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { AnimatePresence } from "framer-motion";
+import ReportModal from "../meme/ReportModal";
+import ShareModal from "../meme/ShareModal";
 import Input from "../ui/Input";
 import Btn from "../ui/Btn";
+
+const optionStyles = "font-bold cursor-pointer hover:text-green-500";
 
 interface ReplyProps {
   comment: CommentType;
   likedComment: boolean;
   userId: string;
   memeId: number;
+  friends: User[];
 }
 
-function Reply({ comment, likedComment, userId, memeId }: ReplyProps) {
+function Reply({ comment, likedComment, userId, memeId, friends }: ReplyProps) {
   const [loading, setLoading] = useState<boolean>(false);
   const [replying, setReplying] = useState<boolean>(false);
+  const [sharing, setSharing] = useState<boolean>(false);
+  const [reporting, setReporting] = useState<boolean>(false);
   const [newReply, setNewReply] = useState<NewCommentType>({
     id: 0,
     content: "",
@@ -33,8 +42,14 @@ function Reply({ comment, likedComment, userId, memeId }: ReplyProps) {
   async function handlePost() {
     setLoading(true);
     await postComment(newReply, comment.id);
+    setNewReply({ ...newReply, content: "" });
     setLoading(false);
     setReplying(false);
+  }
+
+  function handleCancel() {
+    setReplying(false);
+    setNewReply({ ...newReply, content: "" });
   }
 
   return (
@@ -42,7 +57,7 @@ function Reply({ comment, likedComment, userId, memeId }: ReplyProps) {
       <div className="flex gap-x-5 text-zinc-300 text-sm">
         <div
           className="cursor-pointer flex items-center gap-x-2"
-          title="Like comment"
+          title={`${likedComment ? "Unl" : "L"}ike comment`}
           onClick={handleLike}
         >
           {likedComment ? (
@@ -52,11 +67,14 @@ function Reply({ comment, likedComment, userId, memeId }: ReplyProps) {
           )}{" "}
           {comment.likedBy.length}
         </div>
-        <div
-          className="font-bold cursor-pointer"
-          onClick={() => setReplying(true)}
-        >
+        <div className={optionStyles} onClick={() => setReplying(true)}>
           Reply
+        </div>
+        <div className={optionStyles} onClick={() => setSharing(true)}>
+          Share
+        </div>
+        <div className={optionStyles} onClick={() => setReporting(true)}>
+          Report
         </div>
       </div>
       {replying && (
@@ -76,10 +94,24 @@ function Reply({ comment, likedComment, userId, memeId }: ReplyProps) {
               onclick={handlePost}
               primary
             />
-            <Btn text="Cancel" onclick={() => setReplying(false)} />
+            <Btn text="Cancel" onclick={handleCancel} />
           </div>
         </>
       )}
+      <AnimatePresence>
+        {reporting && (
+          <ReportModal memeId={memeId} setReporting={setReporting} />
+        )}
+        {sharing && (
+          <ShareModal
+            memeId={memeId}
+            friends={friends}
+            setSharing={setSharing}
+            setReporting={setReporting}
+            isComment
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

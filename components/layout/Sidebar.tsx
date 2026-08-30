@@ -42,7 +42,6 @@ function Sidebar() {
         onClick={() => setOpen(true)}
       >
         <FaBars size={20} />
-        {/* TODO: show the logo instead of menu icon when not small screen */}
       </div>
       <AnimatePresence>
         {open && (

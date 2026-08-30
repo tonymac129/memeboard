@@ -19,6 +19,7 @@ interface ShareModalProps {
   friends: User[];
   setSharing: React.Dispatch<React.SetStateAction<boolean>>;
   setReporting: React.Dispatch<React.SetStateAction<boolean>>;
+  isComment?: boolean;
 }
 
 function ShareModal({
@@ -26,6 +27,7 @@ function ShareModal({
   friends,
   setSharing,
   setReporting,
+  isComment,
 }: ShareModalProps) {
   const [copied, setCopied] = useState<boolean>(false);
   const [selectedFriends, setSelectedFriends] = useState<string[]>([]);
@@ -43,6 +45,7 @@ function ShareModal({
       if (selectedFriends.length > 0) {
         setMessage("");
         await sendMeme(memeId, message, selectedFriends);
+        //TODO: implement comment sharing for when isComment is true
         setSent(true);
         setTimeout(() => {
           setSelectedFriends([]);
@@ -68,7 +71,9 @@ function ShareModal({
   return (
     <Modal closeModal={() => setSharing(false)}>
       <div className="px-10 py-5 flex flex-col gap-y-3">
-        <h2 className="text-white text-2xl font-bold">Share meme</h2>
+        <h2 className="text-white text-2xl font-bold">
+          Share {isComment ? "comment" : "meme"}
+        </h2>
         {session && (
           <>
             <div className="flex gap-x-3 overflow-auto">

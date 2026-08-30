@@ -16,12 +16,12 @@ export type CommentType = Comment & {
 interface CommentProps {
   comment: CommentType;
   memeId: number;
+  friends: User[];
 }
 
 //TODO: move comment.tsx and commentfield.tsx to the comment folder
-//TODO: add share comment to chat feature
 
-async function Comment({ comment, memeId }: CommentProps) {
+async function Comment({ comment, memeId, friends }: CommentProps) {
   const session = await auth.api.getSession({ headers: await headers() });
   const likedComment = comment.likedBy.find((c) => c.id === session?.user.id)
     ? true
@@ -68,11 +68,17 @@ async function Comment({ comment, memeId }: CommentProps) {
         likedComment={likedComment}
         userId={session?.user.id || ""}
         memeId={memeId}
+        friends={friends}
       />
       {comment.replies && (
         <div className="flex flex-col gap-y-3">
           {comment.replies.map((reply) => (
-            <Comment key={reply.id} comment={reply} memeId={memeId} />
+            <Comment
+              key={reply.id}
+              comment={reply}
+              memeId={memeId}
+              friends={friends}
+            />
           ))}
         </div>
       )}
