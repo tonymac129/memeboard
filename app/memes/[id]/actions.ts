@@ -228,6 +228,42 @@ export async function sendMeme(
   }
 }
 
+export async function sendComment(
+  commentId: number,
+  message: string,
+  friends: string[],
+) {
+  try {
+    const session = await auth.api.getSession({ headers: await headers() });
+    if (session) {
+      const pairs = friends.map((friend) => {
+        return [session.user.id, friend].sort().join("-");
+      });
+      const chats = await prisma.chat.findMany({
+        where: {
+          OR: [{ userId1: session.user.id }, { userId2: session.user.id }],
+        },
+      });
+      for (const chat of chats) {
+        if (pairs.includes([chat.userId1, chat.userId2].join("-"))) {
+          const newMessage = {
+            id: crypto.randomUUID(),
+            message,
+            commentId,
+            created: new Date(),
+            from: session.user.id,
+            chatId: chat.id,
+          };
+          await redis.rpush(`messages:${chat.id}`, newMessage);
+          await realtime.emit("chat.message", JSON.stringify(newMessage));
+        }
+      }
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}
+
 export async function deleteMeme(memeId: number, userId: string) {
   try {
     const session = await auth.api.getSession({ headers: await headers() });

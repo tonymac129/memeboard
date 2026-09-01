@@ -4,7 +4,7 @@ import type { User } from "@/app/generated/prisma/client";
 import { FaCheck, FaClipboard, FaFlag } from "react-icons/fa";
 import { IoSend } from "react-icons/io5";
 import { useState } from "react";
-import { sendMeme } from "@/app/memes/[id]/actions";
+import { sendComment, sendMeme } from "@/app/memes/[id]/actions";
 import { authClient } from "@/lib/auth-client";
 import Modal from "../ui/Modal";
 import Btn from "../ui/Btn";
@@ -19,7 +19,7 @@ interface ShareModalProps {
   friends: User[];
   setSharing: React.Dispatch<React.SetStateAction<boolean>>;
   setReporting: React.Dispatch<React.SetStateAction<boolean>>;
-  isComment?: boolean;
+  isComment?: number;
 }
 
 function ShareModal({
@@ -44,8 +44,11 @@ function ShareModal({
     } else {
       if (selectedFriends.length > 0) {
         setMessage("");
-        await sendMeme(memeId, message, selectedFriends);
-        //TODO: implement comment sharing for when isComment is true
+        if (isComment) {
+          await sendComment(isComment, message, selectedFriends);
+        } else {
+          await sendMeme(memeId, message, selectedFriends);
+        }
         setSent(true);
         setTimeout(() => {
           setSelectedFriends([]);

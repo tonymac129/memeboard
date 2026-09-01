@@ -30,7 +30,10 @@ async function Comment({ comment, memeId, friends }: CommentProps) {
     comment.createdAt.getTime() !== comment.updatedAt.getTime();
 
   return (
-    <div className="w-full relative border-2 border-zinc-700 rounded flex flex-col gap-y-3 p-5">
+    <div
+      id={comment.id.toString()}
+      className="w-full relative border-2 border-zinc-700 rounded flex flex-col gap-y-3 p-5"
+    >
       <div className="flex items-center gap-x-3 text-zinc-300">
         <Link
           href={`/users/${comment.user.username}`}

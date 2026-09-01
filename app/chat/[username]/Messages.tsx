@@ -13,13 +13,14 @@ import {
   reactMessage,
   undoMessage,
 } from "./actions";
+import { AnimatePresence } from "framer-motion";
 import EmbeddedMeme from "@/components/chat/EmbeddedMeme";
+import EmbeddedComment from "@/components/chat/EmbeddedComment";
 import React from "@/components/chat/React";
 import Reaction from "@/components/chat/Reaction";
 import Modal from "@/components/ui/Modal";
 import Link from "next/link";
 import Image from "next/image";
-import { AnimatePresence } from "framer-motion";
 import Input from "@/components/ui/Input";
 import Btn from "@/components/ui/Btn";
 
@@ -231,12 +232,17 @@ function Messages({
                     className={`bg-zinc-900 rounded px-4 flex flex-col gap-y-3 py-2 overflow-auto max-w-[45%] md:max-w-[60%] ${fromMe && "bg-green-800! self-end"}`}
                   >
                     {message.memeId && <EmbeddedMeme memeId={message.memeId} />}
-                    <div className="flex gap-x-2 items-end">
-                      {message.message}
-                      {message.edited && (
-                        <span className="text-xs">(edited)</span>
-                      )}
-                    </div>
+                    {message.commentId && (
+                      <EmbeddedComment commentId={message.commentId} />
+                    )}
+                    {message.message && (
+                      <div className="flex gap-x-2 items-end">
+                        {message.message}
+                        {message.edited && (
+                          <span className="text-xs">(edited)</span>
+                        )}
+                      </div>
+                    )}
                   </div>
                   <div
                     className={`opacity-0 flex gap-x-3 group-hover:opacity-100 transition-all! duration-300 ${fromMe && "flex-row-reverse"}`}

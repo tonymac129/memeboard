@@ -2,6 +2,7 @@ export interface MessageType {
   id: string;
   message: string;
   memeId?: number;
+  commentId?: number;
   created: Date;
   from: string;
   chatId: string;

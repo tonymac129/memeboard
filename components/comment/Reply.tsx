@@ -108,7 +108,7 @@ function Reply({ comment, likedComment, userId, memeId, friends }: ReplyProps) {
             friends={friends}
             setSharing={setSharing}
             setReporting={setReporting}
-            isComment
+            isComment={comment.id}
           />
         )}
       </AnimatePresence>

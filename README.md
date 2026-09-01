@@ -4,15 +4,16 @@ Explore the trendiest memes, upload your own creations, chat with your friends, 
 
 ## Features
 
-- Upload custom memes
-- Comment and discuss the memes
+- Upload and categorize custom memes
+- Discuss and comment on memes
 - Vote for the best memes and save to collections
-- Share the memes and chat with friends
+- Share memes and chat with friends
 - Customize your own profile
-- Follow your friends
+- Follow your friends and see their memes
 - Create and curate custom collections of memes
 - Create tags and categorize memes with them
-- Chat with your friends in realtime and share memes
+- Chat with your friends in realtime and share memes and comments
+- Have fun chatting with MemeBot (not an LLM)
 - Sort, filter, search, and browse through different memes
 
 ## Tech Stack
