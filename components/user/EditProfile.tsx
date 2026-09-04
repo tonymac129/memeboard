@@ -12,7 +12,8 @@ import Input from "../ui/Input";
 import Btn from "../ui/Btn";
 import Image from "next/image";
 
-const labelStyles = "flex flex-col gap-y-1 text-zinc-300 text-sm";
+const labelStyles =
+  "flex flex-col gap-y-1 text-black dark:text-zinc-300 text-sm";
 
 function EditProfile({ user }: { user: User }) {
   const [editing, setEditing] = useState<boolean>(false);
@@ -40,7 +41,9 @@ function EditProfile({ user }: { user: User }) {
         {editing && (
           <Modal closeModal={() => setEditing(false)}>
             <div className="px-10 pt-5 flex flex-col gap-y-3">
-              <h2 className="text-white text-2xl font-bold">Add tags</h2>
+              <h2 className="text-black dark:text-white text-2xl font-bold">
+                Edit profile
+              </h2>
               <label className={labelStyles}>
                 Display name
                 <Input
@@ -62,7 +65,7 @@ function EditProfile({ user }: { user: User }) {
               <label className={labelStyles}>
                 Bio
                 <textarea
-                  className="text-base border-2 border-zinc-700 rounded px-4 py-2 text-zinc-300 outline-none resize-none h-30"
+                  className="text-base border-2 border-zinc-700 rounded px-4 py-2 text-black dark:text-zinc-300 outline-none resize-none h-30"
                   placeholder="Tell people about you"
                   value={userData.bio || ""}
                   onChange={(e) =>

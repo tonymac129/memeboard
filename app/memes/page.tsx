@@ -64,6 +64,4 @@ async function Page() {
   );
 }
 
-//TODO: maybe put the sorting/filtering and flex wrap grid into a reusable component for all instances of displaying memes
-
 export default Page;

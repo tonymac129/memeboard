@@ -6,7 +6,8 @@ import { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 
-const navLinkStyles = "text-zinc-300 hover:text-green-500 font-bold py-2 px-10";
+const navLinkStyles =
+  "text-black dark:text-zinc-300 hover:text-green-600 dark:hover:text-green-500 font-bold py-2 px-10";
 
 function Sidebar() {
   const [open, setOpen] = useState<boolean>(false);
@@ -36,8 +37,8 @@ function Sidebar() {
   return (
     <div>
       <div
-        className="block md:hidden text-zinc-300 p-3 border-2 border-zinc-700 rounded 
-      cursor-pointer hover:bg-zinc-900"
+        className="block md:hidden text-black dark:text-zinc-300 p-3 border-2 border-zinc-700 rounded 
+      cursor-pointer hover:bg-zinc-200 dark:hover:bg-zinc-900"
         ref={btnRef}
         onClick={() => setOpen(true)}
       >
@@ -49,13 +50,13 @@ function Sidebar() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="h-screen w-screen absolute top-0 left-0 bg-zinc-950/75 backdrop-blur-sm"
+            className="h-screen w-screen absolute top-0 left-0 bg-zinc-100/75 dark:bg-zinc-950/75 backdrop-blur-sm"
           >
             <motion.div
               initial={{ left: "-100%" }}
               animate={{ left: 0 }}
               exit={{ left: "-100%" }}
-              className="h-screen w-[80%] max-w-50 py-5 overflow-auto absolute left-0 top-0 flex flex-col gap-y-3 bg-zinc-950 border-r-2 border-zinc-700"
+              className="h-screen w-[80%] max-w-50 py-5 overflow-auto absolute left-0 top-0 flex flex-col gap-y-3 bg-zinc-100 dark:bg-zinc-950 border-r-2 border-zinc-700"
               ref={sidebarRef}
             >
               <Link href="/" className={navLinkStyles}>

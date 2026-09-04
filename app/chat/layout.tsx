@@ -91,7 +91,7 @@ export default async function ChatLayout({
   return (
     <div className="max-w-400 mx-auto px-5 sm:px-20 lg:px-50 h-[calc(100vh-68px)] flex">
       <div className="w-[35%] max-w-70 border-r-2 border-zinc-700 flex flex-col pr-5 py-2 gap-y-3 h-full overflow-auto">
-        <h2 className="text-center text-white font-bold text-xl pt-3">
+        <h2 className="text-center text-black dark:text-white font-bold text-xl pt-3">
           Friends
         </h2>
         <Provider>

@@ -4,23 +4,25 @@ import { MdOutlineAdd } from "react-icons/md";
 import Btn from "../ui/Btn";
 import User from "./User";
 import Sidebar from "./Sidebar";
+import Theme from "./Theme";
 import Link from "next/link";
 
 const navLinkStyles =
-  "hidden md:block text-zinc-300 hover:text-green-500 py-2 px-4";
+  "hidden md:block text-black dark:text-zinc-300 hover:text-green-600 dark:hover:text-green-500 py-2 px-4";
 
 async function Nav() {
   const session = await auth.api.getSession({ headers: await headers() });
 
   return (
-    <div className="sticky top-0 bg-zinc-950 z-50 border-b-2 border-b-zinc-700">
+    <div className="sticky top-0 bg-zinc-100 dark:bg-zinc-950 z-50 border-b-2 border-b-zinc-700">
       <nav className="max-w-400 mx-auto px-5 sm:px-20 lg:px-50 flex items-center justify-between py-1 sm:py-3">
         <div className="flex items-center gap-x-3">
           <Sidebar />
           <Link
             href="/"
             className={
-              navLinkStyles + " block! text-xl text-green-500! font-bold pl-0"
+              navLinkStyles +
+              " block! text-xl text-green-600! dark:text-green-500! font-bold pl-0"
             }
           >
             MemeBoard
@@ -39,6 +41,7 @@ async function Nav() {
           </Link>
         </div>
         <div className="flex items-center gap-x-5">
+          <Theme />
           {session ? (
             <>
               <Btn text="" href="/post" styles="gap-x-1.5!" primary>

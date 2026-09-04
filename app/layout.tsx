@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { ThemeProvider } from "next-themes";
 import Nav from "@/components/layout/Nav";
 import Footer from "@/components/layout/Footer";
 import "./globals.css";
@@ -23,11 +24,14 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${inter.variable} ${inter.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
       <body>
-        <Nav />
-        {children}
-        <Footer />
+        <ThemeProvider attribute="class">
+          <Nav />
+          {children}
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -30,10 +30,12 @@ function EmbeddedMeme({ memeId }: { memeId: number }) {
       {meme ? (
         <Link
           href={`/memes/${memeId}`}
-          className="rounded flex flex-col gap-y-3 border-2 border-zinc-700 p-2 w-70 backdrop-brightness-50"
+          className="rounded flex flex-col gap-y-3 border-2 border-zinc-700 p-2 w-70 backdrop-brightness-70 dark:backdrop-brightness-50"
         >
           <div className="text-sm">Created by {meme.user.name}</div>
-          <h2 className="text-xl font-bold text-white">{meme.title}</h2>
+          <h2 className="text-xl font-bold text-black dark:text-white">
+            {meme.title}
+          </h2>
           <Image
             src={meme.image}
             alt="Meme image"

@@ -211,5 +211,3 @@ export async function undoMessage(chatId: string, messageId: string) {
     console.error("Error: " + err);
   }
 }
-
-//TODO: all these actions are just boilerplate and could be merged into one function but im too lazy to refactor

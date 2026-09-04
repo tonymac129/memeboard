@@ -15,6 +15,8 @@ Explore the trendiest memes, upload your own creations, chat with your friends, 
 - Chat with your friends in realtime and share memes and comments
 - Have fun chatting with MemeBot (not an LLM)
 - Sort, filter, search, and browse through different memes
+- Toggle between dark/light modes
+- Accessible responsive design and UX
 
 ## Tech Stack
 

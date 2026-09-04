@@ -10,7 +10,7 @@ function User({ username, image }: UserProps) {
   return (
     <Link
       href={`/users/${username}`}
-      className="flex gap-x-3 items-center border-2 border-zinc-700 rounded text-zinc-300 px-3 py-0.5 font-bold hover:bg-zinc-900"
+      className="flex gap-x-3 items-center border-2 border-zinc-700 rounded text-black dark:text-zinc-300 px-3 py-0.5 font-bold hover:bg-zinc-200 dark:hover:bg-zinc-900"
     >
       <Image
         src={image}

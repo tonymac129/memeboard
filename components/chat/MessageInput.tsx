@@ -33,7 +33,7 @@ function MessageInput({ name, id, replying, setReplying }: MessageInputProps) {
       {replying && (
         <div
           className="absolute w-full rounded-t px-4 py-2 text-sm border-2 border-b-0 border-zinc-700
-         text-zinc-300 bottom-[calc(100%-4px)] bg-zinc-900 flex items-center justify-between"
+         text-black dark:text-zinc-300 bottom-[calc(100%-4px)] bg-zinc-200 dark:bg-zinc-900 flex items-center justify-between"
         >
           Replying to message: {replying.message}
           <FaXmark
@@ -53,8 +53,11 @@ function MessageInput({ name, id, replying, setReplying }: MessageInputProps) {
       <button type="submit" className="hidden" />
     </form>
   ) : (
-    <div className="bg-zinc-900 rounded text-center py-3 text-zinc-300 w-full relative">
-      <Link href="/login" className="hover:text-green-500">
+    <div className="bg-zinc-900 rounded text-center py-3 text-black dark:text-zinc-300 w-full relative">
+      <Link
+        href="/login"
+        className="hover:text-green-600 dark:hover:text-green-500"
+      >
         Log in
       </Link>{" "}
       to unlock chatting, posting, commenting, and other features!

@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 const userStyles =
-  "font-bold hover:text-green-500 hover:bg-zinc-900 px-4 py-2 flex items-center gap-x-3 rounded text-zinc-300";
+  "font-bold hover:text-green-600 dark:hover:text-green-500 hover:bg-zinc-200 dark:hover:bg-zinc-900 px-4 py-2 flex items-center gap-x-3 rounded text-black dark:text-zinc-300";
 
 interface UserCardProps {
   user: User;

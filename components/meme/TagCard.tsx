@@ -11,9 +11,12 @@ function TagCard({ tag }: { tag: TagType }) {
     <Link
       key={tag.id}
       href={`/tags/${tag.id}`}
-      className="flex items-center gap-x-3 px-5 py-3 text-zinc-300 rounded border-2 border-zinc-700 w-60 hover:bg-zinc-900"
+      className="flex items-center gap-x-3 px-5 py-3 text-black dark:text-zinc-300 rounded border-2 border-zinc-700 w-60 hover:bg-zinc-200 dark:hover:bg-zinc-900"
     >
-      <FaHashtag size={35} className="rounded bg-zinc-800 p-2" />
+      <FaHashtag
+        size={35}
+        className="rounded bg-zinc-300 dark:bg-zinc-800 p-2"
+      />
       <h2 className="font-bold">
         {tag.name} ({tag.memes.length})
       </h2>

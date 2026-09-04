@@ -6,7 +6,8 @@ import MemeCard from "@/components/meme/MemeCard";
 import UserCard from "@/components/user/UserCard";
 import Btn from "@/components/ui/Btn";
 
-const headerStyles = "w-fit text-2xl text-green-500 font-bold";
+const headerStyles =
+  "w-fit text-2xl text-green-600 dark:text-green-500 font-bold";
 
 async function Page() {
   const weekStart = new Date(
@@ -107,7 +108,7 @@ async function Page() {
           {top.length > 0 ? (
             top.map((meme) => <MemeCard key={meme.id} meme={meme} />)
           ) : (
-            <div className="py-5 text-zinc-300">
+            <div className="py-5 text-black dark:text-zinc-300">
               Nothing was posted in the past 7 days, weird...
             </div>
           )}
@@ -131,7 +132,7 @@ async function Page() {
               {friends.length > 0 ? (
                 friends.map((meme) => <MemeCard key={meme.id} meme={meme} />)
               ) : (
-                <div className="py-5 text-zinc-300">
+                <div className="py-5 text-black dark:text-zinc-300">
                   You either don&apos;t have any friends, or they haven&apos;t
                   posted anything yet :(
                 </div>
@@ -154,7 +155,7 @@ async function Page() {
                   );
                 })
               ) : (
-                <div className="py-5 text-zinc-300">
+                <div className="py-5 text-black dark:text-zinc-300">
                   You either don&apos;t have any friends, or you haven&apos;t
                   chatted with them yet :(
                 </div>
@@ -169,5 +170,6 @@ async function Page() {
 
 //TODO: add lazy loading/loading indicator for certain pages
 //TODO: add page transition animation
+//TODO: page load and browse meme animation
 
 export default Page;

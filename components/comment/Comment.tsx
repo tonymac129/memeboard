@@ -2,10 +2,10 @@ import type { User, Comment } from "@/app/generated/prisma/client";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { displayTime } from "@/lib/calc";
-import Reply from "../comment/Reply";
+import Reply from "./Reply";
 import Image from "next/image";
 import Link from "next/link";
-import Options from "../comment/Options";
+import Options from "./Options";
 
 export type CommentType = Comment & {
   likedBy: User[];
@@ -19,8 +19,6 @@ interface CommentProps {
   friends: User[];
 }
 
-//TODO: move comment.tsx and commentfield.tsx to the comment folder
-
 async function Comment({ comment, memeId, friends }: CommentProps) {
   const session = await auth.api.getSession({ headers: await headers() });
   const likedComment = comment.likedBy.find((c) => c.id === session?.user.id)
@@ -28,16 +26,15 @@ async function Comment({ comment, memeId, friends }: CommentProps) {
     : false;
   const hasUpdated =
     comment.createdAt.getTime() !== comment.updatedAt.getTime();
-
   return (
     <div
       id={comment.id.toString()}
       className="w-full relative border-2 border-zinc-700 rounded flex flex-col gap-y-3 p-5"
     >
-      <div className="flex items-center gap-x-3 text-zinc-300">
+      <div className="flex items-center gap-x-3 text-black dark:text-zinc-300">
         <Link
           href={`/users/${comment.user.username}`}
-          className="flex items-center gap-x-3 font-bold hover:text-green-500"
+          className="flex items-center gap-x-3 font-bold hover:text-green-600 dark:hover:text-green-500"
         >
           <Image
             src={comment.user.image || "/icons/default-avatar.svg"}
@@ -65,7 +62,7 @@ async function Comment({ comment, memeId, friends }: CommentProps) {
           </>
         )}
       </div>
-      <p className="text-zinc-300">{comment.content}</p>
+      <p className="text-black dark:text-zinc-300">{comment.content}</p>
       <Reply
         comment={comment}
         likedComment={likedComment}

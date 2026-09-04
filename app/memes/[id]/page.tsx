@@ -5,8 +5,8 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { FaLink } from "react-icons/fa";
 import { displayTime } from "@/lib/calc";
-import CommentField from "@/components/meme/CommentField";
-import Comment, { CommentType } from "@/components/meme/Comment";
+import CommentField from "@/components/comment/CommentField";
+import Comment, { CommentType } from "@/components/comment/Comment";
 import Btn from "@/components/ui/Btn";
 import MemeBar from "@/components/meme/MemeBar";
 import Options from "./Options";
@@ -43,7 +43,10 @@ async function fetchMeme(id: number) {
       tags: true,
       upvotes: true,
       downvotes: true,
-      comments: { include: { user: true, likedBy: true } },
+      comments: {
+        include: { user: true, likedBy: true },
+        orderBy: { createdAt: "desc" },
+      },
     },
   });
   if (!memeData) redirect("/memes");
@@ -99,12 +102,12 @@ async function Page({ params }: { params: Promise<{ id: number }> }) {
   return (
     <div className="max-w-400 mx-auto px-5 sm:px-20 lg:px-50 pt-10 pb-30 flex flex-col gap-y-10">
       <div className="flex flex-col gap-y-3 relative w-[90%] sm:w-[75%] md:w-150">
-        <div className="flex flex-wrap gap-3 text-zinc-300 text-sm">
+        <div className="flex flex-wrap gap-3 text-black dark:text-zinc-300 text-sm">
           <p>
             Uploaded by:{" "}
             <Link
               href={`/users/${memeData.user.username}`}
-              className="hover:text-green-500"
+              className="hover:text-green-600 dark:hover:text-green-500"
             >
               {memeData.user.name}
             </Link>
@@ -126,12 +129,12 @@ async function Page({ params }: { params: Promise<{ id: number }> }) {
             </>
           )}
         </div>
-        <h1 className="text-white font-bold text-3xl flex items-center gap-x-5">
+        <h1 className="text-black dark:text-white font-bold text-3xl flex items-center gap-x-5">
           {memeData.title}
           {memeData.source && (
             <Link
               href={memeData.source}
-              className="hover:text-green-500"
+              className="hover:text-green-600 dark:hover:text-green-500"
               title="Original source"
               target="_blank"
             >
@@ -145,7 +148,7 @@ async function Page({ params }: { params: Promise<{ id: number }> }) {
               <Link
                 href={`/tags/${tag.id}`}
                 key={tag.id}
-                className="text-sm text-zinc-300 rounded-full px-4 py-2 bg-zinc-900 font-bold cursor-pointer"
+                className="text-sm text-black dark:text-zinc-300 rounded-full px-4 py-2 bg-zinc-200 dark:bg-zinc-900 font-bold cursor-pointer"
               >
                 {tag.name}
               </Link>
@@ -157,7 +160,7 @@ async function Page({ params }: { params: Promise<{ id: number }> }) {
         )}
       </div>
       {memeData.description && (
-        <p className="text-zinc-300">{memeData.description}</p>
+        <p className="text-black dark:text-zinc-300">{memeData.description}</p>
       )}
       <Image
         src={memeData.image}
@@ -181,11 +184,13 @@ async function Page({ params }: { params: Promise<{ id: number }> }) {
           />
         ) : (
           <div className="flex flex-col gap-y-3 py-5 border-2 border-zinc-700 rounded w-120 items-center">
-            <span className="text-zinc-300">Sign in to leave a comment!</span>
+            <span className="text-black dark:text-zinc-300">
+              Sign in to leave a comment!
+            </span>
             <Btn text="Sign in" href="/login" styles="w-fit" />
           </div>
         )}
-        <h2 className="text-lg font-bold text-white">
+        <h2 className="text-lg font-bold text-black dark:text-white">
           Comment{memeData.comments.length !== 1 && "s"} (
           {memeData.comments.length})
         </h2>
@@ -200,7 +205,7 @@ async function Page({ params }: { params: Promise<{ id: number }> }) {
               />
             ))
           ) : (
-            <span className="text-sm text-zinc-300">
+            <span className="text-sm text-black dark:text-zinc-300">
               No comments found. Be the first to say something!
             </span>
           )}

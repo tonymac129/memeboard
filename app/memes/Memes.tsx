@@ -9,7 +9,7 @@ import Input from "@/components/ui/Input";
 import MemeCard from "@/components/meme/MemeCard";
 import Dropdown from "@/components/ui/Dropdown";
 
-const optionStyles = "flex gap-x-3 text-zinc-300 items-center";
+const optionStyles = "flex gap-x-3 text-black dark:text-zinc-300 items-center";
 const sortOptions = ["Best", "Top", "New"];
 const filterOptions = [
   "Now",
@@ -166,7 +166,7 @@ function Memes({ memes, friends, userId, tags }: MemesProps) {
             styles="w-fit"
           />
         </div>
-        <div className="absolute right-0 text-zinc-300">
+        <div className="absolute right-0 text-black dark:text-zinc-300">
           {Math.min(Number(count), finalMemes.length)} of {memes.length} memes
         </div>
       </div>
@@ -176,7 +176,7 @@ function Memes({ memes, friends, userId, tags }: MemesProps) {
             return <MemeCard key={meme.id} meme={meme} />;
           })
         ) : (
-          <div className="text-zinc-300">
+          <div className="text-black dark:text-zinc-300">
             No memes found. Maybe try adjusting the filters?
           </div>
         )}

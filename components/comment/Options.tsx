@@ -10,7 +10,7 @@ import Btn from "@/components/ui/Btn";
 import Input from "@/components/ui/Input";
 
 const optionStyles =
-  "flex gap-x-3 px-4 py-2 cursor-pointer hover:bg-zinc-900 items-center";
+  "flex gap-x-3 px-4 py-2 cursor-pointer hover:bg-zinc-200 dark:hover:bg-zinc-900 items-center";
 
 interface OptionsProps {
   comment: CommentType;
@@ -54,9 +54,9 @@ function Options({ comment, userId }: OptionsProps) {
 
   return (
     <div ref={menuRef} className="absolute top-3 right-3">
-      <div className="relative text-zinc-300">
+      <div className="relative text-black dark:text-zinc-300">
         <FaEllipsisH
-          className={`p-2.5 rounded-full hover:bg-zinc-900 cursor-pointer ${menuOpen && "bg-zinc-900"}`}
+          className={`p-2.5 rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-900 cursor-pointer ${menuOpen && "bg-zinc-200 dark:bg-zinc-900"}`}
           onClick={() => setMenuOpen(!menuOpen)}
           size={35}
         />
@@ -81,10 +81,10 @@ function Options({ comment, userId }: OptionsProps) {
         {modalOpen && (
           <Modal closeModal={() => setModalOpen(false)}>
             <div className="flex flex-col gap-y-3 p-6">
-              <h2 className="text-white text-xl font-bold">
+              <h2 className="text-black dark:text-white text-xl font-bold">
                 Delete confirmation
               </h2>
-              <p className="text-zinc-300">
+              <p className="text-black dark:text-zinc-300">
                 Are you sure you want to delete this comment and all its
                 replies? This action cannot be undone.
               </p>
@@ -103,7 +103,9 @@ function Options({ comment, userId }: OptionsProps) {
         {content !== null && (
           <Modal closeModal={() => setContent(null)}>
             <div className="flex flex-col gap-y-3 p-6">
-              <h2 className="text-white text-xl font-bold">Edit comment</h2>
+              <h2 className="text-black dark:text-white text-xl font-bold">
+                Edit comment
+              </h2>
               <Input
                 placeholder="Edit comment"
                 value={content}

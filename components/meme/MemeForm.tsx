@@ -10,7 +10,8 @@ import Upload from "./Upload";
 import Input from "../ui/Input";
 import Btn from "../ui/Btn";
 
-const labelStyles = "flex flex-col gap-y-1 text-zinc-300 text-sm";
+const labelStyles =
+  "flex flex-col gap-y-1 text-black dark:text-zinc-300 text-sm";
 
 interface MemeFormProps {
   postMeme: (meme: MemeType) => Promise<number | undefined>;
@@ -69,13 +70,13 @@ function MemeForm({ postMeme, memeTags, data }: MemeFormProps) {
           {newMeme.tags?.slice(0, 3).map((tag) => (
             <span
               key={tag.id}
-              className="rounded-full px-4 py-2 bg-zinc-900 font-bold cursor-pointer"
+              className="rounded-full px-4 py-2 bg-zinc-200 dark:bg-zinc-900 font-bold cursor-pointer"
             >
               {tag.name}
             </span>
           ))}
           {newMeme.tags?.length && newMeme.tags.length > 3 ? (
-            <span className="rounded-full px-4 py-2 bg-zinc-900 font-bold cursor-pointer">
+            <span className="rounded-full px-4 py-2 bg-zinc-200 dark:bg-zinc-900 font-bold cursor-pointer">
               + {newMeme.tags.length - 3}
             </span>
           ) : (
@@ -95,7 +96,7 @@ function MemeForm({ postMeme, memeTags, data }: MemeFormProps) {
       <label className={labelStyles}>
         Description
         <textarea
-          className="text-base border-2 border-zinc-700 rounded px-4 py-2 text-zinc-300 outline-none resize-none h-30"
+          className="text-base border-2 border-zinc-700 rounded px-4 py-2 text-black dark:text-zinc-300 outline-none resize-none h-30"
           placeholder="Describe what the meme is about (optional)"
           value={newMeme.description}
           onChange={(e) =>

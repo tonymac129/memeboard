@@ -45,11 +45,11 @@ async function Page({ params }: { params: Promise<{ id: string }> }) {
         text={`${memeTag.name} Memes (${memeTag.memes.length})`}
         description={`Browse all the memes labeled with the ${memeTag.name} tag!`}
       >
-        <div className="flex gap-x-1 text-zinc-300">
+        <div className="flex gap-x-1 text-black dark:text-zinc-300">
           Created by:
           <Link
             href={`/users/${memeTag.user.username}`}
-            className="hover:text-green-500"
+            className="hover:text-green-600 dark:hover:text-green-500"
           >
             {memeTag.user.name}
           </Link>

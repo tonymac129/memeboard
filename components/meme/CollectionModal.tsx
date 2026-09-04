@@ -58,7 +58,9 @@ function CollectionModal({
   return (
     <Modal closeModal={() => setCollection(false)}>
       <div className="px-10 pt-5 flex flex-col gap-y-3">
-        <h2 className="text-white text-2xl font-bold">Add to collection</h2>
+        <h2 className="text-black dark:text-white text-2xl font-bold">
+          Add to collection
+        </h2>
         <Input
           placeholder="Search your collections"
           value={search}
@@ -69,7 +71,7 @@ function CollectionModal({
             displayedCollections.map((collection) => (
               <label
                 key={collection.id}
-                className="text-zinc-300 w-fit cursor-pointer flex items-center gap-x-3 py-2"
+                className="text-black dark:text-zinc-300 w-fit cursor-pointer flex items-center gap-x-3 py-2"
               >
                 <div className="group">
                   <input
@@ -89,7 +91,7 @@ function CollectionModal({
                     }}
                   />
                   <div
-                    className="w-4.5 h-4.5 rounded border-2 border-zinc-700 text-zinc-950 flex items-center justify-center
+                    className="w-4.5 h-4.5 rounded border-2 border-zinc-700 text-zinc-100 dark:text-zinc-950 flex items-center justify-center
                    group-has-checked:border-green-600 group-has-checked:bg-green-600"
                   >
                     {selectedCollections.find(
@@ -106,7 +108,9 @@ function CollectionModal({
               </label>
             ))
           ) : (
-            <span className="text-sm text-zinc-300">No collections found</span>
+            <span className="text-sm text-black dark:text-zinc-300">
+              No collections found
+            </span>
           )}
         </div>
         {newCollection.id !== -1 && (

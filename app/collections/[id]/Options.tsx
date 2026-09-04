@@ -16,9 +16,10 @@ import Modal from "@/components/ui/Modal";
 import Input from "@/components/ui/Input";
 import Btn from "@/components/ui/Btn";
 
-const labelStyles = "flex flex-col gap-y-1 text-zinc-300 text-sm";
+const labelStyles =
+  "flex flex-col gap-y-1 text-black dark:text-zinc-300 text-sm";
 const optionStyles =
-  "flex gap-x-3 px-4 py-2 cursor-pointer hover:bg-zinc-900 items-center";
+  "flex gap-x-3 px-4 py-2 cursor-pointer hover:bg-zinc-200 dark:hover:bg-zinc-900 items-center";
 
 export type CollectionType = Collection & {
   memes: Meme[];
@@ -69,14 +70,14 @@ function Options({ collectionData }: { collectionData: CollectionType }) {
       ref={menuRef}
       className="absolute top-10 right-5 sm:right-20 lg:right-50"
     >
-      <div className="relative text-zinc-300">
+      <div className="relative text-black dark:text-zinc-300">
         <FaEllipsisH
-          className={`p-2.5 rounded-full hover:bg-zinc-900 cursor-pointer ${menuOpen && "bg-zinc-900"}`}
+          className={`p-2.5 rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-900 cursor-pointer ${menuOpen && "bg-zinc-200 dark:bg-zinc-900"}`}
           onClick={() => setMenuOpen(!menuOpen)}
           size={35}
         />
         {menuOpen && (
-          <div className="absolute top-[calc(100%+5px)] border-2 bg-zinc-950 border-zinc-700 rounded flex flex-col right-0">
+          <div className="absolute top-[calc(100%+5px)] border-2 bg-zinc-100 dark:bg-zinc-950 border-zinc-700 rounded flex flex-col right-0">
             <div onClick={() => setEditing(true)} className={optionStyles}>
               <FaEdit size={15} /> Edit
             </div>
@@ -93,7 +94,9 @@ function Options({ collectionData }: { collectionData: CollectionType }) {
         {editing && (
           <Modal closeModal={() => setEditing(false)}>
             <div className="flex flex-col gap-y-3 p-6">
-              <h2 className="text-white text-xl font-bold">Edit collection</h2>
+              <h2 className="text-black dark:text-white text-xl font-bold">
+                Edit collection
+              </h2>
               <label className={labelStyles}>
                 Name
                 <Input
@@ -105,7 +108,7 @@ function Options({ collectionData }: { collectionData: CollectionType }) {
               <label className={labelStyles}>
                 Description
                 <textarea
-                  className="text-base border-2 border-zinc-700 rounded px-4 py-2 text-zinc-300 outline-none resize-none h-30"
+                  className="text-base border-2 border-zinc-700 rounded px-4 py-2 text-black dark:text-zinc-300 outline-none resize-none h-30"
                   placeholder="Describe what kinds of memes go in this collection (optional)"
                   value={collection.description || ""}
                   onChange={(e) =>
@@ -116,7 +119,7 @@ function Options({ collectionData }: { collectionData: CollectionType }) {
                   }
                 ></textarea>
               </label>
-              <label className="text-zinc-300 text-sm w-fit cursor-pointer flex items-center gap-x-3 py-2">
+              <label className="text-black dark:text-zinc-300 text-sm w-fit cursor-pointer flex items-center gap-x-3 py-2">
                 <div className="group">
                   <input
                     type="checkbox"
@@ -129,7 +132,7 @@ function Options({ collectionData }: { collectionData: CollectionType }) {
                     }}
                   />
                   <div
-                    className="w-4.5 h-4.5 rounded border-2 border-zinc-700 text-zinc-950 flex items-center justify-center
+                    className="w-4.5 h-4.5 rounded border-2 border-zinc-700 text-zinc-100 dark:text-zinc-950 flex items-center justify-center
                                                  group-has-checked:border-green-600 group-has-checked:bg-green-600"
                   >
                     {collection?.public && <FaCheck size={13} />}
@@ -138,7 +141,7 @@ function Options({ collectionData }: { collectionData: CollectionType }) {
                 Public
                 <div className="group relative">
                   <FaInfoCircle size={15} />
-                  <div className="pointer-events-none opacity-0 group-hover:opacity-100 absolute left-7 top-[50%] translate-y-[-50%] transition-opacity! duration-300 w-60 bg-zinc-900 rounded p-2 text-xs">
+                  <div className="pointer-events-none opacity-0 group-hover:opacity-100 absolute left-7 top-[50%] translate-y-[-50%] transition-opacity! duration-300 w-60 bg-zinc-200 dark:bg-zinc-900 rounded p-2 text-xs">
                     Public collections are viewable by everyone, but only you
                     can edit and add/remove memes from it.
                   </div>
@@ -150,7 +153,7 @@ function Options({ collectionData }: { collectionData: CollectionType }) {
                   collection.memes.map((meme) => (
                     <label
                       key={meme.id}
-                      className="text-zinc-300 text-sm w-fit cursor-pointer flex items-center gap-x-3 py-2"
+                      className="text-black dark:text-zinc-300 text-sm w-fit cursor-pointer flex items-center gap-x-3 py-2"
                     >
                       <div className="group">
                         <input
@@ -170,7 +173,7 @@ function Options({ collectionData }: { collectionData: CollectionType }) {
                           }}
                         />
                         <div
-                          className="w-4.5 h-4.5 rounded border-2 border-zinc-700 text-zinc-950 flex items-center justify-center
+                          className="w-4.5 h-4.5 rounded border-2 border-zinc-700 text-zinc-100 dark:text-zinc-950 flex items-center justify-center
                                  group-has-checked:border-green-600 group-has-checked:bg-green-600"
                         >
                           {selectedMemes.find((m) => m === meme.id) && (
@@ -182,7 +185,7 @@ function Options({ collectionData }: { collectionData: CollectionType }) {
                     </label>
                   ))
                 ) : (
-                  <div className="text-zinc-300 text-center text-sm my-2">
+                  <div className="text-black dark:text-zinc-300 text-center text-sm my-2">
                     No memes added to this collection yet
                   </div>
                 )}
@@ -201,10 +204,10 @@ function Options({ collectionData }: { collectionData: CollectionType }) {
         {deleting && (
           <Modal closeModal={() => setDeleting(false)}>
             <div className="flex flex-col gap-y-3 p-6">
-              <h2 className="text-white text-xl font-bold">
+              <h2 className="text-black dark:text-white text-xl font-bold">
                 Delete confirmation
               </h2>
-              <p className="text-zinc-300">
+              <p className="text-black dark:text-zinc-300">
                 Are you sure you want to delete this collection and all its
                 related data? This action cannot be undone.
               </p>

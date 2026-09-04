@@ -98,7 +98,7 @@ function Collections({ userId, friendIds, collections }: CollectionsProps) {
             />
           ))
         ) : (
-          <div className="text-zinc-300">
+          <div className="text-black dark:text-zinc-300">
             No collections found. Try a different search?
           </div>
         )}

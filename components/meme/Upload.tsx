@@ -18,7 +18,7 @@ function Upload({ provided, setNewMeme }: UploadProps) {
     useState<ClientUploadedFileData<ServerDataType> | null>(null);
 
   return (
-    <div className="w-60 border-zinc-700 border-2 rounded flex flex-col justify-center gap-y-3 cursor-pointer hover:bg-zinc-900 text-center px-10 py-5 items-center">
+    <div className="w-60 border-zinc-700 border-2 rounded flex flex-col justify-center gap-y-3 cursor-pointer hover:bg-zinc-200 dark:hover:bg-zinc-900 text-center px-10 py-5 items-center">
       {uploadedFile || provided ? (
         <Image
           src={uploadedFile ? uploadedFile.ufsUrl : provided!}

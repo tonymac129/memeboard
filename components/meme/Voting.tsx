@@ -21,11 +21,13 @@ function Voting({ meme, upvoted }: VotingProps) {
 
   return (
     <div
-      className={`w-fit border-2 border-zinc-700 rounded cursor-pointer flex items-center gap-x-2 text-zinc-300 font-bold text-base ${upvoted ? "bg-green-700" : upvoted === false ? "bg-red-900" : ""}`}
+      className={`w-fit border-2 border-zinc-700 rounded cursor-pointer flex items-center gap-x-2 text-black dark:text-zinc-300 font-bold text-base ${upvoted ? "bg-green-500 dark:bg-green-700" : upvoted === false ? "bg-red-400 dark:bg-red-900" : ""}`}
     >
       <div
         onClick={() => handleVote(upvoted ? null : true)}
-        className={upvoted === null ? "hover:bg-zinc-900" : ""}
+        className={
+          upvoted === null ? "hover:bg-zinc-200 dark:hover:bg-zinc-900" : ""
+        }
       >
         {upvoted ? (
           <BiSolidUpvote size={33} className="p-2" />
@@ -36,7 +38,9 @@ function Voting({ meme, upvoted }: VotingProps) {
       {meme.upvotes.length - meme.downvotes.length}
       <div
         onClick={() => handleVote(upvoted === false ? null : false)}
-        className={upvoted === null ? "hover:bg-zinc-900" : ""}
+        className={
+          upvoted === null ? "hover:bg-zinc-200 dark:hover:bg-zinc-900" : ""
+        }
       >
         {upvoted === false ? (
           <BiSolidDownvote size={33} className="p-2" />

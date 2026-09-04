@@ -8,7 +8,7 @@ import Modal from "../ui/Modal";
 import Input from "../ui/Input";
 
 const tabBtnStyles =
-  "w-[50%] text-zinc-300 text-center py-2 cursor-pointer border-b-2 border-zinc-700";
+  "w-[50%] text-black dark:text-zinc-300 text-center py-2 cursor-pointer border-b-2 border-zinc-700";
 
 interface FollowingProps {
   followers: User[];
@@ -50,7 +50,7 @@ function Following({ followers, following }: FollowingProps) {
                 onClick={() => setTab("followers")}
                 className={
                   tabBtnStyles +
-                  ` ${tab === "followers" ? "border-b-zinc-950" : "hover:bg-zinc-900"} border-r-2`
+                  ` ${tab === "followers" ? "border-b-zinc-100 dark:border-b-zinc-950" : "hover:bg-zinc-200 dark:hover:bg-zinc-900"} border-r-2`
                 }
               >
                 Followers ({followers.length})
@@ -59,7 +59,7 @@ function Following({ followers, following }: FollowingProps) {
                 onClick={() => setTab("following")}
                 className={
                   tabBtnStyles +
-                  ` ${tab === "following" ? "border-b-zinc-950" : "hover:bg-zinc-900"}`
+                  ` ${tab === "following" ? "border-b-zinc-100 dark:border-b-zinc-950" : "hover:bg-zinc-200 dark:hover:bg-zinc-900"}`
                 }
               >
                 Following ({following.length})
@@ -80,7 +80,7 @@ function Following({ followers, following }: FollowingProps) {
                       <UserCard key={user.id} user={user} />
                     ))
                   ) : (
-                    <span className="text-zinc-300 text-center">
+                    <span className="text-black dark:text-zinc-300 text-center">
                       No users found :(
                     </span>
                   )}

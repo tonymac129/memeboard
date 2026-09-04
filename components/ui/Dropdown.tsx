@@ -52,7 +52,7 @@ function Dropdown({
     <div className="relative" ref={dropdownRef}>
       <div
         className={
-          "bg-zinc-900 rounded w-30 py-1.5 text-center cursor-pointer font-bold px-5 " +
+          "bg-zinc-200 dark:bg-zinc-900 rounded w-30 py-1.5 text-center cursor-pointer font-bold px-5 " +
           styles
         }
         onClick={() => setSelecting(!selecting)}
@@ -62,7 +62,7 @@ function Dropdown({
       {selecting && (
         <div
           className="absolute top-[calc(100%+5px)] left-[-10%] w-[120%] max-h-80 overflow-auto
-         bg-zinc-950 rounded border-2 border-zinc-700"
+         bg-zinc-100 dark:bg-zinc-950 rounded border-2 border-zinc-700"
         >
           {label && <div className="font-bold text-center py-1.5">{label}</div>}
           {hasSearch && (
@@ -78,7 +78,7 @@ function Dropdown({
               return (
                 <div
                   key={i}
-                  className={`cursor-pointer px-4 py-2 hover:bg-zinc-900 text-center ${value === option && "text-green-500 font-bold"}`}
+                  className={`cursor-pointer px-4 py-2 hover:bg-zinc-200 dark:hover:bg-zinc-900 text-center ${value === option && "text-green-600 dark:text-green-500 font-bold"}`}
                   onClick={() => handleSelect(option)}
                 >
                   {option}

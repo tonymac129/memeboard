@@ -43,12 +43,14 @@ function ReportModal({ memeId, setReporting }: ReportModalProps) {
   return (
     <Modal closeModal={() => setReporting(false)}>
       <div className="px-10 py-5 flex flex-col gap-y-3">
-        <h2 className="text-white text-2xl font-bold">Report meme</h2>
+        <h2 className="text-black dark:text-white text-2xl font-bold">
+          Report meme
+        </h2>
         <div className="max-h-70 flex flex-col gap-y-1 overflow-auto">
           {reportOptions.map((option, i) => (
             <label
               key={i}
-              className="text-zinc-300 w-fit cursor-pointer flex items-center gap-x-3 py-2"
+              className="text-black dark:text-zinc-300 w-fit cursor-pointer flex items-center gap-x-3 py-2"
             >
               <div className="group">
                 <input
@@ -71,7 +73,7 @@ function ReportModal({ memeId, setReporting }: ReportModalProps) {
                   }}
                 />
                 <div
-                  className="w-4.5 h-4.5 rounded border-2 border-zinc-700 text-zinc-950 flex items-center justify-center
+                  className="w-4.5 h-4.5 rounded border-2 border-zinc-700 text-zinc-100 dark:text-zinc-950 flex items-center justify-center
                    group-has-checked:border-green-600 group-has-checked:bg-green-600"
                 >
                   {newReport.selectedOptions.includes(option) && (
@@ -83,10 +85,10 @@ function ReportModal({ memeId, setReporting }: ReportModalProps) {
             </label>
           ))}
         </div>
-        <label className="flex flex-col gap-y-1 text-zinc-300 text-sm">
+        <label className="flex flex-col gap-y-1 text-black dark:text-zinc-300 text-sm">
           Additional feedback
           <textarea
-            className="text-base border-2 border-zinc-700 rounded px-4 py-2 text-zinc-300 outline-none resize-none h-25"
+            className="text-base border-2 border-zinc-700 rounded px-4 py-2 text-black dark:text-zinc-300 outline-none resize-none h-25"
             placeholder="Anything else? (optional)"
             value={newReport.feedback || ""}
             onChange={(e) =>

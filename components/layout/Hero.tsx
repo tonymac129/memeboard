@@ -7,9 +7,11 @@ interface HeroProps {
 function Hero({ text, description, children }: HeroProps) {
   return (
     <div className="flex flex-col py-10 gap-y-5 items-center">
-      <h1 className="text-green-500 font-bold text-4xl text-center">{text}</h1>
+      <h1 className="text-green-600 dark:text-green-500 font-bold text-4xl text-center">
+        {text}
+      </h1>
       {description && (
-        <p className="text-zinc-300 w-[80%] md:w-[50%] text-center">
+        <p className="text-black dark:text-zinc-300 w-[80%] md:w-[50%] text-center">
           {description}
         </p>
       )}

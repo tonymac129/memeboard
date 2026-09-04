@@ -3,15 +3,16 @@
 import type { UserType } from "@/types/User";
 import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
+import { addUsername } from "./actions";
 import Input from "../ui/Input";
 import Btn from "../ui/Btn";
 import Provider from "./Provider";
-import { addUsername } from "./actions";
 
 const providers = ["Google", "GitHub"];
 const tabBtnStyles =
-  "w-[50%] text-zinc-300 text-center py-2 cursor-pointer border-b-2 border-zinc-700";
-const labelStyles = "flex flex-col gap-y-1 text-zinc-300 text-sm";
+  "w-[50%] text-black dark:text-zinc-300 text-center py-2 cursor-pointer border-b-2 border-zinc-700";
+const labelStyles =
+  "flex flex-col gap-y-1 text-black dark:text-zinc-300 text-sm";
 
 interface LogInFormProps {
   isLogIn: boolean;
@@ -91,7 +92,7 @@ function LogInForm({ isLogIn, setIsLogIn }: LogInFormProps) {
           onClick={() => setIsLogIn(true)}
           className={
             tabBtnStyles +
-            ` ${isLogIn ? "border-b-zinc-950" : "hover:bg-zinc-900"} border-r-2`
+            ` ${isLogIn ? "border-b-zinc-100 dark:border-b-zinc-950" : "hover:bg-zinc-200 dark:hover:bg-zinc-900"} border-r-2`
           }
         >
           Log in
@@ -100,7 +101,7 @@ function LogInForm({ isLogIn, setIsLogIn }: LogInFormProps) {
           onClick={() => setIsLogIn(false)}
           className={
             tabBtnStyles +
-            ` ${!isLogIn ? "border-b-zinc-950" : "hover:bg-zinc-900"}`
+            ` ${!isLogIn ? "border-b-zinc-100 dark:border-b-zinc-950" : "hover:bg-zinc-200 dark:hover:bg-zinc-900"}`
           }
         >
           Sign up
@@ -151,7 +152,7 @@ function LogInForm({ isLogIn, setIsLogIn }: LogInFormProps) {
           primary
         />
         <div className="bg-zinc-700 relative h-0.5 my-2 flex items-center">
-          <div className="absolute left-[50%] translate-x-[-50%] px-5 py-1 bg-zinc-950 text-zinc-300">
+          <div className="absolute left-[50%] translate-x-[-50%] px-5 py-1 bg-zinc-100 dark:bg-zinc-950 text-black dark:text-zinc-300">
             or
           </div>
         </div>

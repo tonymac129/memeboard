@@ -16,7 +16,7 @@ function Input({ placeholder, type, value, setValue, styles }: InputProps) {
       value={value}
       onChange={(e) => setValue(e.target.value)}
       className={
-        "text-base border-2 border-zinc-700 rounded px-4 py-2 text-zinc-300 outline-none " +
+        "text-base border-2 border-zinc-700 rounded px-4 py-2 text-black dark:text-zinc-300 outline-none " +
         styles
       }
     />

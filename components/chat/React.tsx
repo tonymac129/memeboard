@@ -41,7 +41,7 @@ function React({ chatId, messageId }: ReactProps) {
     <div className="relative" ref={reactionRef}>
       <div
         onClick={() => setReacting(true)}
-        className="flex rounded text-sm items-center bg-zinc-900 w-fit gap-x-2 cursor-pointer px-1.5 py-0.5"
+        className="flex rounded text-sm items-center bg-zinc-200 dark:bg-zinc-900 w-fit gap-x-2 cursor-pointer px-1.5 py-0.5"
       >
         <GrEmoji size={18} />
         <span className="hidden md:block">React</span>

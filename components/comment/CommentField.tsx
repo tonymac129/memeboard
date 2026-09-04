@@ -33,9 +33,11 @@ function CommentField({ userId, memeId, postComment }: CommentFieldProps) {
 
   return (
     <div className="w-[90%] sm:w-[75%] md:w-150 flex flex-col gap-y-3">
-      <h2 className="text-lg font-bold text-white">New comment</h2>
+      <h2 className="text-lg font-bold text-black dark:text-white">
+        New comment
+      </h2>
       <textarea
-        className="text-base border-2 border-zinc-700 rounded px-4 py-2 text-zinc-300 outline-none resize-none h-30"
+        className="text-base border-2 border-zinc-700 rounded px-4 py-2 text-black dark:text-zinc-300 outline-none resize-none h-30"
         placeholder="What do you think of this meme?"
         value={newComment.content}
         onChange={(e) =>

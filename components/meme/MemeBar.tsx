@@ -12,7 +12,7 @@ import Voting from "./Voting";
 import Link from "next/link";
 
 const optionStyles =
-  "border-2 border-zinc-700 rounded cursor-pointer px-3 py-1.5 flex items-center gap-x-2 text-sm text-zinc-300 font-bold";
+  "border-2 border-zinc-700 rounded cursor-pointer px-3 py-1.5 flex items-center gap-x-2 text-sm text-black dark:text-zinc-300 font-bold";
 
 export type MemeType = Meme & {
   upvotes: User[];
@@ -53,7 +53,7 @@ function MemeBar({ meme, userId, collections, friends }: MemeBarProps) {
       <Voting meme={meme} upvoted={upvoted} />
       {session && (
         <div
-          className={optionStyles + " hover:bg-zinc-900"}
+          className={optionStyles + " hover:bg-zinc-200 dark:hover:bg-zinc-900"}
           onClick={() => setCollection(true)}
         >
           {savedCollections.length > 0 ? (
@@ -66,7 +66,7 @@ function MemeBar({ meme, userId, collections, friends }: MemeBarProps) {
         </div>
       )}
       <div
-        className={optionStyles + " hover:bg-zinc-900"}
+        className={optionStyles + " hover:bg-zinc-200 dark:hover:bg-zinc-900"}
         onClick={() => setSharing(true)}
       >
         <FaShare size={18} />
@@ -74,15 +74,18 @@ function MemeBar({ meme, userId, collections, friends }: MemeBarProps) {
       </div>
       {session ? (
         <div
-          className={optionStyles + " hover:bg-zinc-900"}
+          className={optionStyles + " hover:bg-zinc-200 dark:hover:bg-zinc-900"}
           onClick={() => setReporting(true)}
         >
           <FaFlag size={18} />
           Report
         </div>
       ) : (
-        <div className="text-zinc-300">
-          <Link href="/login" className="hover:text-green-500">
+        <div className="text-black dark:text-zinc-300">
+          <Link
+            href="/login"
+            className="hover:text-green-600 dark:hover:text-green-500"
+          >
             Log in
           </Link>{" "}
           to unlock more features!

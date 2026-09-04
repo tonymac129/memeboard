@@ -50,7 +50,9 @@ function TagModal({ selected, setNewMeme, setSelecting, tags }: TagModalProps) {
   return (
     <Modal closeModal={() => setSelecting(false)}>
       <div className="px-10 pt-5 flex flex-col gap-y-3">
-        <h2 className="text-white text-2xl font-bold">Add tags</h2>
+        <h2 className="text-black dark:text-white text-2xl font-bold">
+          Add tags
+        </h2>
         <Input
           placeholder="Search tags"
           value={search}
@@ -61,7 +63,7 @@ function TagModal({ selected, setNewMeme, setSelecting, tags }: TagModalProps) {
             displayedTags.map((tag) => (
               <label
                 key={tag.id}
-                className="text-zinc-300 w-fit cursor-pointer flex items-center gap-x-3 py-2"
+                className="text-black dark:text-zinc-300 w-fit cursor-pointer flex items-center gap-x-3 py-2"
               >
                 <div className="group">
                   <input
@@ -79,7 +81,7 @@ function TagModal({ selected, setNewMeme, setSelecting, tags }: TagModalProps) {
                     }}
                   />
                   <div
-                    className="w-4.5 h-4.5 rounded border-2 border-zinc-700 text-zinc-950 flex items-center justify-center
+                    className="w-4.5 h-4.5 rounded border-2 border-zinc-700 text-zinc-100 dark:text-zinc-950 flex items-center justify-center
                    group-has-checked:border-green-600 group-has-checked:bg-green-600"
                   >
                     {selectedTags.find((t) => t.id === tag.id) && (
@@ -92,7 +94,9 @@ function TagModal({ selected, setNewMeme, setSelecting, tags }: TagModalProps) {
               </label>
             ))
           ) : (
-            <span className="text-sm text-zinc-300">No tags found</span>
+            <span className="text-sm text-black dark:text-zinc-300">
+              No tags found
+            </span>
           )}
         </div>
         {newTag && (

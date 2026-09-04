@@ -26,7 +26,9 @@ async function Page({ params }: { params: Promise<{ id: string }> }) {
 
   return (
     <div className="max-w-400 mx-auto px-5 sm:px-20 lg:px-50 flex flex-col pb-30 gap-y-10">
-      <h2 className="text-white text-2xl font-bold pt-10">Edit meme</h2>
+      <h2 className="text-black dark:text-white text-2xl font-bold pt-10">
+        Edit meme
+      </h2>
       <MemeForm
         postMeme={editMeme}
         memeTags={memeTags}

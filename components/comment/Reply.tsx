@@ -2,7 +2,7 @@
 
 import type { User } from "@/app/generated/prisma/client";
 import type { CommentType as NewCommentType } from "@/types/Meme";
-import type { CommentType } from "../meme/Comment";
+import type { CommentType } from "./Comment";
 import { useState } from "react";
 import { likeComment, postComment } from "@/app/memes/[id]/actions";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
@@ -12,7 +12,8 @@ import ShareModal from "../meme/ShareModal";
 import Input from "../ui/Input";
 import Btn from "../ui/Btn";
 
-const optionStyles = "font-bold cursor-pointer hover:text-green-500";
+const optionStyles =
+  "font-bold cursor-pointer hover:text-green-600 dark:hover:text-green-500";
 
 interface ReplyProps {
   comment: CommentType;
@@ -54,7 +55,7 @@ function Reply({ comment, likedComment, userId, memeId, friends }: ReplyProps) {
 
   return (
     <div className="flex flex-col gap-y-5">
-      <div className="flex gap-x-5 text-zinc-300 text-sm">
+      <div className="flex gap-x-5 text-black dark:text-zinc-300 text-sm">
         <div
           className="cursor-pointer flex items-center gap-x-2"
           title={`${likedComment ? "Unl" : "L"}ike comment`}
@@ -109,6 +110,7 @@ function Reply({ comment, likedComment, userId, memeId, friends }: ReplyProps) {
             setSharing={setSharing}
             setReporting={setReporting}
             isComment={comment.id}
+            content={comment.content}
           />
         )}
       </AnimatePresence>

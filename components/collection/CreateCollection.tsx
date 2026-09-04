@@ -12,7 +12,8 @@ import Input from "../ui/Input";
 import Btn from "../ui/Btn";
 import Checkbox from "./Checkbox";
 
-const labelStyles = "flex flex-col gap-y-1 text-zinc-300 text-sm";
+const labelStyles =
+  "flex flex-col gap-y-1 text-black dark:text-zinc-300 text-sm";
 
 function CreateCollection() {
   const [creating, setCreating] = useState<boolean>(false);
@@ -36,7 +37,7 @@ function CreateCollection() {
     <div className="absolute top-10 right-5 sm:right-20 lg:right-50">
       <MdOutlineAdd
         size={35}
-        className="text-zinc-300 p-1.5 cursor-pointer rounded-full hover:bg-zinc-900"
+        className="text-black dark:text-zinc-300 p-1.5 cursor-pointer rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-900"
         title="Create collection"
         onClick={() => setCreating(true)}
       />
@@ -44,7 +45,7 @@ function CreateCollection() {
         {creating && (
           <Modal closeModal={() => setCreating(false)}>
             <div className="flex flex-col gap-y-3 p-6">
-              <h2 className="text-white text-xl font-bold">
+              <h2 className="text-black dark:text-white text-xl font-bold">
                 Create collection
               </h2>
               <label className={labelStyles}>
@@ -60,7 +61,7 @@ function CreateCollection() {
               <label className={labelStyles}>
                 Description
                 <textarea
-                  className="text-base border-2 border-zinc-700 rounded px-4 py-2 text-zinc-300 outline-none resize-none h-30"
+                  className="text-base border-2 border-zinc-700 rounded px-4 py-2 text-black dark:text-zinc-300 outline-none resize-none h-30"
                   placeholder="Describe what kinds of memes go in this collection (optional)"
                   value={newCollection.description || ""}
                   onChange={(e) =>

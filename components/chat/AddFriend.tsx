@@ -33,7 +33,7 @@ function AddFriend({ users, userId }: AddFriendProps) {
   return (
     <>
       <div
-        className="flex gap-x-3 items-center p-4 rounded hover:bg-zinc-900 text-zinc-300 cursor-pointer"
+        className="flex gap-x-3 items-center p-4 rounded hover:bg-zinc-200 dark:hover:bg-zinc-900 text-black dark:text-zinc-300 cursor-pointer"
         onClick={() => setAdding(true)}
       >
         <FaPlus size={20} className="w-11.25" />
@@ -43,7 +43,9 @@ function AddFriend({ users, userId }: AddFriendProps) {
         {adding && (
           <Modal closeModal={() => setAdding(false)}>
             <div className="flex flex-col gap-y-3 p-6">
-              <h2 className="text-white text-xl font-bold">Add friend</h2>
+              <h2 className="text-black dark:text-white text-xl font-bold">
+                Add friend
+              </h2>
               <Input
                 placeholder="Search username, display, or email"
                 value={search}
@@ -66,7 +68,7 @@ function AddFriend({ users, userId }: AddFriendProps) {
                     );
                   })
                 ) : (
-                  <div className="py-2 text-zinc-300 text-center">
+                  <div className="py-2 text-black dark:text-zinc-300 text-center">
                     No users found! Try a different search?
                   </div>
                 )}

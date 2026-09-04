@@ -14,7 +14,7 @@ interface CheckboxProps {
 
 function Checkbox({ collection, setCollection }: CheckboxProps) {
   return (
-    <label className="text-zinc-300 text-sm w-fit cursor-pointer flex items-center gap-x-3 py-2">
+    <label className="text-black dark:text-zinc-300 text-sm w-fit cursor-pointer flex items-center gap-x-3 py-2">
       <div className="group">
         <input
           type="checkbox"
@@ -27,7 +27,7 @@ function Checkbox({ collection, setCollection }: CheckboxProps) {
           }}
         />
         <div
-          className="w-4.5 h-4.5 rounded border-2 border-zinc-700 text-zinc-950 flex items-center justify-center
+          className="w-4.5 h-4.5 rounded border-2 border-zinc-700 text-zinc-100 dark:text-zinc-950 flex items-center justify-center
                                    group-has-checked:border-green-600 group-has-checked:bg-green-600"
         >
           {collection?.public && <FaCheck size={13} />}
@@ -36,7 +36,7 @@ function Checkbox({ collection, setCollection }: CheckboxProps) {
       Public
       <div className="group relative">
         <FaInfoCircle size={15} />
-        <div className="pointer-events-none opacity-0 group-hover:opacity-100 absolute left-7 top-[50%] translate-y-[-50%] transition-opacity! duration-300 w-60 bg-zinc-900 rounded p-2 text-xs">
+        <div className="pointer-events-none opacity-0 group-hover:opacity-100 absolute left-7 top-[50%] translate-y-[-50%] transition-opacity! duration-300 w-60 bg-zinc-200 dark:bg-zinc-900 rounded p-2 text-xs">
           Public collections are viewable by everyone, but only you can edit and
           add/remove memes from it.
         </div>

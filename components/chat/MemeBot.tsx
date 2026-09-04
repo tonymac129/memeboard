@@ -10,7 +10,7 @@ function MemeBot() {
   return (
     <Link
       href="/chat/memebot"
-      className={`flex gap-x-3 items-center px-4 py-2 rounded hover:bg-zinc-900 text-zinc-300 ${pathname.includes("memebot") && "font-bold text-green-500! bg-zinc-900"}`}
+      className={`flex gap-x-3 items-center px-4 py-2 rounded hover:bg-zinc-200 dark:hover:bg-zinc-900 text-black dark:text-zinc-300 ${pathname.includes("memebot") && "font-bold text-green-600! dark:text-green-500! bg-zinc-200 dark:bg-zinc-900"}`}
     >
       <Image
         src="/icons/memebot.png"

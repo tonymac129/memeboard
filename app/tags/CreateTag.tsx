@@ -11,7 +11,8 @@ import Modal from "@/components/ui/Modal";
 import Input from "@/components/ui/Input";
 import Btn from "@/components/ui/Btn";
 
-const labelStyles = "flex flex-col gap-y-1 text-zinc-300 text-sm";
+const labelStyles =
+  "flex flex-col gap-y-1 text-black dark:text-zinc-300 text-sm";
 
 function CreateTag() {
   const [creating, setCreating] = useState<boolean>(false);
@@ -34,7 +35,7 @@ function CreateTag() {
     <div className="absolute top-10 right-5 sm:right-20 lg:right-50">
       <MdOutlineAdd
         size={35}
-        className="text-zinc-300 p-1.5 cursor-pointer rounded-full hover:bg-zinc-900"
+        className="text-black dark:text-zinc-300 p-1.5 cursor-pointer rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-900"
         title="Create tag"
         onClick={() => setCreating(true)}
       />
@@ -42,7 +43,9 @@ function CreateTag() {
         {creating && (
           <Modal closeModal={() => setCreating(false)}>
             <div className="flex flex-col gap-y-3 p-6">
-              <h2 className="text-white text-xl font-bold">Create tag</h2>
+              <h2 className="text-black dark:text-white text-xl font-bold">
+                Create tag
+              </h2>
               <label className={labelStyles}>
                 Name
                 <Input

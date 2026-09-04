@@ -25,7 +25,7 @@ import Input from "@/components/ui/Input";
 import Btn from "@/components/ui/Btn";
 
 const optionStyles =
-  "flex rounded text-sm items-center bg-zinc-900 w-fit gap-x-2 cursor-pointer px-1.5 py-0.5";
+  "flex rounded text-sm items-center bg-zinc-200 dark:bg-zinc-900 w-fit gap-x-2 cursor-pointer px-1.5 py-0.5";
 
 interface EditingType {
   id: string;
@@ -147,13 +147,16 @@ function Messages({
         const created = new Date(message.created);
 
         return message.deleted ? (
-          <div key={i} className="text-zinc-300 text-sm my-2 text-center">
+          <div
+            key={i}
+            className="text-black dark:text-zinc-300 text-sm my-2 text-center"
+          >
             {fromMe ? (
               <>
                 You deleted a message{" "}
                 <span
                   onClick={() => handleUndo(message.id)}
-                  className="ml-5 hover:text-green-500 cursor-pointer"
+                  className="ml-5 hover:text-green-600 dark:hover:text-green-500 cursor-pointer"
                 >
                   Undo
                 </span>
@@ -165,12 +168,12 @@ function Messages({
         ) : (
           <div
             key={message.id}
-            className={`flex group flex-col gap-y-1 ${highlighted === message.id && "bg-zinc-900"}`}
+            className={`flex group flex-col gap-y-1 ${highlighted === message.id && "bg-zinc-200 dark:bg-zinc-900"}`}
             ref={highlighted === message.id ? highlightedRef : null}
           >
             {message.replying && (
               <div
-                className={`relative flex items-center mx-15 mt-5 text-zinc-300 cursor-pointer text-sm ${fromMe && "self-end"}`}
+                className={`relative flex items-center mx-15 mt-5 text-black dark:text-zinc-300 cursor-pointer text-sm ${fromMe && "self-end"}`}
                 onClick={() => handleReply(message.replying!.id)}
               >
                 <HiOutlineReply
@@ -209,7 +212,7 @@ function Messages({
                     />
                   </div>
                 ))}
-              <div className="text-zinc-300 flex flex-col gap-y-1 flex-1">
+              <div className="text-black dark:text-zinc-300 flex flex-col gap-y-1 flex-1">
                 {firstMessage && (
                   <div
                     className={`flex gap-x-2 items-center text-sm ${fromMe && "self-end"}`}
@@ -229,7 +232,7 @@ function Messages({
                   className={`flex gap-x-3 items-center ${fromMe && "flex-row-reverse"}`}
                 >
                   <div
-                    className={`bg-zinc-900 rounded px-4 flex flex-col gap-y-3 py-2 overflow-auto max-w-[45%] md:max-w-[60%] ${fromMe && "bg-green-800! self-end"}`}
+                    className={`bg-zinc-200 dark:bg-zinc-900 rounded px-4 flex flex-col gap-y-3 py-2 overflow-auto max-w-[45%] md:max-w-[60%] ${fromMe && "bg-green-500! dark:bg-green-800! self-end"}`}
                   >
                     {message.memeId && <EmbeddedMeme memeId={message.memeId} />}
                     {message.commentId && (
@@ -329,7 +332,9 @@ function Messages({
         {editing !== null && (
           <Modal closeModal={() => setEditing(null)}>
             <div className="flex flex-col gap-y-3 p-6">
-              <h2 className="text-white text-xl font-bold">Edit message</h2>
+              <h2 className="text-black dark:text-white text-xl font-bold">
+                Edit message
+              </h2>
               <Input
                 placeholder="Edit message"
                 value={editing.content}
@@ -349,8 +354,10 @@ function Messages({
         {deleting && (
           <Modal closeModal={() => setDeleting(null)}>
             <div className="flex flex-col gap-y-3 p-6">
-              <h2 className="text-white text-xl font-bold">Delete message</h2>
-              <p className="text-zinc-300">
+              <h2 className="text-black dark:text-white text-xl font-bold">
+                Delete message
+              </h2>
+              <p className="text-black dark:text-zinc-300">
                 Are you sure you want to delete this message from the chat?
               </p>
               <div className="flex gap-x-3">

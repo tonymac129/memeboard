@@ -47,12 +47,12 @@ async function Page({ params }: { params: Promise<{ id: string }> }) {
         text={`${collectionData.name} Collection (${collectionData.memes.length})`}
         description={collectionData.description || ""}
       >
-        <div className="flex gap-x-3 text-zinc-300">
+        <div className="flex gap-x-3 text-black dark:text-zinc-300">
           <div>
             Created by{" "}
             <Link
               href={`/users/${collectionData.user.username}`}
-              className="hover:text-green-500"
+              className="hover:text-green-600 dark:hover:text-green-500"
             >
               {collectionData.user.name}
             </Link>
@@ -60,7 +60,7 @@ async function Page({ params }: { params: Promise<{ id: string }> }) {
           •
           {collectionData.public ? (
             <div
-              className="flex items-center gap-x-3 text-zinc-300"
+              className="flex items-center gap-x-3 text-black dark:text-zinc-300"
               title="Everyone on MemeBoard can see this collection and its content"
             >
               <FaGlobe size={20} />
@@ -68,7 +68,7 @@ async function Page({ params }: { params: Promise<{ id: string }> }) {
             </div>
           ) : (
             <div
-              className="flex items-center gap-x-3 text-zinc-300"
+              className="flex items-center gap-x-3 text-black dark:text-zinc-300"
               title="Only you can see this collection and its content"
             >
               <FaLock size={20} />
@@ -83,7 +83,7 @@ async function Page({ params }: { params: Promise<{ id: string }> }) {
             <MemeCard key={meme.id} meme={meme} />
           ))
         ) : (
-          <div className="text-zinc-300">
+          <div className="text-black dark:text-zinc-300">
             No memes added to this collection yet
           </div>
         )}

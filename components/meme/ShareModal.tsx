@@ -12,7 +12,7 @@ import Image from "next/image";
 import Input from "../ui/Input";
 
 const optionStyles =
-  "flex flex-col gap-y-1 rounded hover:bg-zinc-900 items-center text-zinc-300 cursor-pointer text-sm font-bold";
+  "flex flex-col gap-y-1 rounded hover:bg-zinc-200 dark:hover:bg-zinc-900 items-center text-black dark:text-zinc-300 cursor-pointer text-sm font-bold";
 
 interface ShareModalProps {
   memeId: number;
@@ -20,6 +20,7 @@ interface ShareModalProps {
   setSharing: React.Dispatch<React.SetStateAction<boolean>>;
   setReporting: React.Dispatch<React.SetStateAction<boolean>>;
   isComment?: number;
+  content?: string;
 }
 
 function ShareModal({
@@ -28,6 +29,7 @@ function ShareModal({
   setSharing,
   setReporting,
   isComment,
+  content,
 }: ShareModalProps) {
   const [copied, setCopied] = useState<boolean>(false);
   const [selectedFriends, setSelectedFriends] = useState<string[]>([]);
@@ -60,8 +62,10 @@ function ShareModal({
 
   function handleCopy() {
     setCopied(true);
+    navigator.clipboard.writeText(
+      isComment ? (content as string) : window.location.href,
+    );
     setTimeout(() => {
-      navigator.clipboard.writeText(window.location.href);
       setCopied(false);
     }, 2000);
   }
@@ -74,7 +78,7 @@ function ShareModal({
   return (
     <Modal closeModal={() => setSharing(false)}>
       <div className="px-10 py-5 flex flex-col gap-y-3">
-        <h2 className="text-white text-2xl font-bold">
+        <h2 className="text-black dark:text-white text-2xl font-bold">
           Share {isComment ? "comment" : "meme"}
         </h2>
         {session && (
@@ -111,7 +115,11 @@ function ShareModal({
                   setValue={(message) => setMessage(message)}
                 />
                 <Btn
-                  text={sent ? "Meme sent. View message" : "Send meme"}
+                  text={
+                    sent
+                      ? `${isComment ? "Comment" : "Meme"} sent. View message`
+                      : `Send ${isComment ? "comment" : "meme"}`
+                  }
                   onclick={handleSend}
                   styles="text-base"
                   primary
@@ -121,7 +129,7 @@ function ShareModal({
               </>
             )}
             <div className="h-0.5 my-3 w-full bg-zinc-700 relative">
-              <div className="absolute left-[50%] translate-x-[-50%] top-[50%] translate-y-[-50%] px-5 bg-zinc-950 text-zinc-300">
+              <div className="absolute left-[50%] translate-x-[-50%] top-[50%] translate-y-[-50%] px-5 bg-zinc-100 dark:bg-zinc-950 text-black dark:text-zinc-300">
                 or
               </div>
             </div>

@@ -36,7 +36,7 @@ function Tags({ tags }: { tags: TagType[] }) {
             return <TagCard key={tag.id} tag={tag} />;
           })
         ) : (
-          <div className="text-zinc-300">
+          <div className="text-black dark:text-zinc-300">
             No tags found. Try a different search?
           </div>
         )}

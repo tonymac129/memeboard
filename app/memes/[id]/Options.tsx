@@ -10,7 +10,7 @@ import Btn from "@/components/ui/Btn";
 import Link from "next/link";
 
 const optionStyles =
-  "flex gap-x-3 px-4 py-2 cursor-pointer hover:bg-zinc-900 items-center";
+  "flex gap-x-3 px-4 py-2 cursor-pointer hover:bg-zinc-200 dark:hover:bg-zinc-900 items-center";
 
 interface OptionsProps {
   memeId: number;
@@ -43,14 +43,14 @@ function Options({ memeId, userId }: OptionsProps) {
 
   return (
     <div ref={menuRef} className="absolute top-0 right-0">
-      <div className="relative text-zinc-300">
+      <div className="relative text-black dark:text-zinc-300">
         <FaEllipsisH
-          className={`p-2.5 rounded-full hover:bg-zinc-900 cursor-pointer ${menuOpen && "bg-zinc-900"}`}
+          className={`p-2.5 rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-900 cursor-pointer ${menuOpen && "bg-zinc-200 dark:bg-zinc-900"}`}
           onClick={() => setMenuOpen(!menuOpen)}
           size={35}
         />
         {menuOpen && (
-          <div className="absolute top-[calc(100%+5px)] border-2 bg-zinc-950 border-zinc-700 rounded flex flex-col right-0">
+          <div className="absolute top-[calc(100%+5px)] border-2 bg-zinc-100 dark:bg-zinc-950 border-zinc-700 rounded flex flex-col right-0">
             <Link href={`/edit/${memeId}`} className={optionStyles}>
               <FaEdit size={15} /> Edit
             </Link>
@@ -67,10 +67,10 @@ function Options({ memeId, userId }: OptionsProps) {
         {modalOpen && (
           <Modal closeModal={() => setModalOpen(false)}>
             <div className="flex flex-col gap-y-3 p-6">
-              <h2 className="text-white text-xl font-bold">
+              <h2 className="text-black dark:text-white text-xl font-bold">
                 Delete confirmation
               </h2>
-              <p className="text-zinc-300">
+              <p className="text-black dark:text-zinc-300">
                 Are you sure you want to delete this meme and all its related
                 information and comments? This action cannot be undone.
               </p>
