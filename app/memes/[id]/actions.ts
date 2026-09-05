@@ -276,3 +276,33 @@ export async function deleteMeme(memeId: number, userId: string) {
     console.error("Error: " + err);
   }
 }
+
+export async function react(memeId: number, emoji: string) {
+  try {
+    const session = await auth.api.getSession({ headers: await headers() });
+    if (session) {
+      await prisma.reaction.upsert({
+        where: { memeId_userId: { userId: session.user.id, memeId } },
+        update: { emoji },
+        create: { emoji, memeId, userId: session.user.id },
+      });
+      revalidatePath(`/memes/${memeId}`);
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}
+
+export async function removeReaction(memeId: number) {
+  try {
+    const session = await auth.api.getSession({ headers: await headers() });
+    if (session) {
+      await prisma.reaction.delete({
+        where: { memeId_userId: { memeId, userId: session.user.id } },
+      });
+      revalidatePath(`/memes/${memeId}`);
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}

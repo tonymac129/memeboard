@@ -32,6 +32,7 @@ model User {
   upvotes       Meme[]       @relation("Upvotes")
   downvotes     Meme[]       @relation("Downvotes")
   likedComments Comment[]    @relation("Comment Likes")
+  reactions     Reaction[]
   collections   Collection[]
   reports       Report[]
   chats1        Chat[]       @relation("User 1")
@@ -102,6 +103,7 @@ model Meme {
   upvotes     User[]       @relation("Upvotes")
   downvotes   User[]       @relation("Downvotes")
   collections Collection[] @relation("Collections")
+  reactions   Reaction[]   @relation("Reactions")
   reports     Report[]
   shares      Int          @default(0)
 
@@ -178,4 +180,18 @@ model Chat {
   updatedAt DateTime? @updatedAt
 
   @@unique([userId1, userId2])
+}
+
+model Reaction {
+  id    String @id @default(uuid())
+  emoji String
+
+  memeId Int
+  meme   Meme   @relation(name: "Reactions", fields: [memeId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([memeId, userId])
 }

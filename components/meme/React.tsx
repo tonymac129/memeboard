@@ -2,22 +2,17 @@
 
 import type { Emoji } from "@emoji-mart/data";
 import { useRef, useState, useEffect } from "react";
-import { GrEmoji } from "react-icons/gr";
-import { reactMessage } from "@/app/chat/[username]/actions";
+import { FaFaceGrin } from "react-icons/fa6";
 import { AnimatePresence, motion } from "framer-motion";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
+import { react } from "@/app/memes/[id]/actions";
 
 type EmojiType = Emoji & {
   native: string;
 };
 
-interface ReactProps {
-  chatId: string;
-  messageId: string;
-}
-
-function React({ chatId, messageId }: ReactProps) {
+function React({ memeId }: { memeId: number }) {
   const [reacting, setReacting] = useState<boolean>(false);
   const reactionRef = useRef<HTMLDivElement>(null);
 
@@ -34,7 +29,7 @@ function React({ chatId, messageId }: ReactProps) {
   }, []);
 
   async function handleReact(emoji: EmojiType) {
-    await reactMessage(chatId, messageId, emoji.native);
+    await react(memeId, emoji.native);
     setReacting(false);
   }
 
@@ -42,9 +37,9 @@ function React({ chatId, messageId }: ReactProps) {
     <div className="relative" ref={reactionRef}>
       <div
         onClick={() => setReacting(true)}
-        className="flex rounded text-sm items-center bg-zinc-200 dark:bg-zinc-900 w-fit gap-x-2 cursor-pointer px-1.5 py-0.5"
+        className="border-2 border-zinc-700 rounded cursor-pointer px-3 py-1.5 flex items-center gap-x-2 text-sm text-black dark:text-zinc-300 font-bold hover:bg-zinc-200 dark:hover:bg-zinc-900"
       >
-        <GrEmoji size={18} />
+        <FaFaceGrin size={18} />
         <span className="hidden md:block">React</span>
       </div>
       <AnimatePresence>

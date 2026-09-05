@@ -10,6 +10,7 @@ import ShareModal from "./ShareModal";
 import ReportModal from "./ReportModal";
 import Voting from "./Voting";
 import Link from "next/link";
+import React from "./React";
 
 const optionStyles =
   "border-2 border-zinc-700 rounded cursor-pointer px-3 py-1.5 flex items-center gap-x-2 text-sm text-black dark:text-zinc-300 font-bold";
@@ -49,21 +50,28 @@ function MemeBar({ meme, userId, collections, friends }: MemeBarProps) {
   const { data: session } = authClient.useSession();
 
   return (
-    <div className="flex flex-wrap gap-5 items-center">
+    <div className="flex flex-wrap gap-3 items-center">
       <Voting meme={meme} upvoted={upvoted} />
       {session && (
-        <div
-          className={optionStyles + " hover:bg-zinc-200 dark:hover:bg-zinc-900"}
-          onClick={() => setCollection(true)}
-        >
-          {savedCollections.length > 0 ? (
-            <FaBookmark className="text-yellow-500" size={18} />
-          ) : (
-            <FaRegBookmark size={18} />
-          )}
-          Save
-          {savedCollections.length > 0 ? `d (${savedCollections.length})` : ""}
-        </div>
+        <>
+          <div
+            className={
+              optionStyles + " hover:bg-zinc-200 dark:hover:bg-zinc-900"
+            }
+            onClick={() => setCollection(true)}
+          >
+            {savedCollections.length > 0 ? (
+              <FaBookmark className="text-yellow-500" size={18} />
+            ) : (
+              <FaRegBookmark size={18} />
+            )}
+            Save
+            {savedCollections.length > 0
+              ? `d (${savedCollections.length})`
+              : ""}
+          </div>
+          <React memeId={meme.id} />
+        </>
       )}
       <div
         className={optionStyles + " hover:bg-zinc-200 dark:hover:bg-zinc-900"}

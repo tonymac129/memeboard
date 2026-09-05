@@ -8,6 +8,7 @@ export interface MemeType {
   description?: string;
   comments: CommentType[];
   created: Date;
+  reactions?: ReactionType[];
 }
 
 export interface ServerDataType {
@@ -40,4 +41,9 @@ export interface CollectionType {
 export interface ReportType {
   selectedOptions: string[];
   feedback?: string;
+}
+
+export interface ReactionType {
+  emoji: string;
+  userId: string;
 }

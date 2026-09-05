@@ -12,6 +12,7 @@ import MemeBar from "@/components/meme/MemeBar";
 import Options from "./Options";
 import Image from "next/image";
 import Link from "next/link";
+import Emoji from "@/components/meme/Emoji";
 
 function generateTree(comments: CommentType[]): CommentType[] {
   const commentMap: Record<string, CommentType & { replies: CommentType[] }> =
@@ -43,6 +44,7 @@ async function fetchMeme(id: number) {
       tags: true,
       upvotes: true,
       downvotes: true,
+      reactions: true,
       comments: {
         include: { user: true, likedBy: true },
         orderBy: { createdAt: "desc" },
@@ -115,6 +117,22 @@ async function Page({ params }: { params: Promise<{ id: number }> }) {
   });
   const hasUpdated =
     memeData.updatedAt.getTime() !== memeData.createdAt.getTime();
+  const reactions =
+    memeData.reactions.length > 0
+      ? Object.fromEntries(
+          Object.entries(
+            memeData.reactions.reduce(
+              (acc: Record<string, string[]>, reaction) => {
+                acc[reaction.emoji] = acc[reaction.emoji]
+                  ? [...acc[reaction.emoji], reaction.userId]
+                  : [reaction.userId];
+                return acc;
+              },
+              {},
+            ),
+          ).sort(([, a], [, b]) => b.length - a.length),
+        )
+      : null;
 
   return (
     <div className="max-w-400 mx-auto px-5 sm:px-20 lg:px-50 pt-10 pb-30 flex flex-col gap-y-10">
@@ -186,12 +204,27 @@ async function Page({ params }: { params: Promise<{ id: number }> }) {
         height={300}
         className="rounded"
       />
-      <MemeBar
-        meme={memeData}
-        userId={session?.user.id}
-        collections={userCollections}
-        friends={userFriends}
-      />
+      <div className="flex flex-col gap-y-3">
+        <MemeBar
+          meme={memeData}
+          userId={session?.user.id}
+          collections={userCollections}
+          friends={userFriends}
+        />
+        {reactions && (
+          <div className="flex gap-x-3">
+            {Object.keys(reactions).map((emoji) => (
+              <Emoji
+                key={emoji}
+                emoji={emoji}
+                users={reactions[emoji]}
+                userId={session?.user.id || undefined}
+                memeId={memeData.id}
+              />
+            ))}
+          </div>
+        )}
+      </div>
       <div className="flex flex-col gap-y-5">
         {session?.user ? (
           <CommentField
