@@ -32,8 +32,8 @@ function Tags({ tags }: { tags: TagType[] }) {
       />
       <div className="flex flex-wrap justify-center gap-5">
         {displayed.length > 0 ? (
-          displayed.map((tag) => {
-            return <TagCard key={tag.id} tag={tag} />;
+          displayed.map((tag, i) => {
+            return <TagCard key={tag.id} tag={tag} index={i} />;
           })
         ) : (
           <div className="text-black dark:text-zinc-300">

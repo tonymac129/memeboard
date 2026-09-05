@@ -127,8 +127,8 @@ async function Page() {
       <div className="flex flex-col gap-y-5">
         <h2 className={headerStyles}>Most recent posts ({recent.length})</h2>
         <div className="flex gap-5 flex-wrap">
-          {recent.map((meme) => (
-            <MemeCard key={meme.id} meme={meme} />
+          {recent.map((meme, i) => (
+            <MemeCard key={meme.id} meme={meme} index={i} />
           ))}
         </div>
       </div>
@@ -136,7 +136,9 @@ async function Page() {
         <h2 className={headerStyles}>Top posts this week ({top.length})</h2>
         <div className="flex gap-5 flex-wrap">
           {top.length > 0 ? (
-            top.map((meme) => <MemeCard key={meme.id} meme={meme} />)
+            top.map((meme, i) => (
+              <MemeCard key={meme.id} meme={meme} index={i} />
+            ))
           ) : (
             <div className="py-5 text-black dark:text-zinc-300">
               Nothing was posted in the past 7 days, weird...
@@ -147,8 +149,8 @@ async function Page() {
       <div className="flex flex-col gap-y-5">
         <h2 className={headerStyles}>All time top posts ({topAll.length})</h2>
         <div className="flex gap-5 flex-wrap">
-          {topAll.map((meme) => (
-            <MemeCard key={meme.id} meme={meme} />
+          {topAll.map((meme, i) => (
+            <MemeCard key={meme.id} meme={meme} index={i} />
           ))}
         </div>
       </div>
@@ -160,7 +162,9 @@ async function Page() {
             </h2>
             <div className="flex gap-5 flex-wrap">
               {friends.length > 0 ? (
-                friends.map((meme) => <MemeCard key={meme.id} meme={meme} />)
+                friends.map((meme, i) => (
+                  <MemeCard key={meme.id} meme={meme} index={i} />
+                ))
               ) : (
                 <div className="py-5 text-black dark:text-zinc-300">
                   You either don&apos;t have any friends, or they haven&apos;t
@@ -200,6 +204,5 @@ async function Page() {
 
 //TODO: add lazy loading/loading indicator for certain pages
 //TODO: add page transition animation
-//TODO: page load and browse meme animation
 
 export default Page;

@@ -90,11 +90,12 @@ function Collections({ userId, friendIds, collections }: CollectionsProps) {
       </div>
       <div className="flex flex-wrap justify-center gap-5">
         {displayed.length > 0 ? (
-          displayed.map((collection) => (
+          displayed.map((collection, i) => (
             <CollectionCard
               key={collection.id}
               collection={collection}
               user={collection.user.name}
+              index={i}
             />
           ))
         ) : (

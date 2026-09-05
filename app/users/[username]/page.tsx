@@ -157,8 +157,8 @@ async function Page({ params }: { params: Promise<{ username: string }> }) {
         </Link>
         <div className="flex flex-wrap gap-5">
           {userData.memes.length > 0 ? (
-            userData.memes.map((meme) => {
-              return <MemeCard key={meme.id} meme={meme} />;
+            userData.memes.map((meme, i) => {
+              return <MemeCard key={meme.id} meme={meme} index={i} />;
             })
           ) : (
             <div className="text-black dark:text-zinc-300 text-sm">

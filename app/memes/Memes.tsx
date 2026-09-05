@@ -172,8 +172,8 @@ function Memes({ memes, friends, userId, tags }: MemesProps) {
       </div>
       <div className="flex flex-wrap justify-center gap-5">
         {finalMemes.length > 0 ? (
-          finalMemes.map((meme) => {
-            return <MemeCard key={meme.id} meme={meme} />;
+          finalMemes.map((meme, i) => {
+            return <MemeCard key={meme.id} meme={meme} index={i} />;
           })
         ) : (
           <div className="text-black dark:text-zinc-300">

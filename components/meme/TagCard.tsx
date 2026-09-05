@@ -1,27 +1,39 @@
 import { Meme, MemeTag } from "@/app/generated/prisma/client";
 import { FaHashtag, FaStar } from "react-icons/fa";
+import { motion } from "framer-motion";
 import Link from "next/link";
 
 type TagType = MemeTag & {
   memes: Meme[];
 };
 
-function TagCard({ tag }: { tag: TagType }) {
+interface TagCardProps {
+  tag: TagType;
+  index?: number;
+}
+
+function TagCard({ tag, index }: TagCardProps) {
   return (
-    <Link
-      key={tag.id}
-      href={`/tags/${tag.id}`}
-      className="flex items-center gap-x-3 px-5 py-3 text-black dark:text-zinc-300 rounded border-2 border-zinc-700 w-60 hover:bg-zinc-200 dark:hover:bg-zinc-900"
+    <motion.div
+      initial={{ y: 50, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.8, type: "spring", delay: (index || 0) * 0.1 }}
     >
-      <FaHashtag
-        size={35}
-        className="rounded bg-zinc-300 dark:bg-zinc-800 p-2"
-      />
-      <h2 className="font-bold">
-        {tag.name} ({tag.memes.length})
-      </h2>
-      {tag.default && <FaStar size={15} title="Popular tag" />}
-    </Link>
+      <Link
+        key={tag.id}
+        href={`/tags/${tag.id}`}
+        className="flex items-center gap-x-3 px-5 py-3 text-black dark:text-zinc-300 rounded border-2 border-zinc-700 w-60 hover:bg-zinc-200 dark:hover:bg-zinc-900"
+      >
+        <FaHashtag
+          size={35}
+          className="rounded bg-zinc-300 dark:bg-zinc-800 p-2"
+        />
+        <h2 className="font-bold">
+          {tag.name} ({tag.memes.length})
+        </h2>
+        {tag.default && <FaStar size={15} title="Popular tag" />}
+      </Link>
+    </motion.div>
   );
 }
 
