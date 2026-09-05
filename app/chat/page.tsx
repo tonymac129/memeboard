@@ -4,6 +4,22 @@ export const metadata: Metadata = {
   title: "Chat | MemeBoard",
   description:
     "Chat about random stuff, share memes, and hang out with your friends here!",
+  authors: [{ name: "tonymac129", url: "https://tonymac.net" }],
+  openGraph: {
+    title: "Chat | MemeBoard",
+    description:
+      "Chat about random stuff, share memes, and hang out with your friends here!",
+    url: "https://memeboard-app.vercel.app/chat",
+    siteName: "MemeBoard",
+    images: [
+      {
+        url: "/logo.png",
+        width: 100,
+        height: 100,
+      },
+    ],
+    type: "website",
+  },
 };
 
 async function Page() {

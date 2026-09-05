@@ -13,6 +13,22 @@ export const metadata: Metadata = {
   title: "Home | MemeBoard",
   description:
     "Explore the trendiest memes, upload your own creations, chat with your friends, interact with the community, and more!",
+  authors: [{ name: "tonymac129", url: "https://tonymac.net" }],
+  openGraph: {
+    title: "Home | MemeBoard",
+    description:
+      "Explore the trendiest memes, upload your own creations, chat with your friends, interact with the community, and more!",
+    url: "https://memeboard-app.vercel.app",
+    siteName: "MemeBoard",
+    images: [
+      {
+        url: "/logo.png",
+        width: 100,
+        height: 100,
+      },
+    ],
+    type: "website",
+  },
 };
 
 export default function RootLayout({

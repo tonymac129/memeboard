@@ -1,7 +1,11 @@
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
+import { FaImage } from "react-icons/fa";
+import { BiSolidCollection } from "react-icons/bi";
+import { IoChatbubbles } from "react-icons/io5";
 import Hero from "@/components/layout/Hero";
+import Section from "@/components/layout/Section";
 import MemeCard from "@/components/meme/MemeCard";
 import UserCard from "@/components/user/UserCard";
 import Btn from "@/components/ui/Btn";
@@ -94,6 +98,32 @@ async function Page() {
           />
         </div>
       )}
+      <div className="flex gap-3 pb-5 flex-wrap">
+        <Section
+          href="/memes"
+          title="Memes"
+          description="Post your own creations, browse community
+              memes by tags, and view discussion comments."
+        >
+          <FaImage size={30} />
+        </Section>
+        <Section
+          href="/collections"
+          title="Collections"
+          description="Curate your own public or private meme tags and
+              collections to make organizing different
+              memes easier."
+        >
+          <BiSolidCollection size={30} />
+        </Section>
+        <Section
+          href="/chat"
+          title="Chat"
+          description="Interact with the useless MemeBot or friend other people to chat and share memes/comments in realtime."
+        >
+          <IoChatbubbles size={30} />
+        </Section>
+      </div>
       <div className="flex flex-col gap-y-5">
         <h2 className={headerStyles}>Most recent posts ({recent.length})</h2>
         <div className="flex gap-5 flex-wrap">

@@ -9,6 +9,22 @@ export const metadata: Metadata = {
   title: "Memes | MemeBoard",
   description:
     "Browse, search, explore, and discover all kinds of memes curated by the community here with custom tags and filters!",
+  authors: [{ name: "tonymac129", url: "https://tonymac.net" }],
+  openGraph: {
+    title: "Memes | MemeBoard",
+    description:
+      "Browse, search, explore, and discover all kinds of memes curated by the community here with custom tags and filters!",
+    url: "https://memeboard-app.vercel.app/memes",
+    siteName: "MemeBoard",
+    images: [
+      {
+        url: "/logo.png",
+        width: 100,
+        height: 100,
+      },
+    ],
+    type: "website",
+  },
 };
 
 async function Page() {

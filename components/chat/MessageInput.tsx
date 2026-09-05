@@ -53,7 +53,7 @@ function MessageInput({ name, id, replying, setReplying }: MessageInputProps) {
       <button type="submit" className="hidden" />
     </form>
   ) : (
-    <div className="bg-zinc-900 rounded text-center py-3 text-black dark:text-zinc-300 w-full relative">
+    <div className="bg-zinc-200 dark:bg-zinc-900 rounded text-center py-3 text-black dark:text-zinc-300 w-full relative">
       <Link
         href="/login"
         className="hover:text-green-600 dark:hover:text-green-500"

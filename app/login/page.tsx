@@ -8,6 +8,22 @@ export const metadata: Metadata = {
   title: "Log In | MemeBoard",
   description:
     "Log in to MemeBoard here with credentials, Google, or GitHub, or create an account if you don't already have one!",
+  authors: [{ name: "tonymac129", url: "https://tonymac.net" }],
+  openGraph: {
+    title: "Log In | MemeBoard",
+    description:
+      "Log in to MemeBoard here with credentials, Google, or GitHub, or create an account if you don't already have one!",
+    url: "https://memeboard-app.vercel.app/login",
+    siteName: "MemeBoard",
+    images: [
+      {
+        url: "/logo.png",
+        width: 100,
+        height: 100,
+      },
+    ],
+    type: "website",
+  },
 };
 
 async function Page() {

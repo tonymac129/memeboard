@@ -7,7 +7,7 @@ import CollectionCard from "@/components/collection/CollectionCard";
 import Dropdown from "@/components/ui/Dropdown";
 import Input from "@/components/ui/Input";
 
-const optionStyles = "flex gap-x-3 text-zinc-300 items-center";
+const optionStyles = "flex gap-x-3 text-black dark:text-zinc-300 items-center";
 const sortOptions: string[] = ["New", "Name", "Creator"];
 const filterOptions: string[] = ["All", "Friends", "You"];
 

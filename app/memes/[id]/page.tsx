@@ -66,6 +66,23 @@ export async function generateMetadata({
     description:
       memeData.description.slice(0, 100) +
       (memeData.description.length > 100 ? "..." : ""),
+    authors: [{ name: "tonymac129", url: "https://tonymac.net" }],
+    openGraph: {
+      title: `${memeData.title} | MemeBoard`,
+      description:
+        memeData.description.slice(0, 100) +
+        (memeData.description.length > 100 ? "..." : ""),
+      url: `https://memeboard-app.vercel.app/memes/${memeData.id}`,
+      siteName: "MemeBoard",
+      images: [
+        {
+          url: "/logo.png",
+          width: 100,
+          height: 100,
+        },
+      ],
+      type: "website",
+    },
   };
 }
 
@@ -183,7 +200,7 @@ async function Page({ params }: { params: Promise<{ id: number }> }) {
             postComment={postComment}
           />
         ) : (
-          <div className="flex flex-col gap-y-3 py-5 border-2 border-zinc-700 rounded w-120 items-center">
+          <div className="flex flex-col items-center gap-y-3 py-5 border-2 border-zinc-700 rounded w-[90%] sm:w-[75%] md:w-150 ">
             <span className="text-black dark:text-zinc-300">
               Sign in to leave a comment!
             </span>

@@ -10,6 +10,22 @@ export const metadata: Metadata = {
   title: "Collections | MemeBoard",
   description:
     "Browse public custom curated meme collections other people created or manage your own here!",
+  authors: [{ name: "tonymac129", url: "https://tonymac.net" }],
+  openGraph: {
+    title: "Collections | MemeBoard",
+    description:
+      "Browse public custom curated meme collections other people created or manage your own here!",
+    url: "https://memeboard-app.vercel.app/collections",
+    siteName: "MemeBoard",
+    images: [
+      {
+        url: "/logo.png",
+        width: 100,
+        height: 100,
+      },
+    ],
+    type: "website",
+  },
 };
 
 async function Page() {
@@ -39,7 +55,7 @@ async function Page() {
         friendIds={friendIds}
         collections={collections}
       />
-      <CreateCollection />
+      {session && <CreateCollection />}
     </div>
   );
 }

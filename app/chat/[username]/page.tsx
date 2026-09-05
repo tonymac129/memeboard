@@ -27,8 +27,23 @@ export async function generateMetadata({
   if (!userData) redirect("/chat");
 
   return {
-    title: `Your Chat with ${userData.name} | MemeBoard`,
+    title: `${userData.name} | Chat | MemeBoard`,
     description: `Chat, hang out, share memes, and have fun with ${userData.name} with MemeBoard Chat!`,
+    authors: [{ name: "tonymac129", url: "https://tonymac.net" }],
+    openGraph: {
+      title: `${userData.name} | Chat | MemeBoard`,
+      description: `Chat, hang out, share memes, and have fun with ${userData.name} with MemeBoard Chat!`,
+      url: `https://memeboard-app.vercel.app/chat/${userData.username}`,
+      siteName: "MemeBoard",
+      images: [
+        {
+          url: "/logo.png",
+          width: 100,
+          height: 100,
+        },
+      ],
+      type: "website",
+    },
   };
 }
 

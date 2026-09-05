@@ -8,6 +8,22 @@ export const metadata: Metadata = {
   title: "Tags | MemeBoard",
   description:
     "Check out all the categorized and custom tags on MemeBoard to discover more memes related to a specific topic!",
+  authors: [{ name: "tonymac129", url: "https://tonymac.net" }],
+  openGraph: {
+    title: "Tags | MemeBoard",
+    description:
+      "Check out all the categorized and custom tags on MemeBoard to discover more memes related to a specific topic!",
+    url: "https://memeboard-app.vercel.app/tags",
+    siteName: "MemeBoard",
+    images: [
+      {
+        url: "/logo.png",
+        width: 100,
+        height: 100,
+      },
+    ],
+    type: "website",
+  },
 };
 
 async function Page() {

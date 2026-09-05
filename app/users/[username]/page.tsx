@@ -46,6 +46,21 @@ export async function generateMetadata({
   return {
     title: `${userData.name}'s Profile | MemeBoard`,
     description: `Check out ${userData.name}'s custom profile on MemeBoard! Explore their memes and interests and connect with them!`,
+    authors: [{ name: "tonymac129", url: "https://tonymac.net" }],
+    openGraph: {
+      title: `${userData.name}'s Profile | MemeBoard`,
+      description: `Check out ${userData.name}'s custom profile on MemeBoard! Explore their memes and interests and connect with them!`,
+      url: `https://memeboard-app.vercel.app/users/${userData.username}`,
+      siteName: "MemeBoard",
+      images: [
+        {
+          url: "/logo.png",
+          width: 100,
+          height: 100,
+        },
+      ],
+      type: "website",
+    },
   };
 }
 

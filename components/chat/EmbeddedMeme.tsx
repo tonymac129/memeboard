@@ -4,6 +4,7 @@ import type { Comment, Meme, User } from "@/app/generated/prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { FaFaceFrown } from "react-icons/fa6";
 
 type MemeType = Meme & {
   user: User;
@@ -27,7 +28,7 @@ function EmbeddedMeme({ memeId }: { memeId: number }) {
 
   return (
     <>
-      {meme ? (
+      {meme && meme.user ? (
         <Link
           href={`/memes/${memeId}`}
           className="rounded flex flex-col gap-y-3 border-2 border-zinc-700 p-2 w-70 backdrop-brightness-70 dark:backdrop-brightness-50"
@@ -49,6 +50,11 @@ function EmbeddedMeme({ memeId }: { memeId: number }) {
             <span>{meme.shares} shares</span>
           </div>
         </Link>
+      ) : meme ? (
+        <div className="rounded flex flex-col items-center gap-y-5 border-2 border-zinc-700 py-10 w-70 backdrop-brightness-70 dark:backdrop-brightness-50">
+          <FaFaceFrown size={35} />
+          Meme not found
+        </div>
       ) : (
         <div>Loading...</div>
       )}

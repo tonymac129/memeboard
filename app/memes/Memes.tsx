@@ -39,7 +39,7 @@ function Memes({ memes, friends, userId, tags }: MemesProps) {
   const [query, setQuery] = useState<string>("");
   const [sortMethod, setSortMethod] = useState<string>("Best");
   const [filterMethod, setFilterMethod] = useState<string>("This week");
-  const [count, setCount] = useState<string>("10");
+  const [count, setCount] = useState<string>("25");
   const [selectedTag, setSelectedTag] = useState<string>("None");
   const finalMemes = useMemo(() => {
     return memes

@@ -8,7 +8,7 @@ import Theme from "./Theme";
 import Link from "next/link";
 
 const navLinkStyles =
-  "hidden md:block text-black dark:text-zinc-300 hover:text-green-600 dark:hover:text-green-500 py-2 px-4";
+  "hidden lg:block text-black dark:text-zinc-300 hover:text-green-600 dark:hover:text-green-500 py-2 px-4";
 
 async function Nav() {
   const session = await auth.api.getSession({ headers: await headers() });

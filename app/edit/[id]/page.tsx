@@ -10,6 +10,22 @@ export const metadata: Metadata = {
   title: "Edit Meme | MemeBoard",
   description:
     "Edit your meme's title, tags, image, description, and source link here using this form!",
+  authors: [{ name: "tonymac129", url: "https://tonymac.net" }],
+  openGraph: {
+    title: "Edit Meme | MemeBoard",
+    description:
+      "Edit your meme's title, tags, image, description, and source link here using this form!",
+    url: "https://memeboard-app.vercel.app/edit",
+    siteName: "MemeBoard",
+    images: [
+      {
+        url: "/logo.png",
+        width: 100,
+        height: 100,
+      },
+    ],
+    type: "website",
+  },
 };
 
 async function Page({ params }: { params: Promise<{ id: string }> }) {

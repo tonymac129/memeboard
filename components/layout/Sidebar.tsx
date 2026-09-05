@@ -37,7 +37,7 @@ function Sidebar() {
   return (
     <div>
       <div
-        className="block md:hidden text-black dark:text-zinc-300 p-3 border-2 border-zinc-700 rounded 
+        className="block lg:hidden text-black dark:text-zinc-300 p-3 border-2 border-zinc-700 rounded 
       cursor-pointer hover:bg-zinc-200 dark:hover:bg-zinc-900"
         ref={btnRef}
         onClick={() => setOpen(true)}

@@ -3,6 +3,7 @@
 import type { Comment, User } from "@/app/generated/prisma/client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { FaFaceFrown } from "react-icons/fa6";
 
 type CommentType = Comment & {
   user: User;
@@ -29,7 +30,7 @@ function EmbeddedComment({ commentId, profile }: EmbeddedCommentProps) {
 
   return (
     <>
-      {comment ? (
+      {comment && comment.user ? (
         <Link
           href={`/memes/${comment.memeId}#${comment.id}`}
           className={`rounded flex flex-col gap-y-3 border-2 border-zinc-700 p-2 w-70 backdrop-brightness-70 dark:backdrop-brightness-50 ${profile && "bg-zinc-100 dark:bg-zinc-950 text-black dark:text-zinc-300 w-full p-4 hover:bg-zinc-200 dark:hover:bg-zinc-900"}`}
@@ -47,6 +48,11 @@ function EmbeddedComment({ commentId, profile }: EmbeddedCommentProps) {
             </span>
           </div>
         </Link>
+      ) : comment ? (
+        <div className="rounded flex flex-col items-center gap-y-5 border-2 border-zinc-700 py-10 w-70 backdrop-brightness-70 dark:backdrop-brightness-50">
+          <FaFaceFrown size={35} />
+          Comment not found
+        </div>
       ) : (
         <div>Loading...</div>
       )}

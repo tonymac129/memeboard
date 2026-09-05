@@ -30,6 +30,21 @@ export async function generateMetadata({
   return {
     title: `${memeTag.name} Memes | MemeBoard`,
     description: `Browse all the memes labeled with the ${memeTag.name} tag!`,
+    authors: [{ name: "tonymac129", url: "https://tonymac.net" }],
+    openGraph: {
+      title: `${memeTag.name} Memes | MemeBoard`,
+      description: `Browse all the memes labeled with the ${memeTag.name} tag!`,
+      url: `https://memeboard-app.vercel.app/tags/${memeTag.id}`,
+      siteName: "MemeBoard",
+      images: [
+        {
+          url: "/logo.png",
+          width: 100,
+          height: 100,
+        },
+      ],
+      type: "website",
+    },
   };
 }
 
