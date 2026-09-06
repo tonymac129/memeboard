@@ -1,8 +1,18 @@
 import Link from "next/link";
+import Image from "next/image";
 
 function Footer() {
   return (
     <div className="flex flex-col gap-y-5 py-15 border-t-2 border-zinc-700 text-sm text-black dark:text-zinc-300 items-center">
+      <Link href="/" className="mb-3">
+        <Image
+          src="/logo.png"
+          alt="MemeBoard Logo"
+          width={100}
+          height={100}
+          className="w-10"
+        />
+      </Link>
       <div className="flex flex-col sm:flex-row gap-y-5 gap-x-15">
         <span className="text-center">
           &copy; {new Date().getFullYear()}{" "}

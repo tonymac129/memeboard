@@ -6,6 +6,7 @@ import User from "./User";
 import Sidebar from "./Sidebar";
 import Theme from "./Theme";
 import Link from "next/link";
+import Image from "next/image";
 
 const navLinkStyles =
   "hidden lg:block text-black dark:text-zinc-300 hover:text-green-600 dark:hover:text-green-500 py-2 px-4";
@@ -22,10 +23,17 @@ async function Nav() {
             href="/"
             className={
               navLinkStyles +
-              " block! text-xl text-green-600! dark:text-green-500! font-bold pl-0"
+              " flex! items-center gap-x-3 text-xl text-green-600! dark:text-green-500! font-bold pl-0"
             }
           >
-            MemeBoard
+            <Image
+              src="/logo.png"
+              alt="MemeBoard Logo"
+              width={100}
+              height={100}
+              className="w-8"
+            />
+            <span className="hidden sm:block">MemeBoard</span>
           </Link>
           <Link href="/memes" className={navLinkStyles}>
             Memes
