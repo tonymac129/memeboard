@@ -8,6 +8,8 @@ import {
   BiUpvote,
 } from "react-icons/bi";
 import { vote } from "@/app/memes/[id]/actions";
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 interface VotingProps {
   meme: MemeType;
@@ -15,8 +17,15 @@ interface VotingProps {
 }
 
 function Voting({ meme, upvoted }: VotingProps) {
+  const { data: session } = authClient.useSession();
+  const router = useRouter();
+
   async function handleVote(state: boolean | null) {
-    await vote(meme.id, state);
+    if (session) {
+      await vote(meme.id, state);
+    } else {
+      router.push("/login");
+    }
   }
 
   return (

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 import Hero from "@/components/layout/Hero";
 import Tags from "./Tags";
 import CreateTag from "./CreateTag";
@@ -27,6 +29,7 @@ export const metadata: Metadata = {
 };
 
 async function Page() {
+  const session = await auth.api.getSession({ headers: await headers() });
   const tags = await prisma.memeTag.findMany({
     orderBy: { id: "asc" },
     include: { memes: true },
@@ -39,7 +42,7 @@ async function Page() {
         description="Check out all the categorized and custom tags on MemeBoard to discover more memes related to a specific topic!"
       />
       <Tags tags={tags} />
-      <CreateTag />
+      {session && <CreateTag />}
     </div>
   );
 }

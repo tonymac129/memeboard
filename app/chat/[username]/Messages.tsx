@@ -73,6 +73,7 @@ function Messages({
     events: ["chat.message"],
     onData: (data) => {
       const newMessage = JSON.parse(data.data);
+      console.log(newMessage);
       if (
         newMessage.chatId === id ||
         ((newMessage.both as string[]).includes(session?.user.id as string) &&

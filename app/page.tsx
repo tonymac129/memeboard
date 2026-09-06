@@ -202,7 +202,4 @@ async function Page() {
   );
 }
 
-//TODO: add lazy loading/loading indicator for certain pages
-//TODO: add page transition animation
-
 export default Page;

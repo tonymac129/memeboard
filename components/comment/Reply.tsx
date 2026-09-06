@@ -7,6 +7,7 @@ import { useState } from "react";
 import { likeComment, postComment } from "@/app/memes/[id]/actions";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation";
 import ReportModal from "../meme/ReportModal";
 import ShareModal from "../meme/ShareModal";
 import Input from "../ui/Input";
@@ -35,9 +36,14 @@ function Reply({ comment, likedComment, userId, memeId, friends }: ReplyProps) {
     userId,
     memeId,
   });
+  const router = useRouter();
 
   async function handleLike() {
-    await likeComment(!likedComment, comment.id, memeId);
+    if (userId) {
+      await likeComment(!likedComment, comment.id, memeId);
+    } else {
+      router.push("/login");
+    }
   }
 
   async function handlePost() {
@@ -68,7 +74,10 @@ function Reply({ comment, likedComment, userId, memeId, friends }: ReplyProps) {
           )}{" "}
           {comment.likedBy.length}
         </div>
-        <div className={optionStyles} onClick={() => setReplying(true)}>
+        <div
+          className={optionStyles}
+          onClick={() => (userId ? setReplying(true) : router.push("/login"))}
+        >
           Reply
         </div>
         <div className={optionStyles} onClick={() => setSharing(true)}>

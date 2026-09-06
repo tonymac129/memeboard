@@ -36,6 +36,8 @@ export const botMessage = {
   chatId: "",
 };
 
+//TODO: fix memebot real time
+
 async function Page() {
   const session = await auth.api.getSession({ headers: await headers() });
   const [userId1, userId2] = ["memebot", session?.user.id || "guest"].sort();

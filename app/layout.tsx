@@ -4,6 +4,7 @@ import { ThemeProvider } from "next-themes";
 import Nav from "@/components/layout/Nav";
 import Footer from "@/components/layout/Footer";
 import Motion from "@/components/layout/Motion";
+import NextTopLoader from "nextjs-toploader";
 import "./globals.css";
 
 const inter = Inter({
@@ -45,6 +46,14 @@ export default function RootLayout({
     >
       <body>
         <ThemeProvider attribute="class">
+          <NextTopLoader
+            showSpinner={false}
+            initialPosition={0.1}
+            crawlSpeed={10}
+            height={2}
+            shadow={false}
+            template='<div class="bar bg-green-500! dark:bg-green-600!" role="bar"><div class="peg"></div></div><div class="spinner" role="spinner"><div class="spinner-icon"></div></div>'
+          />
           <Nav />
           <Motion>
             {children}

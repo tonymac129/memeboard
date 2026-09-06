@@ -1,6 +1,7 @@
 "use client";
 
 import { react, removeReaction } from "@/app/memes/[id]/actions";
+import { useRouter } from "next/navigation";
 
 interface EmojiProps {
   emoji: string;
@@ -10,6 +11,8 @@ interface EmojiProps {
 }
 
 function Emoji({ emoji, users, userId, memeId }: EmojiProps) {
+  const router = useRouter();
+
   async function handleReact() {
     if (userId) {
       if (users.includes(userId)) {
@@ -17,6 +20,8 @@ function Emoji({ emoji, users, userId, memeId }: EmojiProps) {
       } else {
         await react(memeId, emoji);
       }
+    } else {
+      router.push("/login");
     }
   }
 
