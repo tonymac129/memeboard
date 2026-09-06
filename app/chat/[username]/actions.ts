@@ -63,18 +63,15 @@ export async function sendMessage(
       await redis.rpush(`messages:${chat.id}`, newMessage);
       await realtime.emit("chat.message", JSON.stringify(newMessage));
       if (id === "memebot") {
-        setTimeout(async () => {
-          const botMessage = {
-            id: crypto.randomUUID(),
-            message:
-              botMessages[Math.floor(Math.random() * botMessages.length)],
-            created: new Date(),
-            from: "memebot",
-            chatId: chat.id,
-          };
-          await redis.rpush(`messages:${chat.id}`, botMessage);
-          await realtime.emit("chat.message", JSON.stringify(botMessage));
-        }, 1000);
+        const botMessage = {
+          id: crypto.randomUUID(),
+          message: botMessages[Math.floor(Math.random() * botMessages.length)],
+          created: new Date(),
+          from: "memebot",
+          chatId: chat.id,
+        };
+        await redis.rpush(`messages:${chat.id}`, botMessage);
+        await realtime.emit("chat.message", JSON.stringify(botMessage));
       }
     }
   } catch (err) {
